@@ -1,7 +1,15 @@
 name = "GeoDatasets"
 uuid = "2a3f1dca-97a5-4513-bfd8-b69f0106a87e"
 authors = ["Elias Carvalho <eliascarvdev@gmail.com> and contributors"]
-version = "1.0.0-DEV"
+version = "0.1.0"
+
+[deps]
+GADM = "a8dd9ffe-31dc-4cf5-a379-ea69100a8233"
+GeoStatsImages = "7cd16168-b42c-5e7d-a585-4f59d326662d"
+INMET = "1fb021e9-9ab7-46c1-8a23-23f3c2783cf7"
 
 [compat]
+GADM = "1.1"
+GeoStatsImages = "1.1"
+INMET = "1.0"
 julia = "1.9"
