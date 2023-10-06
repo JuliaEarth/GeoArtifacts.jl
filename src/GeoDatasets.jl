@@ -1,5 +1,8 @@
 module GeoDatasets
 
+using GeoIO
+using Meshes
+
 using GADM
 using INMET
 using GeoStatsImages
@@ -21,12 +24,11 @@ The option `fix` can be used to fix orientation and degeneracy
 issues with polygons.
 """
 function gadm(country, subregions...; depth=0, ϵ=nothing, min=3, max=typemax(Int), maxiter=10, fix=true, kwargs...)
-  table = GADM.get(country, subregions...; depth=depth, kwargs...)
-  gtable = asgeotable(table, fix)
-  𝒯 = values(gtable)
-  𝒟 = domain(gtable)
-  𝒩 = decimate(𝒟, ϵ, min=min, max=max, maxiter=maxiter)
-  georef(𝒯, 𝒩)
+  table = GADM.get(country, subregions...; depth, kwargs...)
+  geotable = GeoIO.asgeotable(table, fix)
+  dom = domain(geotable)
+  newdom = decimate(dom, ϵ; min, max, maxiter)
+  georef(values(geotable), newdom)
 end
 
 export INMET
