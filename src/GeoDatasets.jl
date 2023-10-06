@@ -2,6 +2,8 @@ module GeoDatasets
 
 using GeoIO
 using Meshes
+using Unitful
+using GeoTables
 
 using GADM
 using INMET
@@ -31,7 +33,25 @@ function gadm(country, subregions...; depth=0, ϵ=nothing, min=3, max=typemax(In
   georef(values(geotable), newdom)
 end
 
-export INMET
-export geostatsimage, gadm
+"""
+    inmetstations(kind=:automatic)
+
+Return INMET stations of given kind. There are two kinds of stations: `:automatic` and `:manual`.
+"""
+function inmetstations(kind=:automatic)
+  df = INMET.stations(kind)
+  names = propertynames(df)
+  cnames = [:VL_LONGITUDE, :VL_LATITUDE, :VL_ALTITUDE]
+  fnames = setdiff(names, cnames)
+  feats = df[:, fnames]
+  coords = ustrip.(df[:, cnames])
+  points = map(eachrow(coords)) do row
+    x, y, z = row
+    Point(x, y, z)
+  end
+  georef(feats, PointSet(points))
+end
+
+export gadm, geostatsimage, inmetstations
 
 end
