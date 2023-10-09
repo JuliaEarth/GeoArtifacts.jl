@@ -1,4 +1,4 @@
-module GeoDatasets
+module GeoArtifacts
 
 using GeoIO
 using Meshes

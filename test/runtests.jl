@@ -1,8 +1,8 @@
-using GeoDatasets
+using GeoArtifacts
 using Meshes
 using Test
 
-@testset "GeoDatasets.jl" begin
+@testset "GeoArtifacts.jl" begin
   # @testset "gadm" begin
   #   gtb = gadm("SVN", depth=1, ϵ=0.04)
   #   @test length(gtb.geometry) == 12

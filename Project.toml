@@ -1,4 +1,4 @@
-name = "GeoDatasets"
+name = "GeoArtifacts"
 uuid = "2a3f1dca-97a5-4513-bfd8-b69f0106a87e"
 authors = ["Elias Carvalho <eliascarvdev@gmail.com> and contributors"]
 version = "0.1.0"
