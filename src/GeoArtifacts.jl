@@ -1,3 +1,7 @@
+# -----------------------------------------------------------------
+# Licensed under the MIT License. See LICENSE in the project root.
+# -----------------------------------------------------------------
+
 module GeoArtifacts
 
 using GeoIO
@@ -52,6 +56,13 @@ function inmetstations(kind=:automatic)
   georef(feats, PointSet(points))
 end
 
-export gadm, geostatsimage, inmetstations
+"""
+    availableimages()
+
+List of identifiers for all available images in GeoStatsImages.jl.
+"""
+availableimages() = GeoStatsImages.available()
+
+export gadm, inmetstations, availableimages, geostatsimage
 
 end
