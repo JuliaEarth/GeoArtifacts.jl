@@ -9,16 +9,16 @@ Julia package for loading geospatial artifacts, e.g. datasets, from different da
 
 ### (Down)loading data from GADM
 
-The `gadm` function (down)loads data from the GADM dataset:
+The `GADM.get` function (down)loads data from the GADM dataset:
 
 ```julia
-julia> gadm("BRA", depth = 1)
+julia> GADM.get("BRA", depth = 1)
 ```
 
 ### (Down)loading data from INMET
 
 ```julia
-julia> inmetstations()
+julia> INMET.stations()
 565×13 GeoTable over 565 PointSet{3,Float64}
 ┌────────────┬────────────┬───────────┬─────────────┬─────────────┬────────────────┬─────────────────┬───────────────────────────
 │ TP_ESTACAO │ CD_ESTACAO │ SG_ESTADO │ CD_SITUACAO │ CD_DISTRITO │    CD_OSCAR    │ DT_FIM_OPERACAO │         CD_WSI           ⋯
@@ -35,9 +35,9 @@ julia> inmetstations()
 ### Loading data from GeoStatsImages.jl
 
 ```julia
-julia> geostatsimage(identifier)
+julia> GeoStatsImages.geostatsimage(identifier)
 ```
 
-where `identifier` can be any of the strings listed with the command `availableimages()`.
+where `identifier` can be any of the strings listed with the command `GeoStatsImages.available()`.
 
 Please read the docstrings for more details.
