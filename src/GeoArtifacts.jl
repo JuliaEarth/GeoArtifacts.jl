@@ -9,6 +9,8 @@ using GeoStatsImages
 include("gadm.jl")
 include("inmet.jl")
 
-export GADM, INMET, GeoStatsImages
+image(name) = geostatsimage(name)
+
+export GADM, INMET
 
 end

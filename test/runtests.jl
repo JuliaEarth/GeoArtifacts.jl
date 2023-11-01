@@ -3,7 +3,12 @@ using Meshes
 using Test
 
 @testset "GeoArtifacts.jl" begin
-  # @testset "GADM" begin
+  @testset "GeoStatsImages.jl" begin
+    gtb = GeoArtifacts.image("Strebelle")
+    @test names(gtb) == ["facies", "geometry"]
+  end
+
+  # @testset "GADM.jl" begin
   #   gtb = GADM.get("SVN", depth=1, ϵ=0.04)
   #   @test length(gtb.geometry) == 12
 
@@ -14,7 +19,7 @@ using Test
   #   @test length(gtb.geometry) == 7
   # end
 
-  @testset "INMET" begin
+  @testset "INMET.jl" begin
     # automatic stations
     gtb = INMET.stations()
     @test all(isequal("Automatica"), gtb.TP_ESTACAO)
