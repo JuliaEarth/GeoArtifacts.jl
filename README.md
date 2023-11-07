@@ -22,5 +22,5 @@ julia> INMET.stations()
 ### GeoStatsImages.jl
 
 ```julia
-julia> GeoStatsImages.geostatsimage(identifier)
+julia> GeoArtifacts.image(identifier)
 ```
