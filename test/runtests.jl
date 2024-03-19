@@ -8,16 +8,16 @@ using Test
     @test names(gtb) == ["facies", "geometry"]
   end
 
-  # @testset "GADM.jl" begin
-  #   gtb = GADM.get("SVN", depth=1, ϵ=0.04)
-  #   @test length(gtb.geometry) == 12
+  @testset "GADM.jl" begin
+    gtb = GADM.get("SVN", depth=1)
+    @test length(gtb.geometry) == 12
 
-  #   gtb = GADM.get("QAT", depth=1, ϵ=0.04)
-  #   @test length(gtb.geometry) == 7
+    gtb = GADM.get("QAT", depth=1)
+    @test length(gtb.geometry) == 7
 
-  #   gtb = GADM.get("ISR", depth=1)
-  #   @test length(gtb.geometry) == 7
-  # end
+    gtb = GADM.get("ISR", depth=1)
+    @test length(gtb.geometry) == 7
+  end
 
   @testset "INMET.jl" begin
     # automatic stations
