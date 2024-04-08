@@ -1,7 +1,7 @@
 name = "GeoArtifacts"
 uuid = "2a3f1dca-97a5-4513-bfd8-b69f0106a87e"
 authors = ["Elias Carvalho <eliascarvdev@gmail.com> and contributors"]
-version = "0.3.0"
+version = "0.3.1"
 
 [deps]
 GADM = "a8dd9ffe-31dc-4cf5-a379-ea69100a8233"
@@ -16,8 +16,8 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 GADM = "1.1"
 GeoIO = "1.1"
 GeoStatsImages = "1.1"
-GeoTables = "1.8"
+GeoTables = "1.19"
 INMET = "1.0"
-Meshes = "0.41"
+Meshes = "0.42"
 Unitful = "1.17"
 julia = "1.9"
