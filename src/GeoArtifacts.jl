@@ -7,6 +7,7 @@ module GeoArtifacts
 include("image.jl")
 include("gadm.jl")
 include("inmet.jl")
+include("naturalearth.jl")
 
 export GADM, INMET
 
