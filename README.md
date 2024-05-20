@@ -3,7 +3,8 @@
 [![Build Status](https://github.com/JuliaEarth/GeoArtifacts.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaEarth/GeoArtifacts.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/JuliaEarth/GeoArtifacts.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaEarth/GeoArtifacts.jl)
 
-Julia package for loading geospatial artifacts such as datasets from different sources.
+GeoArtifacts.jl provides geospatial artifacts (e.g., datasets) from different sources. It is used in the book
+[*Geospatial Data Science with Julia*](https://juliaearth.github.io/geospatial-data-science-with-julia).
 
 ## Usage
 
@@ -42,7 +43,21 @@ julia> GADM.get("BRA", depth=1)
 #### NaturalEarth
 
 ```julia
-NaturalEarth.get(identifier)
+julia> NaturalEarth.get("admin_0_countries", 110)
+177×169 GeoTable over 177 GeometrySet{2,Float32}
+┌─────────────┬───────────────┬───────────────────────┬─────────────┬─────────────┬─────────────┬────────────────────────────────────
+│  FCLASS_IL  │   CONTINENT   │        NAME_FA        │    WB_A3    │ ADM0_A3_WB  │  FCLASS_SE  │             NAME_RU               ⋯
+│ Categorical │  Categorical  │      Categorical      │ Categorical │ Categorical │ Categorical │           Categorical             ⋯
+│  [NoUnits]  │   [NoUnits]   │       [NoUnits]       │  [NoUnits]  │  [NoUnits]  │  [NoUnits]  │            [NoUnits]              ⋯
+├─────────────┼───────────────┼───────────────────────┼─────────────┼─────────────┼─────────────┼────────────────────────────────────
+│   missing   │    Oceania    │         فیجی          │     FJI     │     -99     │   missing   │              Фиджи                ⋯
+│   missing   │    Africa     │       تانزانیا        │     TZA     │     -99     │   missing   │             Танзания              ⋯
+│   missing   │    Africa     │      صحرای غربی       │     -99     │     -99     │   missing   │         Западная Сахара           ⋯
+│   missing   │ North America │        کانادا         │     CAN     │     -99     │   missing   │              Канада               ⋯
+│   missing   │ North America │  ایالات متحده آمریکا  │     USA     │     -99     │   missing   │               США                 ⋯
+│      ⋮      │       ⋮       │           ⋮           │      ⋮      │      ⋮      │      ⋮      │                ⋮                  ⋱
+└─────────────┴───────────────┴───────────────────────┴─────────────┴─────────────┴─────────────┴────────────────────────────────────
+                                                                                                     162 columns and 172 rows omitted
 ```
 
 #### INMET
@@ -74,5 +89,19 @@ julia> INMET.stations()
 ### GeoStatsImages
 
 ```julia
-julia> GeoStatsImages.get(identifier)
+julia> GeoStatsImages.get("WalkerLake")
+160000×2 GeoTable over 400×400 CartesianGrid{2,Float64}
+┌────────────┬───────────────────────────────────────────┐
+│     Z      │                 geometry                  │
+│ Continuous │                Quadrangle                 │
+│ [NoUnits]  │                                           │
+├────────────┼───────────────────────────────────────────┤
+│  0.256614  │  Quadrangle((0.0, 0.0), ..., (0.0, 1.0))  │
+│  0.260752  │  Quadrangle((1.0, 0.0), ..., (1.0, 1.0))  │
+│  0.26127   │  Quadrangle((2.0, 0.0), ..., (2.0, 1.0))  │
+│  0.24452   │  Quadrangle((3.0, 0.0), ..., (3.0, 1.0))  │
+│  0.220545  │  Quadrangle((4.0, 0.0), ..., (4.0, 1.0))  │
+│     ⋮      │                     ⋮                     │
+└────────────┴───────────────────────────────────────────┘
+                                       159995 rows omitted
 ```

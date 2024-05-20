@@ -4,11 +4,11 @@
 
 module GeoArtifacts
 
-include("image.jl")
 include("gadm.jl")
-include("inmet.jl")
 include("naturalearth.jl")
+include("inmet.jl")
+include("geostatsimages.jl")
 
-export GADM, INMET
+export GADM, NaturalEarth, INMET, GeoStatsImages
 
 end

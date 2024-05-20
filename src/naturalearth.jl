@@ -2,13 +2,15 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # -----------------------------------------------------------------
 
+module NaturalEarth
+
 using GeoIO
 
 import NaturalEarth as NE
 
 """
-    GeoArtifacts.naturalearth(name::String; fix=true, version = v"5.1.2")
-    GeoArtifacts.naturalearth(name::String, scale::Int; fix=true, version = v"5.1.2")
+    NaturalEarth.get(name::String; fix=true, version = v"5.1.2")
+    NaturalEarth.get(name::String, scale::Int; fix=true, version = v"5.1.2")
 
 Load a NaturalEarth dataset as a `GeoTable`.
 
@@ -21,8 +23,10 @@ issues with polygons.
 # Examples
 
 ```julia
-GeoArtifacts.naturalearth("admin_0_countries", 110)
-GeoArtifacts.naturalearth("110m_admin_0_countries")
+NaturalEarth.get("admin_0_countries", 110)
+NaturalEarth.get("110m_admin_0_countries")
 ```
 """
-naturalearth(args...; fix=true, kwargs...) = GeoIO.asgeotable(NE.naturalearth(args...; kwargs...), fix)
+get(args...; fix=true, kwargs...) = GeoIO.asgeotable(NE.naturalearth(args...; kwargs...), fix)
+
+end

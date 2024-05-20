@@ -3,12 +3,7 @@ using Meshes
 using Test
 
 @testset "GeoArtifacts.jl" begin
-  @testset "GeoStatsImages.jl" begin
-    gtb = GeoArtifacts.image("Strebelle")
-    @test names(gtb) == ["facies", "geometry"]
-  end
-
-  @testset "GADM.jl" begin
+  @testset "GADM" begin
     gtb = GADM.get("SVN", depth=1)
     @test length(gtb.geometry) == 12
 
@@ -19,7 +14,17 @@ using Test
     @test length(gtb.geometry) == 7
   end
 
-  @testset "INMET.jl" begin
+  @testset "NaturalEarth" begin
+    gtb = NaturalEarth.get("admin_0_countries", 110)
+    @test gtb.geometry isa GeometrySet
+    @test embeddim(gtb.geometry) == 2
+
+    gtb = NaturalEarth.get("110m_admin_0_countries")
+    @test gtb.geometry isa GeometrySet
+    @test embeddim(gtb.geometry) == 2
+  end
+
+  @testset "INMET" begin
     # automatic stations
     gtb = INMET.stations()
     @test all(isequal("Automatica"), gtb.TP_ESTACAO)
@@ -33,13 +38,8 @@ using Test
     @test embeddim(gtb.geometry) == 3
   end
 
-  @testset "NaturalEarth.jl" begin
-    gtb = GeoArtifacts.naturalearth("admin_0_countries", 110)
-    @test gtb.geometry isa GeometrySet
-    @test embeddim(gtb.geometry) == 2
-
-    gtb = GeoArtifacts.naturalearth("110m_admin_0_countries")
-    @test gtb.geometry isa GeometrySet
-    @test embeddim(gtb.geometry) == 2
+  @testset "GeoStatsImages" begin
+    gtb = GeoStatsImages.get("Strebelle")
+    @test names(gtb) == ["facies", "geometry"]
   end
 end
