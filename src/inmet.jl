@@ -2,6 +2,12 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # -----------------------------------------------------------------
 
+"""
+Provides functions to load data from the INMET API.
+Please check their docstrings for more details:
+
+- `INMET.stations`
+"""
 module INMET
 
 using Meshes

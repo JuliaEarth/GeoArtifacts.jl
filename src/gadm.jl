@@ -2,6 +2,10 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # -----------------------------------------------------------------
 
+"""
+Provides a single function `GADM.get` to download data from the GADM database.
+Please check its docstring for more details.
+"""
 module GADM
 
 using GeoIO

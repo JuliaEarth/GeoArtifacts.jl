@@ -2,6 +2,10 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # -----------------------------------------------------------------
 
+"""
+Provides a single function `NaturalEarth.get` to download data from the
+NaturalEarth database.  Please check its docstring for more details.
+"""
 module NaturalEarth
 
 using GeoIO

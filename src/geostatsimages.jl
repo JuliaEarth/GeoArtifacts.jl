@@ -2,6 +2,11 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # -----------------------------------------------------------------
 
+"""
+Provides a single function `GeoStatsImages.get` to load images
+from geostatistics literature. Please check its docstring for
+more details.
+"""
 module GeoStatsImages
 
 using GeoStatsImages
