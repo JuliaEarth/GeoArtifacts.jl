@@ -25,9 +25,7 @@ at a given depth starting from the given region specification.
 The option `fix` can be used to fix orientation and degeneracy
 issues with polygons.
 """
-function get(country, subregions...; depth=0, ϵ=nothing, min=3, max=typemax(Int), maxiter=10, fix=true, kwargs...)
-  table = GADMData.get(country, subregions...; depth, kwargs...)
-  GeoIO.asgeotable(table, fix)
-end
+get(country, subregions...; depth=0, fix=true, kwargs...) =
+  GeoIO.asgeotable(GADMData.get(country, subregions...; depth, kwargs...), fix)
 
 end
