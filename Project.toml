@@ -1,7 +1,7 @@
 name = "GeoArtifacts"
 uuid = "2a3f1dca-97a5-4513-bfd8-b69f0106a87e"
 authors = ["Elias Carvalho <eliascarvdev@gmail.com> and contributors"]
-version = "0.5.0"
+version = "0.6.0"
 
 [deps]
 GADM = "a8dd9ffe-31dc-4cf5-a379-ea69100a8233"
