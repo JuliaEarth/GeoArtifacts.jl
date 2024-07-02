@@ -17,11 +17,11 @@ using Test
   @testset "NaturalEarth" begin
     gtb = NaturalEarth.get("admin_0_countries", 110)
     @test gtb.geometry isa GeometrySet
-    @test embeddim(gtb.geometry) == 2
+    @test embeddim(gtb.geometry) == 3
 
     gtb = NaturalEarth.get("110m_admin_0_countries")
     @test gtb.geometry isa GeometrySet
-    @test embeddim(gtb.geometry) == 2
+    @test embeddim(gtb.geometry) == 3
   end
 
   @testset "INMET" begin
