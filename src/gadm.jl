@@ -12,6 +12,7 @@ using GeoIO
 using Meshes
 using GeoTables
 
+import GeoInterface as GI
 import GADM as GADMData
 
 """
@@ -25,7 +26,10 @@ at a given depth starting from the given region specification.
 The option `fix` can be used to fix orientation and degeneracy
 issues with polygons.
 """
-get(country, subregions...; depth=0, fix=true, kwargs...) =
-  GeoIO.asgeotable(GADMData.get(country, subregions...; depth, kwargs...), fix)
+function get(country, subregions...; depth=0, fix=true, kwargs...)
+  table = GADMData.get(country, subregions...; depth, kwargs...)
+  crs = GI.crs(table)
+  GeoIO.asgeotable(table, crs, fix)
+end
 
 end
