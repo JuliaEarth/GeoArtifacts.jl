@@ -10,7 +10,6 @@ module NaturalEarth
 
 using GeoIO
 
-import GeoInterface as GI
 import NaturalEarth as NE
 
 """
@@ -34,8 +33,7 @@ NaturalEarth.get("110m_admin_0_countries")
 """
 function get(args...; fix=true, kwargs...)
   table = NE.naturalearth(args...; kwargs...)
-  crs = GI.crs(table)
-  GeoIO.asgeotable(table, crs, fix)
+  GeoIO.asgeotable(table, fix)
 end
 
 end

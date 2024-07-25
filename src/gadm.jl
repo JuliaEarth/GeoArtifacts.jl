@@ -12,7 +12,6 @@ using GeoIO
 using Meshes
 using GeoTables
 
-import GeoInterface as GI
 import GADM as GADMData
 
 """
@@ -28,8 +27,7 @@ issues with polygons.
 """
 function get(country, subregions...; depth=0, fix=true, kwargs...)
   table = GADMData.get(country, subregions...; depth, kwargs...)
-  crs = GI.crs(table)
-  GeoIO.asgeotable(table, crs, fix)
+  GeoIO.asgeotable(table, fix)
 end
 
 end
