@@ -15,19 +15,16 @@ using GeoTables
 import GADM as GADMData
 
 """
-    GADM.get(country, subregions...; depth=0, fix=true)
+    GADM.get(country, subregions...; depth=0)
 
 (Down)load GADM table and convert the result into a `GeoTable`.
 
 The `depth` option can be used to return tables for subregions
 at a given depth starting from the given region specification.
-
-The option `fix` can be used to fix orientation and degeneracy
-issues with polygons.
 """
-function get(country, subregions...; depth=0, fix=true, kwargs...)
+function get(country, subregions...; depth=0, kwargs...)
   table = GADMData.get(country, subregions...; depth, kwargs...)
-  GeoIO.asgeotable(table, fix)
+  GeoIO.asgeotable(table)
 end
 
 end
