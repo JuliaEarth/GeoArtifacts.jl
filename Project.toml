@@ -15,7 +15,7 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
 GADM = "1.1"
-GeoIO = "1.15.2"
+GeoIO = "1.16"
 GeoStatsImages = "1.1"
 GeoTables = "1.21"
 INMET = "1.0"
