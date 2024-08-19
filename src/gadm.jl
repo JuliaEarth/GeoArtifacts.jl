@@ -87,7 +87,6 @@ end
 """
     GADM.get(country, subregions...; depth=0, version=v"4.1", kwargs...)
 
-
 (Down)load GADM table and convert the result into a `GeoTable`.
 
 The `depth` option can be used to return tables for subregions
@@ -101,6 +100,7 @@ The [`GADM.codes`](@ref) function can be used to get a table with all country co
 * `subregions`: Full official names in hierarchial order (provinces, districts, etc.);
 * `depth`: Number of levels below the last subregion to search;
 * `version`: Version of the GADM API;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
 ## Examples
 
