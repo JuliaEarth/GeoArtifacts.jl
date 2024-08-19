@@ -16,7 +16,7 @@ using DataDeps
 
 const CODES = [c.alpha3 for c in all_countries()]
 
-const API_VERSIONS = ("4.1", "4.0", "3.6", "2.8")
+const API_VERSIONS = (v"4.1", v"4.0", v"3.6", v"2.8")
 
 """
     GADM.codes()
@@ -26,39 +26,38 @@ Lis of all ISO 3166 Alpha 3 country codes.
 codes() = CODES
 
 """
-    GADM.download(code; version="4.1")
+    GADM.download(code; version=v"4.1")
 
-Downloads data for country `code` using a given `version` of the
-[GADM](https://gadm.org) API.
+Downloads data for country `code` using a given `version` of the [GADM](https://gadm.org) API.
 The available API versions are: 4.1 (default), 4.0, 3.6 and 2.8.
 """
-function download(code; version="4.1")
+function download(code; version=v"4.1")
   if code ∉ CODES
     throw(ArgumentError("country code \"$code\" not found, please provide a standard ISO 3 country code"))
   end
 
   if version ∉ API_VERSIONS
-    throw(ArgumentError("invalid API version, please use one of these: $(join(API_VERSIONS, ", "))"))
+    throw(ArgumentError("invalid API version, please check the docstring"))
   end
 
-  route = if version == "2.8"
+  route = if version == v"2.8"
     "https://biogeo.ucdavis.edu/data/gadm2.8/gpkg"
   else
     "https://geodata.ucdavis.edu/gadm/gadm$version/gpkg"
   end
 
-  filename = if version == "2.8"
+  filename = if version == v"2.8"
     "$(code)_adm_gpkg.zip"
-  elseif version == "3.6"
+  elseif version == v"3.6"
     "gadm36_$(code)_gpkg.zip"
-  elseif version == "4.0"
+  elseif version == v"4.0"
     "gadm40_$(code).gpkg"
   else
     "gadm41_$(code).gpkg"
   end
 
   ID = "GADM_$code"
-  postfetch = version ∈ ("3.6", "2.8") ? DataDeps.unpack : identity
+  postfetch = version < v"4.0" ? DataDeps.unpack : identity
 
   try
     # if data is already on disk
@@ -82,7 +81,7 @@ function download(code; version="4.1")
 end
 
 """
-    GADM.get(country, subregions...; depth=0, version="4.1")
+    GADM.get(country, subregions...; depth=0, version=v"4.1")
 
 
 (Down)load GADM table and convert the result into a `GeoTable`.
