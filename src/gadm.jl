@@ -110,11 +110,11 @@ end
 """
     GADM.get(country, subregions...; depth=0, version="4.1")
 
-Returns a Tables.jl columntable for the requested region.
 
-Geometry of the region(s) can be accessed with the key `geom`.
+(Down)load GADM table and convert the result into a `GeoTable`.
 
-The geometries are `GeoInterface`-compliant Polygons/MultiPolygons.
+The `depth` option can be used to return tables for subregions
+at a given depth starting from the given region specification.
 
 1. country: ISO 3166 Alpha 3 country code
 2. subregions: Full official names in hierarchial order (provinces, districts, etc.)
