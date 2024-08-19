@@ -11,18 +11,19 @@ module GADM
 using GeoIO
 using GeoTables
 using TableTransforms
+using Countries
 using DataDeps
 
-"""
-    GADM.isvalidcode(str)
-
-Tells whether or not `str` is a valid
-ISO 3166 Alpha 3 country code. Valid
-code examples are "IND", "USA", "BRA".
-"""
-isvalidcode(str) = match(r"\b[A-Z]{3}\b", str) !== nothing
+const CODES = [c.alpha3 for c in all_countries()]
 
 const API_VERSIONS = ("4.1", "4.0", "3.6", "2.8")
+
+"""
+    GADM.codes()
+
+Lis of all ISO 3166 Alpha 3 country codes.
+"""
+codes() = CODES
 
 """
     GADM.download(code; version="4.1")
@@ -34,9 +35,13 @@ It is possible to choose the API version by passing it to the
 `version` keyword argument as string.
 The available API versions are: 4.1 (default), 4.0, 3.6 and 2.8.
 """
-function download(country; version="4.1")
+function download(code; version="4.1")
+  if code ∉ CODES
+    throw(ArgumentError("country code \"$code\" not found, please provide a standard ISO 3 country code"))
+  end
+
   if version ∉ API_VERSIONS
-    throw(ArgumentError("invalid API version"))
+    throw(ArgumentError("invalid API version, please use one of these: $(join(API_VERSIONS, ", "))"))
   end
 
   route = if version == "2.8"
@@ -46,16 +51,16 @@ function download(country; version="4.1")
   end
 
   filename = if version == "2.8"
-    "$(country)_adm_gpkg.zip"
+    "$(code)_adm_gpkg.zip"
   elseif version == "3.6"
-    "gadm36_$(country)_gpkg.zip"
+    "gadm36_$(code)_gpkg.zip"
   elseif version == "4.0"
-    "gadm40_$(country).gpkg"
+    "gadm40_$(code).gpkg"
   else
-    "gadm41_$(country).gpkg"
+    "gadm41_$(code).gpkg"
   end
 
-  ID = "GADM_$country"
+  ID = "GADM_$code"
   postfetch = version ∈ ("3.6", "2.8") ? DataDeps.unpack : identity
 
   try
@@ -67,44 +72,16 @@ function download(country; version="4.1")
     # and download using DataDeps.jl
     try
       register(DataDep(ID,
-        "Geographic data for country $country provided by the https://gadm.org project.",
+        "Geographic data for country $code provided by the https://gadm.org project.",
         "$route/$filename",
         Any,
         post_fetch_method=postfetch
       ))
       @datadep_str ID
-    catch e
-      if e isa HTTP.StatusError && e.status == 404
-        throw(ArgumentError("country code \"$country\" not found, please provide a standard ISO 3 country code"))
-      else
-        throw(ErrorException("download failed due to internet and/or server issues"))
-      end
+    catch
+      throw(ErrorException("download failed due to internet and/or server issues"))
     end
   end
-end
-
-"""
-    GADM.dataread(path; kwargs...)
-
-Read data in `path` returned by [`GADM.download`](@ref).
-"""
-function dataread(path; kwargs...)
-  files = readdir(path; join=true)
-
-  isgpkg(f) = last(splitext(f)) == ".gpkg"
-  gpkg = files[findfirst(isgpkg, files)]
-
-  GeoIO.load(gpkg; kwargs...)
-end
-
-"""
-    GADM.getdataset(country; layer=0, version="4.1")
-
-Downloads and extracts dataset of the given country code.
-"""
-function getdataset(country; layer=0, kwargs...)
-  isvalidcode(country) || throw(ArgumentError("please provide standard ISO 3 country codes"))
-  dataread(download(country; kwargs...); layer)
 end
 
 """
@@ -132,9 +109,17 @@ gtb = GADM.get("IND", "Uttar Pradesh"; depth=1)
 ```
 """
 function get(country, subregions...; depth=0, kwargs...)
+  # download country data
+  path = download(country; kwargs...)
+
+  # find GeoPackage file
+  files = readdir(path; join=true)
+  isgpkg(f) = last(splitext(f)) == ".gpkg"
+  gpkg = files[findfirst(isgpkg, files)]
+
   # select layer by level
   level = length(subregions) + depth
-  gtb = getdataset(country; layer=level, kwargs...)
+  gtb = GeoIO.load(gpkg; layer=level)
 
   fgtb = if !isempty(subregions)
     # fetch query params

@@ -4,6 +4,7 @@ authors = ["Elias Carvalho <eliascarvdev@gmail.com> and contributors"]
 version = "1.0.3"
 
 [deps]
+Countries = "5bf49175-83fb-4b6d-82b5-d6ded85154ae"
 DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
 GeoIO = "f5a160d5-e41d-4189-8b61-d57781c419e3"
 GeoStatsImages = "7cd16168-b42c-5e7d-a585-4f59d326662d"
@@ -15,6 +16,7 @@ TableTransforms = "0d432bfd-3ee1-4ac1-886a-39f05cc69a3e"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
+Countries = "0.3"
 DataDeps = "0.7"
 GeoIO = "1.16"
 GeoStatsImages = "1.1"
