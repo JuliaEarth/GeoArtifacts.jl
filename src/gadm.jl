@@ -43,7 +43,7 @@ function download(code; version=v"4.1")
   route = if version == v"2.8"
     "https://biogeo.ucdavis.edu/data/gadm2.8/gpkg"
   else
-    "https://geodata.ucdavis.edu/gadm/gadm$version/gpkg"
+    "https://geodata.ucdavis.edu/gadm/gadm$(version.major).$(version.minor)/gpkg"
   end
 
   filename = if version == v"2.8"
