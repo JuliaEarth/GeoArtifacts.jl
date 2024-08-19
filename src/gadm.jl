@@ -16,14 +16,16 @@ using DataDeps
 
 const CODES = [c.alpha3 for c in all_countries()]
 
+const CODETABLE = [(country=c.name, code=c.alpha3) for c in all_countries()]
+
 const API_VERSIONS = (v"4.1", v"4.0", v"3.6", v"2.8")
 
 """
     GADM.codes()
 
-Lis of all ISO 3166 Alpha 3 country codes.
+Table with all ISO 3166 Alpha 3 country codes.
 """
-codes() = CODES
+codes() = CODETABLE
 
 """
     GADM.download(code; version=v"4.1")
@@ -83,7 +85,7 @@ function download(code; version=v"4.1")
 end
 
 """
-    GADM.get(country, subregions...; depth=0, version=v"4.1")
+    GADM.get(country, subregions...; depth=0, version=v"4.1", kwargs...)
 
 
 (Down)load GADM table and convert the result into a `GeoTable`.
@@ -91,9 +93,14 @@ end
 The `depth` option can be used to return tables for subregions
 at a given depth starting from the given region specification.
 
-1. country: ISO 3166 Alpha 3 country code
-2. subregions: Full official names in hierarchial order (provinces, districts, etc.)
-3. depth: Number of levels below the last subregion to search, default = 0
+The [`GADM.codes`](@ref) function can be used to get a table with all country codes.
+
+## Parameters
+
+* `country`: ISO 3166 Alpha 3 country code;
+* `subregions`: Full official names in hierarchial order (provinces, districts, etc.);
+* `depth`: Number of levels below the last subregion to search;
+* `version`: Version of the GADM API;
 
 ## Examples
 
@@ -106,9 +113,9 @@ gtb = GADM.get("IND"; depth=1)
 gtb = GADM.get("IND", "Uttar Pradesh"; depth=1)
 ```
 """
-function get(country, subregions...; depth=0, kwargs...)
+function get(country, subregions...; depth=0, version=v"4.1", kwargs...)
   # download country data
-  path = download(country; kwargs...)
+  path = download(country; version)
 
   # find GeoPackage file
   files = readdir(path; join=true)
@@ -117,20 +124,20 @@ function get(country, subregions...; depth=0, kwargs...)
 
   # select layer by level
   level = length(subregions) + depth
-  gtb = GeoIO.load(gpkg; layer=level)
+  gtb = GeoIO.load(gpkg; layer=level, kwargs...)
 
-  fgtb = if !isempty(subregions)
+  transform = if !isempty(subregions)
     # fetch query params
     qcols = ["NAME_$(qlevel)" for qlevel in 1:length(subregions)]
     query = zip(qcols, subregions)
 
     # filter layer by subregions 
-    gtb |> Filter(row -> all(row[col] == val for (col, val) in query))
+    Filter(row -> all(row[col] == val for (col, val) in query))
   else
-    gtb
+    Identity()
   end
 
-  fgtb
+  gtb |> transform
 end
 
 end
