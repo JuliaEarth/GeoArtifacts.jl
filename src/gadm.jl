@@ -100,7 +100,7 @@ end
 """
     GADM.getdataset(country; layer=0, version="4.1")
 
-Downloads and extracts dataset of the given country code
+Downloads and extracts dataset of the given country code.
 """
 function getdataset(country; layer=0, kwargs...)
   isvalidcode(country) || throw(ArgumentError("please provide standard ISO 3 country codes"))
