@@ -18,7 +18,7 @@ const CODES = [c.alpha3 for c in all_countries()]
 
 const CODETABLE = [(country=c.name, code=c.alpha3) for c in all_countries()]
 
-const API_VERSIONS = (v"4.1", v"4.0", v"3.6", v"2.8")
+const APIVERSIONS = (v"4.1", v"4.0", v"3.6", v"2.8")
 
 """
     GADM.codes()
@@ -40,7 +40,7 @@ function download(code; version=v"4.1")
     throw(ArgumentError("country code \"$code\" not found, please provide a standard ISO 3 country code"))
   end
 
-  if version ∉ API_VERSIONS
+  if version ∉ APIVERSIONS
     throw(ArgumentError("invalid API version, please check the docstring"))
   end
 
