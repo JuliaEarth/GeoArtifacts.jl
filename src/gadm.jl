@@ -28,11 +28,8 @@ codes() = CODES
 """
     GADM.download(code; version="4.1")
 
-Downloads data for country `code` using DataDeps.jl and returns file path.
-The data is provided by the API of the [GADM](https://gadm.org) project.
-
-It is possible to choose the API version by passing it to the
-`version` keyword argument as string.
+Downloads data for country `code` using a given `version` of the
+[GADM](https://gadm.org) API.
 The available API versions are: 4.1 (default), 4.0, 3.6 and 2.8.
 """
 function download(code; version="4.1")
