@@ -14,7 +14,7 @@ using TableTransforms
 using DataDeps
 
 """
-    isvalidcode(str)
+    GADM.isvalidcode(str)
 
 Tells whether or not `str` is a valid
 ISO 3166 Alpha 3 country code. Valid
@@ -25,7 +25,7 @@ isvalidcode(str) = match(r"\b[A-Z]{3}\b", str) !== nothing
 const API_VERSIONS = ("4.1", "4.0", "3.6", "2.8")
 
 """
-    download(country; version="4.1")
+    GADM.download(country; version="4.1")
 
 Downloads data for `country` using DataDeps.jl and returns path.
 The data is provided by the API of the [GADM](https://gadm.org) project.
@@ -84,9 +84,9 @@ function download(country; version="4.1")
 end
 
 """
-    dataread(path; kwargs...)
+    GADM.dataread(path; kwargs...)
 
-Read data in `path` returned by [`download`](@ref).
+Read data in `path` returned by [`GADM.download`](@ref).
 """
 function dataread(path; kwargs...)
   files = readdir(path; join=true)
@@ -98,7 +98,7 @@ function dataread(path; kwargs...)
 end
 
 """
-    getdataset(country; layer=0, version="4.1")
+    GADM.getdataset(country; layer=0, version="4.1")
 
 Downloads and extracts dataset of the given country code
 """
@@ -136,20 +136,18 @@ function get(country, subregions...; depth=0, kwargs...)
   level = length(subregions) + depth
   gtb = getdataset(country; layer=level, kwargs...)
 
-  sgtb = if !isempty(subregions)
+  fgtb = if !isempty(subregions)
     # fetch query params
     qcols = ["NAME_$(qlevel)" for qlevel in 1:length(subregions)]
     query = zip(qcols, subregions)
 
     # filter layer by subregions 
-    fgtb = gtb |> Filter(row -> all(row[col] == val for (col, val) in query))
-    nrow(fgtb) == 0 && throw(ArgumentError("could not find required region (country $country, subregions $subregions)"))
-    fgtb
+    gtb |> Filter(row -> all(row[col] == val for (col, val) in query))
   else
     gtb
   end
 
-  sgtb
+  fgtb
 end
 
 end
