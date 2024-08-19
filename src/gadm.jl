@@ -28,7 +28,9 @@ codes() = CODES
 """
     GADM.download(code; version=v"4.1")
 
-Downloads data for country `code` using a given `version` of the [GADM](https://gadm.org) API.
+Downloads data for country `code` using a given `version` of
+the [GADM](https://gadm.org) API.
+
 The available API versions are: 4.1 (default), 4.0, 3.6 and 2.8.
 """
 function download(code; version=v"4.1")
