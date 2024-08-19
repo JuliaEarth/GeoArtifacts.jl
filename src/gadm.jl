@@ -25,9 +25,9 @@ isvalidcode(str) = match(r"\b[A-Z]{3}\b", str) !== nothing
 const API_VERSIONS = ("4.1", "4.0", "3.6", "2.8")
 
 """
-    GADM.download(country; version="4.1")
+    GADM.download(code; version="4.1")
 
-Downloads data for `country` using DataDeps.jl and returns path.
+Downloads data for country `code` using DataDeps.jl and returns file path.
 The data is provided by the API of the [GADM](https://gadm.org) project.
 
 It is possible to choose the API version by passing it to the
