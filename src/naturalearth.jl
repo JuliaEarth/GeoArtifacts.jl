@@ -9,28 +9,59 @@ NaturalEarth database.  Please check its docstring for more details.
 module NaturalEarth
 
 using GeoIO
+using DataDeps
+using TableTransforms
+using Tables
+using CSV
 
-import NaturalEarth as NE
+const TABLE = CSV.File(joinpath(@__DIR__, "..", "artifacts", "NaturalEarth.csv")) 
 
-"""
-    NaturalEarth.get(name::String; version = v"5.1.2")
-    NaturalEarth.get(name::String, scale::Int; version = v"5.1.2")
+function download(scale, map, variation)
+  scalestr = "1:$(scale)m"
+  mapquery = contains(map)
+  varquery = contains(variation)
 
-Load a NaturalEarth dataset as a `GeoTable`.
+  srows = TABLE |> Filter(row -> row.Scale == scalestr && mapquery(row.Map) && varquery(row.Variation))
+  srow = Tables.rows(srows) |> first
 
-The `name` should not include the `ne_` prefix, and if providing a `scale`
-should also not include a scale. No suffix should be added.
+  link = srow.Download
+  fname = split(link, "/") |> last |> splitext |> first
 
-# Examples
+  try
+    # if data is already on disk
+    # we just return the path
+    @datadep_str fname
+  catch
+    # otherwise we register the data
+    # and download using DataDeps.jl
+    try
+      register(DataDep(fname,
+        """
+        Geographic data provided by the https://www.naturalearthdata.com project.
+        Scale: $(srow.Scale)
+        Map: $(srow.Map)
+        Variation: $(srow.Variation)
+        """,
+        link,
+        Any,
+        post_fetch_method=DataDeps.unpack
+      ))
+      @datadep_str fname
+    catch
+      throw(ErrorException("download failed due to internet and/or server issues"))
+    end
+  end
+end
 
-```julia
-NaturalEarth.get("admin_0_countries", 110)
-NaturalEarth.get("110m_admin_0_countries")
-```
-"""
-function get(args...; kwargs...)
-  table = NE.naturalearth(args...; kwargs...)
-  GeoIO.asgeotable(table)
+function get(scale, map, variation; kwargs...)
+  path = download(scale, map, variation)
+
+  # find Shapefile/GeoTIFF file
+  files = readdir(path; join=true)
+  isgeo(f) = last(splitext(f)) ∈ (".shp", ".tif", ".tiff")
+  file = files[findfirst(isgeo, files)]
+
+  GeoIO.load(file; kwargs...)
 end
 
 end
