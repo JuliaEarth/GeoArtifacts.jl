@@ -37,9 +37,4 @@ using Test
     @test gtb.geometry isa PointSet
     @test embeddim(gtb.geometry) == 3
   end
-
-  @testset "GeoStatsImages" begin
-    gtb = GeoStatsImages.get("Strebelle")
-    @test names(gtb) == ["facies", "geometry"]
-  end
 end

@@ -7,7 +7,6 @@ module GeoArtifacts
 include("gadm.jl")
 include("naturalearth.jl")
 include("inmet.jl")
-include("geostatsimages.jl")
 
 function __init__()
   # make sure datasets are always downloaded
