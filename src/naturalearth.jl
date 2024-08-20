@@ -14,44 +14,42 @@ using TableTransforms
 using Tables
 using CSV
 
-function download(scale, entity, variat)
-  netable = CSV.File(joinpath(@__DIR__, "..", "artifacts", "NaturalEarth.csv"))
+function download(scale, entity, variant)
+  table = CSV.File(joinpath(@__DIR__, "..", "artifacts", "NaturalEarth.csv"))
 
-  scalestr = "1:$(scale)m"
-  srows = netable |> Filter(row -> row.SCALE == scalestr && contains(row.ENTITY, entity) && contains(row.VARIANT, variat))
+  srows = table |> Filter(row -> row.SCALE == "1:$(scale)m" && contains(row.ENTITY, entity) && contains(row.VARIANT, variant))
   srow = Tables.rows(srows) |> first
 
-  url = srow.URL
-  fname = split(url, "/") |> last |> splitext |> first
+  ID = "NaturalEarth_$(srow.SCALE)_$(srow.ENTITY)_$(srow.VARIANT)"
 
   try
     # if data is already on disk
     # we just return the path
-    @datadep_str fname
+    @datadep_str ID
   catch
     # otherwise we register the data
     # and download using DataDeps.jl
     try
-      register(DataDep(fname,
+      register(DataDep(ID,
         """
         Geographic data provided by the https://www.naturalearthdata.com project.
         Scale: $(srow.SCALE)
         Entity: $(srow.ENTITY)
-        Variat: $(srow.VARIANT)
+        Variant: $(srow.VARIANT)
         """,
-        url,
+        srow.URL,
         Any,
         post_fetch_method=DataDeps.unpack
       ))
-      @datadep_str fname
+      @datadep_str ID
     catch
       throw(ErrorException("download failed due to internet and/or server issues"))
     end
   end
 end
 
-function get(scale, entity, variat; kwargs...)
-  path = download(scale, entity, variat)
+function get(scale, entity, variant; kwargs...)
+  path = download(scale, entity, variant)
 
   # find Shapefile/GeoTIFF file
   files = readdir(path; join=true)
