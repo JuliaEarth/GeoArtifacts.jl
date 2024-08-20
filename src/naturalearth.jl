@@ -14,18 +14,15 @@ using TableTransforms
 using Tables
 using CSV
 
-const TABLE = CSV.File(joinpath(@__DIR__, "..", "artifacts", "NaturalEarth.csv")) 
+function download(scale, entity, variat)
+  netable = CSV.File(joinpath(@__DIR__, "..", "artifacts", "NaturalEarth.csv"))
 
-function download(scale, map, variation)
   scalestr = "1:$(scale)m"
-  mapquery = contains(map)
-  varquery = contains(variation)
-
-  srows = TABLE |> Filter(row -> row.Scale == scalestr && mapquery(row.Map) && varquery(row.Variation))
+  srows = netable |> Filter(row -> row.SCALE == scalestr && contains(row.ENTITY, entity) && contains(row.VARIANT, variat))
   srow = Tables.rows(srows) |> first
 
-  link = srow.Download
-  fname = split(link, "/") |> last |> splitext |> first
+  url = srow.URL
+  fname = split(url, "/") |> last |> splitext |> first
 
   try
     # if data is already on disk
@@ -38,11 +35,11 @@ function download(scale, map, variation)
       register(DataDep(fname,
         """
         Geographic data provided by the https://www.naturalearthdata.com project.
-        Scale: $(srow.Scale)
-        Map: $(srow.Map)
-        Variation: $(srow.Variation)
+        Scale: $(srow.SCALE)
+        Entity: $(srow.ENTITY)
+        Variat: $(srow.VARIANT)
         """,
-        link,
+        url,
         Any,
         post_fetch_method=DataDeps.unpack
       ))
@@ -53,8 +50,8 @@ function download(scale, map, variation)
   end
 end
 
-function get(scale, map, variation; kwargs...)
-  path = download(scale, map, variation)
+function get(scale, entity, variat; kwargs...)
+  path = download(scale, entity, variat)
 
   # find Shapefile/GeoTIFF file
   files = readdir(path; join=true)

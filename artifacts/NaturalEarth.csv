@@ -1,4 +1,4 @@
-"Scale","Type","Map","Variation","Download"
+"SCALE","TYPE","ENTITY","VARIANT","URL"
 "1:10m","Cultural","Admin 0 – Countries","countries","https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip"
 "1:10m","Cultural","Admin 0 – Countries","without boundary lakes","https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries_lakes.zip"
 "1:10m","Cultural","Admin 0 – Countries point-of-views","countries (Argentina POV)","https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries_arg.zip"
