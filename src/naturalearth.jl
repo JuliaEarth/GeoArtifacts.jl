@@ -5,12 +5,19 @@
 """
 Provides functions to download data from the NaturalEarth database.
 
-They are: [`NaturalEarth.countries`](@ref), [`NaturalEarth.borders`](@ref),
-[`NaturalEarth.states`](@ref), [`NaturalEarth.counties`](@ref),
-[`NaturalEarth.populatedplaces`](@ref), [`NaturalEarth.roads`](@ref),
-[`NaturalEarth.railroads`](@ref), [`NaturalEarth.airports`](@ref),
-[`NaturalEarth.ports`](@ref), [`NaturalEarth.urbanareas`](@ref),
-[`NaturalEarth.usparks`](@ref), [`NaturalEarth.timezones`](@ref),
+They are: 
+* [`NaturalEarth.countries`](@ref)
+* [`NaturalEarth.borders`](@ref)
+* [`NaturalEarth.states`](@ref)
+* [`NaturalEarth.counties`](@ref)
+* [`NaturalEarth.populatedplaces`](@ref)
+* [`NaturalEarth.roads`](@ref)
+* [`NaturalEarth.railroads`](@ref)
+* [`NaturalEarth.airports`](@ref)
+* [`NaturalEarth.ports`](@ref)
+* [`NaturalEarth.urbanareas`](@ref)
+* [`NaturalEarth.usparks`](@ref)
+* [`NaturalEarth.timezones`](@ref)
 
 Please check the docstrings for more details.
 """
