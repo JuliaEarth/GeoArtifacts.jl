@@ -4,6 +4,14 @@
 
 """
 Provides functions to download data from the NaturalEarth database.
+
+They are: [`NaturalEarth.countries`](@ref), [`NaturalEarth.borders`](@ref),
+[`NaturalEarth.states`](@ref), [`NaturalEarth.counties`](@ref),
+[`NaturalEarth.populatedplaces`](@ref), [`NaturalEarth.roads`](@ref),
+[`NaturalEarth.railroads`](@ref), [`NaturalEarth.airports`](@ref),
+[`NaturalEarth.ports`](@ref), [`NaturalEarth.urbanareas`](@ref),
+[`NaturalEarth.usparks`](@ref), [`NaturalEarth.timezones`](@ref),
+
 Please check the docstrings for more details.
 """
 module NaturalEarth
@@ -69,6 +77,25 @@ end
 # PUBLIC API
 # -----------
 
+"""
+    NaturalEarth.countries(variant="default"; scale="1:10", kwargs...)
+
+Load all countries of the Earth.
+
+# Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Variants
+
+* `"default"`: Default countries map;
+* `"nolakes"`: Countries without boundary lakes;
+* `"isopov"`: ISO point-of-view;
+* `"toplevel"`: Top level countries point-of-view;
+* ISO 3166 Alpha 3 string: Point-of-view of selected countries;
+"""
 function countries(variant="default"; scale="1:10", kwargs...)
   ispov = false
   variantstr = if variant == "default"
@@ -153,6 +180,25 @@ function countries(variant="default"; scale="1:10", kwargs...)
   get(scale, entity, variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.borders(variant="default"; scale="1:10", kwargs...)
+
+Load all country borders of the Earth.
+
+# Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Variants
+
+* `"default"`: Default borders map;
+* `"mapunit"`: Borders with map units;
+* `"maritme"`: Borders of maritime indicators;
+* `"maritimechn"`: Borders of maritime indicators with China supplement;
+* `"maritme"`: Borders of Pacific grouping lines;
+"""
 function borders(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
     if scale == "1:10"
@@ -176,6 +222,24 @@ function borders(variant="default"; scale="1:10", kwargs...)
   get(scale, "Admin 0 – Boundary Lines", variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.states(variant="default"; scale="1:10", kwargs...)
+
+Load all states of the Earth.
+
+# Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Variants
+
+* `"default"`: Default states map;
+* `"ranks"`: States with scale ranks;
+* `"nolakes"`: States without large lakes;
+* `"borders"`: State borders;
+"""
 function states(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
     "states and provinces"
@@ -199,6 +263,24 @@ function states(variant="default"; scale="1:10", kwargs...)
   get(scale, "Admin 1 – States, Provinces", variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.counties(variant="default"; scale="1:10", kwargs...)
+
+Load all counties of the Earth.
+
+# Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Variants
+
+* `"default"`: Default counties map;
+* `"nolakes"`: Counties without large lakes;
+* `"ranks"`: Counties with scale ranks;
+* `"ranksislands"`: Counties with scale ranks and minor islands;
+"""
 function counties(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
     "counties"
@@ -214,6 +296,22 @@ function counties(variant="default"; scale="1:10", kwargs...)
   get(scale, "Admin 2 – Counties", variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.populatedplaces(variant="default"; scale="1:10", kwargs...)
+
+Load all populated places of the Earth.
+
+# Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Variants
+
+* `"default"`: Default populated places map;
+* `"simple"`: Simplified data (less columns);
+"""
 function populatedplaces(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
     "populated places"
@@ -225,6 +323,22 @@ function populatedplaces(variant="default"; scale="1:10", kwargs...)
   get(scale, "Populated Places", variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.roads(variant="default"; scale="1:10", kwargs...)
+
+Load all roads of the Earth.
+
+# Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Variants
+
+* `"default"`: Default roads map;
+* `"northamerica"`: Roads with North America supplement;
+"""
 function roads(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
     "roads"
@@ -236,6 +350,22 @@ function roads(variant="default"; scale="1:10", kwargs...)
   get(scale, "Roads", variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.railroads(variant="default"; scale="1:10", kwargs...)
+
+Load all rail roads of the Earth.
+
+# Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Variants
+
+* `"default"`: Default rail roads map;
+* `"northamerica"`: Rail roads with North America supplement;
+"""
 function railroads(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
     "railroads"
@@ -247,14 +377,64 @@ function railroads(variant="default"; scale="1:10", kwargs...)
   get(scale, "Railroads", variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.airports(; scale="1:10", kwargs...)
+
+Load all airports of the Earth.
+
+# Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+"""
 airports(; scale="1:10", kwargs...) = get(scale, "Airports", "airports"; kwargs...)
 
+"""
+    NaturalEarth.ports(; scale="1:10", kwargs...)
+
+Load all ports of the Earth.
+
+# Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+"""
 ports(; scale="1:10", kwargs...) = get(scale, "Ports", "ports"; kwargs...)
 
+"""
+    NaturalEarth.urbanareas(; scale="1:10", kwargs...)
+
+Load all urban areas of the Earth.
+
+# Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+"""
 urbanareas(; scale="1:10", kwargs...) = get(scale, "Urban Areas", "urban areas"; kwargs...)
 
+"""
+    NaturalEarth.usparks(; scale="1:10", kwargs...)
+
+Load the U.S. national parks.
+
+# Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+"""
 usparks(; scale="1:10", kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
 
+"""
+    NaturalEarth.timezones(; scale="1:10", kwargs...)
+
+Load all time zones of the Earth.
+
+# Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+"""
 timezones(; scale="1:10", kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
 
 # -----------------
