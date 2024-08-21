@@ -117,13 +117,53 @@ function states(; scale=10, variant=:states, kwargs...)
   get(scale, "Admin 1 – States, Provinces", variantstr; kwargs...)
 end
 
-counties(; scale=10, kwargs...) = get(scale, "Admin 2 – Counties", "counties"; kwargs...)
+function counties(; scale=10, variant=:counties, kwargs...)
+  variantstr = if variant == :counties
+    "counties"
+  elseif variant == :nolakes
+    "without large lakes"
+  elseif variant == :ranks
+    "as scale ranks"
+  elseif variant == :ranksislands
+    "scale ranks with minor islands"
+  else
+    varianterror()
+  end
+  get(scale, "Admin 2 – Counties", variantstr; kwargs...)
+end
 
-populatedplaces(; scale=10, kwargs...) = get(scale, "Populated Places", "populated places"; kwargs...)
+function populatedplaces(; scale=10, variant=:populatedplaces, kwargs...)
+  variantstr = if variant == :populatedplaces
+    "populated places"
+  elseif variant == :simple
+    "simple (less columns)"
+  else
+    varianterror()
+  end
+  get(scale, "Populated Places", variantstr; kwargs...)
+end
 
-roads(; scale=10, kwargs...) = get(scale, "Roads", "roads"; kwargs...)
+function roads(; scale=10, variant=:roads, kwargs...)
+  variantstr = if variant == :roads
+    "roads"
+  elseif variant == :northamerica
+    "North America supplement"
+  else
+    varianterror()
+  end
+  get(scale, "Roads", variantstr; kwargs...)
+end
 
-railroads(; scale=10, kwargs...) = get(scale, "Railroads", "railroads"; kwargs...)
+function railroads(; scale=10, variant=:railroads, kwargs...)
+  variantstr = if variant == :railroads
+    "railroads"
+  elseif variant == :northamerica
+    "North America supplement"
+  else
+    varianterror()
+  end
+  get(scale, "Railroads", variantstr; kwargs...)
+end
 
 airports(; scale=10, kwargs...) = get(scale, "Airports", "airports"; kwargs...)
 
