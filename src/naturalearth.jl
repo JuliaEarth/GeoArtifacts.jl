@@ -69,9 +69,9 @@ end
 # USER HELPERS
 # -------------
 
-countries(scale=10; kwargs...) = get(scale, "Admin 0 – Countries", "countries"; kwargs...)
+countries(; scale=10, kwargs...) = get(scale, "Admin 0 – Countries", "countries"; kwargs...)
 
-function boundarylines(scale=10; kwargs...)
+function boundarylines(; scale=10, kwargs...)
   variant = if scale == 10
     "land boundaries"
   elseif scale == 50
@@ -82,24 +82,24 @@ function boundarylines(scale=10; kwargs...)
   get(scale, "Admin 0 – Boundary Lines", variant; kwargs...)
 end
 
-states(scale=10; kwargs...) = get(scale, "Admin 1 – States, Provinces", "states and provinces"; kwargs...)
+states(; scale=10, kwargs...) = get(scale, "Admin 1 – States, Provinces", "states and provinces"; kwargs...)
 
-counties(scale=10; kwargs...) = get(scale, "Admin 2 – Counties", "counties"; kwargs...)
+counties(; scale=10, kwargs...) = get(scale, "Admin 2 – Counties", "counties"; kwargs...)
 
-populatedplaces(scale=10; kwargs...) = get(scale, "Populated Places", "populated places"; kwargs...)
+populatedplaces(; scale=10, kwargs...) = get(scale, "Populated Places", "populated places"; kwargs...)
 
-roads(scale=10; kwargs...) = get(scale, "Roads", "roads"; kwargs...)
+roads(; scale=10, kwargs...) = get(scale, "Roads", "roads"; kwargs...)
 
-railroads(scale=10; kwargs...) = get(scale, "Railroads", "railroads"; kwargs...)
+railroads(; scale=10, kwargs...) = get(scale, "Railroads", "railroads"; kwargs...)
 
-airports(scale=10; kwargs...) = get(scale, "Airports", "airports"; kwargs...)
+airports(; scale=10, kwargs...) = get(scale, "Airports", "airports"; kwargs...)
 
-ports(scale=10; kwargs...) = get(scale, "Ports", "ports"; kwargs...)
+ports(; scale=10, kwargs...) = get(scale, "Ports", "ports"; kwargs...)
 
-urbanareas(scale=10; kwargs...) = get(scale, "Urban Areas", "urban areas"; kwargs...)
+urbanareas(; scale=10, kwargs...) = get(scale, "Urban Areas", "urban areas"; kwargs...)
 
-usparks(scale=10; kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
+usparks(; scale=10, kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
 
-timezones(scale=10; kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
+timezones(; scale=10, kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
 
 end
