@@ -88,6 +88,8 @@ function borders(; scale=10, variant=:border, kwargs...)
     "maritime indicators China supplement"
   elseif variant == :pacific
     "Pacific grouping lines"
+  else
+    varianterror()
   end
   get(scale, "Admin 0 – Boundary Lines", variantstr; kwargs...)
 end
