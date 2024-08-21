@@ -101,7 +101,47 @@ Load all countries of the Earth.
 * `"nolakes"`: Countries without boundary lakes;
 * `"isopov"`: ISO point-of-view;
 * `"toplevel"`: Top level countries point-of-view;
-* ISO 3166 Alpha 3 string: Point-of-view of selected countries;
+* ISO 3166 Alpha 3 string: Point-of-view of the following countries:
+  * `"ARG"`: Argentina
+  * `"BDG"`: Bangladesh
+  * `"BRA"`: Brazil
+  * `"CHN"`: China
+  * `"EGY"`: Egypt
+  * `"FRA"`: France
+  * `"DEU"`: Germany
+  * `"GRC"`: Greece
+  * `"IDN"`: Indonesia
+  * `"IND"`: India
+  * `"ISR"`: Israel
+  * `"ITA"`: Italy
+  * `"JPN"`: Japan
+  * `"KOR"`: South Korea
+  * `"MAR"`: Morocco
+  * `"NEP"`: Nepal
+  * `"NLD"`: Netherlands
+  * `"PAK"`: Pakistan
+  * `"POL"`: Poland
+  * `"PRT"`: Portugal
+  * `"PSE"`: Palestine
+  * `"RUS"`: Russia
+  * `"SAU"`: Saudi Arabia
+  * `"ESP"`: Spain
+  * `"SWE"`: Sweden
+  * `"TUR"`: Turkey
+  * `"TWN"`: Taiwan
+  * `"GBR"`: United Kingdom
+  * `"USA"`: United States
+  * `"UKR"`: Ukraine
+  * `"VNM"`: Vietnam
+
+# Examples
+
+```julia
+NaturalEarth.counties()
+NaturalEarth.counties(scale="1:100")
+NaturalEarth.counties("BRA")
+NaturalEarth.counties("USA")
+```
 """
 function countries(variant="default"; scale="1:10", kwargs...)
   ispov = false
@@ -205,6 +245,15 @@ Load all country borders of the Earth.
 * `"maritme"`: Borders of maritime indicators;
 * `"maritimechn"`: Borders of maritime indicators with China supplement;
 * `"maritme"`: Borders of Pacific grouping lines;
+
+# Examples
+
+```julia
+NaturalEarth.borders()
+NaturalEarth.borders(scale="1:100")
+NaturalEarth.borders("maritme")
+NaturalEarth.borders("pacific")
+```
 """
 function borders(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
@@ -246,6 +295,14 @@ Load all states of the Earth.
 * `"ranks"`: States with scale ranks;
 * `"nolakes"`: States without large lakes;
 * `"borders"`: State borders;
+
+# Examples
+
+```julia
+NaturalEarth.states()
+NaturalEarth.states(scale="1:100")
+NaturalEarth.states("borders")
+```
 """
 function states(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
@@ -287,6 +344,13 @@ Load all counties of the Earth.
 * `"nolakes"`: Counties without large lakes;
 * `"ranks"`: Counties with scale ranks;
 * `"ranksislands"`: Counties with scale ranks and minor islands;
+
+# Examples
+
+```julia
+NaturalEarth.counties()
+NaturalEarth.counties("ranks")
+```
 """
 function counties(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
@@ -318,6 +382,14 @@ Load all populated places of the Earth.
 
 * `"default"`: Default populated places map;
 * `"simple"`: Simplified data (less columns);
+
+# Examples
+
+```julia
+NaturalEarth.populatedplaces()
+NaturalEarth.populatedplaces(scale="1:100")
+NaturalEarth.populatedplaces("simple")
+```
 """
 function populatedplaces(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
@@ -345,6 +417,13 @@ Load all roads of the Earth.
 
 * `"default"`: Default roads map;
 * `"northamerica"`: Roads with North America supplement;
+
+# Examples
+
+```julia
+NaturalEarth.roads()
+NaturalEarth.roads("northamerica")
+```
 """
 function roads(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
@@ -372,6 +451,13 @@ Load all rail roads of the Earth.
 
 * `"default"`: Default rail roads map;
 * `"northamerica"`: Rail roads with North America supplement;
+
+# Examples
+
+```julia
+NaturalEarth.railroads()
+NaturalEarth.railroads("northamerica")
+```
 """
 function railroads(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
@@ -393,6 +479,13 @@ Load all airports of the Earth.
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Examples
+
+```julia
+NaturalEarth.airports()
+NaturalEarth.airports("scale="1:50"")
+```
 """
 airports(; scale="1:10", kwargs...) = get(scale, "Airports", "airports"; kwargs...)
 
@@ -405,6 +498,13 @@ Load all ports of the Earth.
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Examples
+
+```julia
+NaturalEarth.ports()
+NaturalEarth.ports("scale="1:50"")
+```
 """
 ports(; scale="1:10", kwargs...) = get(scale, "Ports", "ports"; kwargs...)
 
@@ -417,6 +517,13 @@ Load all urban areas of the Earth.
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Examples
+
+```julia
+NaturalEarth.urbanareas()
+NaturalEarth.urbanareas("scale="1:50"")
+```
 """
 urbanareas(; scale="1:10", kwargs...) = get(scale, "Urban Areas", "urban areas"; kwargs...)
 
@@ -429,6 +536,12 @@ Load the U.S. national parks.
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Examples
+
+```julia
+NaturalEarth.usparks()
+```
 """
 usparks(; scale="1:10", kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
 
@@ -441,6 +554,12 @@ Load all time zones of the Earth.
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+# Examples
+
+```julia
+NaturalEarth.timezones()
+```
 """
 timezones(; scale="1:10", kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
 
