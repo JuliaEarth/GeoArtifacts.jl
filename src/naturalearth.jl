@@ -77,71 +77,73 @@ function countries(; scale=10, variant=:countries, kwargs...)
     "without boundary lakes"
   else
     ispov = true
-    if variant == :arg
-      "countries (Argentina POV)"
-    elseif variant == :bdg
-      "countries (Bangladesh POV)"
-    elseif variant == :bra
-      "countries (Brazil POV)"
-    elseif variant == :chn
-      "countries (China POV)"
-    elseif variant == :egy
-      "countries (Egypt POV)"
-    elseif variant == :fra
-      "countries (France POV)"
-    elseif variant == :deu
-      "countries (Germany POV)"
-    elseif variant == :grc
-      "countries (Greece POV)"
-    elseif variant == :idn
-      "countries (Indonesia POV)"
-    elseif variant == :ind
-      "countries (India POV)"
-    elseif variant == :iso
+    if variant == :isopov
       "countries (ISO POV)"
-    elseif variant == :isr
-      "countries (Israel POV)"
-    elseif variant == :ita
-      "countries (Italy POV)"
-    elseif variant == :jpn
-      "countries (Japan POV)"
-    elseif variant == :kor
-      "countries (South Korea POV)"
-    elseif variant == :mar
-      "countries (Morocco POV)"
-    elseif variant == :nep
-      "countries (Nepal POV)"
-    elseif variant == :nld
-      "countries (Netherlands POV)"
-    elseif variant == :pak
-      "countries (Pakistan POV)"
-    elseif variant == :pol
-      "countries (Poland POV)"
-    elseif variant == :prt
-      "countries (Portugal POV)"
-    elseif variant == :pse
-      "countries (Palestine POV)"
-    elseif variant == :rus
-      "countries (Russia POV)"
-    elseif variant == :sau
-      "countries (Saudi Arabia POV)"
-    elseif variant == :esp
-      "countries (Spain POV)"
-    elseif variant == :swe
-      "countries (Sweden POV)"
-    elseif variant == :tlc
+    elseif variant == :toplevel
       "countries (top-level-countries POV)"
-    elseif variant == :tur
+    elseif variant == :ARG
+      "countries (Argentina POV)"
+    elseif variant == :BDG
+      "countries (Bangladesh POV)"
+    elseif variant == :BRA
+      "countries (Brazil POV)"
+    elseif variant == :CHN
+      "countries (China POV)"
+    elseif variant == :EGY
+      "countries (Egypt POV)"
+    elseif variant == :FRA
+      "countries (France POV)"
+    elseif variant == :DEU
+      "countries (Germany POV)"
+    elseif variant == :GRC
+      "countries (Greece POV)"
+    elseif variant == :IDN
+      "countries (Indonesia POV)"
+    elseif variant == :IND
+      "countries (India POV)"
+    elseif variant == :ISO
+      "countries (ISO POV)"
+    elseif variant == :ISR
+      "countries (Israel POV)"
+    elseif variant == :ITA
+      "countries (Italy POV)"
+    elseif variant == :JPN
+      "countries (Japan POV)"
+    elseif variant == :KOR
+      "countries (South Korea POV)"
+    elseif variant == :MAR
+      "countries (Morocco POV)"
+    elseif variant == :NEP
+      "countries (Nepal POV)"
+    elseif variant == :NLD
+      "countries (Netherlands POV)"
+    elseif variant == :PAK
+      "countries (Pakistan POV)"
+    elseif variant == :POL
+      "countries (Poland POV)"
+    elseif variant == :PRT
+      "countries (Portugal POV)"
+    elseif variant == :PSE
+      "countries (Palestine POV)"
+    elseif variant == :RUS
+      "countries (Russia POV)"
+    elseif variant == :SAU
+      "countries (Saudi Arabia POV)"
+    elseif variant == :ESP
+      "countries (Spain POV)"
+    elseif variant == :SWE
+      "countries (Sweden POV)"
+    elseif variant == :TUR
       "countries (Turkey POV)"
-    elseif variant == :twn
+    elseif variant == :TWN
       "countries (Taiwan POV)"
-    elseif variant == :gbr
+    elseif variant == :GBR
       "countries (United Kingdom POV)"
-    elseif variant == :usa
+    elseif variant == :USA
       "countries (United States POV)"
-    elseif variant == :ukr
+    elseif variant == :UKR
       "countries (Ukraine POV)"
-    elseif variant == :vnm
+    elseif variant == :VNM
       "countries (Vietnam POV)"
     else
       varianterror()
