@@ -71,7 +71,7 @@ end
 
 countries(; scale=10, kwargs...) = get(scale, "Admin 0 – Countries", "countries"; kwargs...)
 
-function boundarylines(; scale=10, kwargs...)
+function borders(; scale=10, kwargs...)
   variant = if scale == 10
     "land boundaries"
   elseif scale == 50
