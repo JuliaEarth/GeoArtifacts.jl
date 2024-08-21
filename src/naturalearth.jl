@@ -69,7 +69,87 @@ end
 # PUBLIC API
 # -----------
 
-countries(; scale=10, kwargs...) = get(scale, "Admin 0 – Countries", "countries"; kwargs...)
+function countries(; scale=10, variant=:countries, kwargs...)
+  ispov = false
+  variantstr = if variant == :countries
+    "countries"
+  elseif variant == :nolakes
+    "without boundary lakes"
+  else
+    ispov = true
+    if variant == :arg
+      "countries (Argentina POV)"
+    elseif variant == :bdg
+      "countries (Bangladesh POV)"
+    elseif variant == :bra
+      "countries (Brazil POV)"
+    elseif variant == :chn
+      "countries (China POV)"
+    elseif variant == :egy
+      "countries (Egypt POV)"
+    elseif variant == :fra
+      "countries (France POV)"
+    elseif variant == :deu
+      "countries (Germany POV)"
+    elseif variant == :grc
+      "countries (Greece POV)"
+    elseif variant == :idn
+      "countries (Indonesia POV)"
+    elseif variant == :ind
+      "countries (India POV)"
+    elseif variant == :iso
+      "countries (ISO POV)"
+    elseif variant == :isr
+      "countries (Israel POV)"
+    elseif variant == :ita
+      "countries (Italy POV)"
+    elseif variant == :jpn
+      "countries (Japan POV)"
+    elseif variant == :kor
+      "countries (South Korea POV)"
+    elseif variant == :mar
+      "countries (Morocco POV)"
+    elseif variant == :nep
+      "countries (Nepal POV)"
+    elseif variant == :nld
+      "countries (Netherlands POV)"
+    elseif variant == :pak
+      "countries (Pakistan POV)"
+    elseif variant == :pol
+      "countries (Poland POV)"
+    elseif variant == :prt
+      "countries (Portugal POV)"
+    elseif variant == :pse
+      "countries (Palestine POV)"
+    elseif variant == :rus
+      "countries (Russia POV)"
+    elseif variant == :sau
+      "countries (Saudi Arabia POV)"
+    elseif variant == :esp
+      "countries (Spain POV)"
+    elseif variant == :swe
+      "countries (Sweden POV)"
+    elseif variant == :tlc
+      "countries (top-level-countries POV)"
+    elseif variant == :tur
+      "countries (Turkey POV)"
+    elseif variant == :twn
+      "countries (Taiwan POV)"
+    elseif variant == :gbr
+      "countries (United Kingdom POV)"
+    elseif variant == :usa
+      "countries (United States POV)"
+    elseif variant == :ukr
+      "countries (Ukraine POV)"
+    elseif variant == :vnm
+      "countries (Vietnam POV)"
+    else
+      varianterror()
+    end
+  end
+  entity = ispov ? "Admin 0 – Countries point-of-views" : "Admin 0 – Countries"
+  get(scale, entity, variantstr; kwargs...)
+end
 
 function borders(; scale=10, variant=:border, kwargs...)
   variantstr = if variant == :border
