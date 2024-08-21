@@ -18,7 +18,7 @@ Provides functions to download data from the NaturalEarth database:
 * [`NaturalEarth.usparks`](@ref)
 * [`NaturalEarth.timezones`](@ref)
 
-Please check the docstrings for more details.
+Please check their docstrings for more details.
 """
 module NaturalEarth
 
