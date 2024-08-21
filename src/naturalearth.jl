@@ -3,8 +3,8 @@
 # -----------------------------------------------------------------
 
 """
-Provides a single function `NaturalEarth.get` to download data from the
-NaturalEarth database. Please check its docstring for more details.
+Provides utility functions to download data from the NaturalEarth database.
+Please check the docstrings for more details.
 """
 module NaturalEarth
 
@@ -65,9 +65,9 @@ function get(scale, entity, variant; kwargs...)
   GeoIO.load(file; kwargs...)
 end
 
-# -------------
-# USER HELPERS
-# -------------
+# -----------
+# PUBLIC API
+# -----------
 
 countries(; scale=10, kwargs...) = get(scale, "Admin 0 – Countries", "countries"; kwargs...)
 
@@ -134,6 +134,10 @@ urbanareas(; scale=10, kwargs...) = get(scale, "Urban Areas", "urban areas"; kwa
 usparks(; scale=10, kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
 
 timezones(; scale=10, kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
+
+# -----------------
+# HELPER FUNCTIONS
+# -----------------
 
 varianterror() = throw(ArgumentError("invalid variant, please check the docstring"))
 
