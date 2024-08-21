@@ -94,7 +94,7 @@ at a given depth starting from the given region specification.
 
 The [`GADM.codes`](@ref) function can be used to get a table with all country codes.
 
-## Parameters
+# Arguments
 
 * `country`: ISO 3166 Alpha 3 country code;
 * `subregions`: Full official names in hierarchial order (provinces, districts, etc.);
@@ -102,7 +102,7 @@ The [`GADM.codes`](@ref) function can be used to get a table with all country co
 * `version`: Version of the GADM API;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-## Examples
+# Examples
 
 ```julia
 # geotable of size 1, data of India's borders
