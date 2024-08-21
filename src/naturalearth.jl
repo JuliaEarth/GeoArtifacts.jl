@@ -15,13 +15,13 @@ using Tables
 using CSV
 
 function download(scale, entity, variant)
-  if scale ∉ (10, 50, 100)
-    throw(ArgumentError("invalid scale, please use one these: 10, 50, 100"))
+  if scale ∉ ("1:10", "1:50", "1:100")
+    throw(ArgumentError("invalid scale, please use one these: 1:10, 1:50, 1:100"))
   end
 
   table = CSV.File(joinpath(@__DIR__, "..", "artifacts", "NaturalEarth.csv"))
 
-  srows = table |> Filter(row -> row.SCALE == "1:$(scale)m" && contains(row.ENTITY, entity) && contains(row.VARIANT, variant))
+  srows = table |> Filter(row -> row.SCALE == "$(scale)m" && contains(row.ENTITY, entity) && contains(row.VARIANT, variant))
   srow = Tables.rows(srows) |> first
 
   url = srow.URL
@@ -69,81 +69,81 @@ end
 # PUBLIC API
 # -----------
 
-function countries(; scale=10, variant=:countries, kwargs...)
+function countries(variant="default"; scale="1:10", kwargs...)
   ispov = false
-  variantstr = if variant == :countries
+  variantstr = if variant == "default"
     "countries"
-  elseif variant == :nolakes
+  elseif variant == "nolakes"
     "without boundary lakes"
   else
     ispov = true
-    if variant == :isopov
+    if variant == "isopov"
       "countries (ISO POV)"
-    elseif variant == :toplevel
+    elseif variant == "toplevel"
       "countries (top-level-countries POV)"
-    elseif variant == :ARG
+    elseif variant == "ARG"
       "countries (Argentina POV)"
-    elseif variant == :BDG
+    elseif variant == "BDG"
       "countries (Bangladesh POV)"
-    elseif variant == :BRA
+    elseif variant == "BRA"
       "countries (Brazil POV)"
-    elseif variant == :CHN
+    elseif variant == "CHN"
       "countries (China POV)"
-    elseif variant == :EGY
+    elseif variant == "EGY"
       "countries (Egypt POV)"
-    elseif variant == :FRA
+    elseif variant == "FRA"
       "countries (France POV)"
-    elseif variant == :DEU
+    elseif variant == "DEU"
       "countries (Germany POV)"
-    elseif variant == :GRC
+    elseif variant == "GRC"
       "countries (Greece POV)"
-    elseif variant == :IDN
+    elseif variant == "IDN"
       "countries (Indonesia POV)"
-    elseif variant == :IND
+    elseif variant == "IND"
       "countries (India POV)"
-    elseif variant == :ISO
+    elseif variant == "ISO"
       "countries (ISO POV)"
-    elseif variant == :ISR
+    elseif variant == "ISR"
       "countries (Israel POV)"
-    elseif variant == :ITA
+    elseif variant == "ITA"
       "countries (Italy POV)"
-    elseif variant == :JPN
+    elseif variant == "JPN"
       "countries (Japan POV)"
-    elseif variant == :KOR
+    elseif variant == "KOR"
       "countries (South Korea POV)"
-    elseif variant == :MAR
+    elseif variant == "MAR"
       "countries (Morocco POV)"
-    elseif variant == :NEP
+    elseif variant == "NEP"
       "countries (Nepal POV)"
-    elseif variant == :NLD
+    elseif variant == "NLD"
       "countries (Netherlands POV)"
-    elseif variant == :PAK
+    elseif variant == "PAK"
       "countries (Pakistan POV)"
-    elseif variant == :POL
+    elseif variant == "POL"
       "countries (Poland POV)"
-    elseif variant == :PRT
+    elseif variant == "PRT"
       "countries (Portugal POV)"
-    elseif variant == :PSE
+    elseif variant == "PSE"
       "countries (Palestine POV)"
-    elseif variant == :RUS
+    elseif variant == "RUS"
       "countries (Russia POV)"
-    elseif variant == :SAU
+    elseif variant == "SAU"
       "countries (Saudi Arabia POV)"
-    elseif variant == :ESP
+    elseif variant == "ESP"
       "countries (Spain POV)"
-    elseif variant == :SWE
+    elseif variant == "SWE"
       "countries (Sweden POV)"
-    elseif variant == :TUR
+    elseif variant == "TUR"
       "countries (Turkey POV)"
-    elseif variant == :TWN
+    elseif variant == "TWN"
       "countries (Taiwan POV)"
-    elseif variant == :GBR
+    elseif variant == "GBR"
       "countries (United Kingdom POV)"
-    elseif variant == :USA
+    elseif variant == "USA"
       "countries (United States POV)"
-    elseif variant == :UKR
+    elseif variant == "UKR"
       "countries (Ukraine POV)"
-    elseif variant == :VNM
+    elseif variant == "VNM"
       "countries (Vietnam POV)"
     else
       varianterror()
@@ -153,22 +153,22 @@ function countries(; scale=10, variant=:countries, kwargs...)
   get(scale, entity, variantstr; kwargs...)
 end
 
-function borders(; scale=10, variant=:border, kwargs...)
-  variantstr = if variant == :border
-    if scale == 10
+function borders(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    if scale == "1:10"
       "land boundaries"
-    elseif scale == 50
+    elseif scale == "1:50"
       "land lines"
     else
       "country boundaries"
     end
-  elseif variant == :mapunit
+  elseif variant == "mapunit"
     "map unit lines"
-  elseif variant == :maritme
+  elseif variant == "maritme"
     "maritime indicators"
-  elseif variant == :maritimechn
+  elseif variant == "maritimechn"
     "maritime indicators China supplement"
-  elseif variant == :pacific
+  elseif variant == "pacific"
     "Pacific grouping lines"
   else
     varianterror()
@@ -176,19 +176,19 @@ function borders(; scale=10, variant=:border, kwargs...)
   get(scale, "Admin 0 – Boundary Lines", variantstr; kwargs...)
 end
 
-function states(; scale=10, variant=:states, kwargs...)
-  variantstr = if variant == :states
+function states(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
     "states and provinces"
-  elseif variant == :ranks
-    if scale == 10
+  elseif variant == "ranks"
+    if scale == "1:10"
       "as scale ranks"
     else
       "scale ranks"
     end
-  elseif variant == :nolakes
+  elseif variant == "nolakes"
     "without large lakes"
-  elseif variant == :borders
-    if scale == 100
+  elseif variant == "borders"
+    if scale == "1:100"
       "boundaries"
     else
       "boundary lines"
@@ -199,14 +199,14 @@ function states(; scale=10, variant=:states, kwargs...)
   get(scale, "Admin 1 – States, Provinces", variantstr; kwargs...)
 end
 
-function counties(; scale=10, variant=:counties, kwargs...)
-  variantstr = if variant == :counties
+function counties(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
     "counties"
-  elseif variant == :nolakes
+  elseif variant == "nolakes"
     "without large lakes"
-  elseif variant == :ranks
+  elseif variant == "ranks"
     "as scale ranks"
-  elseif variant == :ranksislands
+  elseif variant == "ranksislands"
     "scale ranks with minor islands"
   else
     varianterror()
@@ -214,10 +214,10 @@ function counties(; scale=10, variant=:counties, kwargs...)
   get(scale, "Admin 2 – Counties", variantstr; kwargs...)
 end
 
-function populatedplaces(; scale=10, variant=:populatedplaces, kwargs...)
-  variantstr = if variant == :populatedplaces
+function populatedplaces(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
     "populated places"
-  elseif variant == :simple
+  elseif variant == "simple"
     "simple (less columns)"
   else
     varianterror()
@@ -225,10 +225,10 @@ function populatedplaces(; scale=10, variant=:populatedplaces, kwargs...)
   get(scale, "Populated Places", variantstr; kwargs...)
 end
 
-function roads(; scale=10, variant=:roads, kwargs...)
-  variantstr = if variant == :roads
+function roads(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
     "roads"
-  elseif variant == :northamerica
+  elseif variant == "northamerica"
     "North America supplement"
   else
     varianterror()
@@ -236,10 +236,10 @@ function roads(; scale=10, variant=:roads, kwargs...)
   get(scale, "Roads", variantstr; kwargs...)
 end
 
-function railroads(; scale=10, variant=:railroads, kwargs...)
-  variantstr = if variant == :railroads
+function railroads(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
     "railroads"
-  elseif variant == :northamerica
+  elseif variant == "northamerica"
     "North America supplement"
   else
     varianterror()
@@ -247,15 +247,15 @@ function railroads(; scale=10, variant=:railroads, kwargs...)
   get(scale, "Railroads", variantstr; kwargs...)
 end
 
-airports(; scale=10, kwargs...) = get(scale, "Airports", "airports"; kwargs...)
+airports(; scale="1:10", kwargs...) = get(scale, "Airports", "airports"; kwargs...)
 
-ports(; scale=10, kwargs...) = get(scale, "Ports", "ports"; kwargs...)
+ports(; scale="1:10", kwargs...) = get(scale, "Ports", "ports"; kwargs...)
 
-urbanareas(; scale=10, kwargs...) = get(scale, "Urban Areas", "urban areas"; kwargs...)
+urbanareas(; scale="1:10", kwargs...) = get(scale, "Urban Areas", "urban areas"; kwargs...)
 
-usparks(; scale=10, kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
+usparks(; scale="1:10", kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
 
-timezones(; scale=10, kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
+timezones(; scale="1:10", kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
 
 # -----------------
 # HELPER FUNCTIONS
