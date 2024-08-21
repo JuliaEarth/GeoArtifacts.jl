@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------
 
 """
-Provides utility functions to download data from the NaturalEarth database.
+Provides functions to download data from the NaturalEarth database.
 Please check the docstrings for more details.
 """
 module NaturalEarth
