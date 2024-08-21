@@ -71,18 +71,49 @@ end
 
 countries(; scale=10, kwargs...) = get(scale, "Admin 0 – Countries", "countries"; kwargs...)
 
-function borders(; scale=10, kwargs...)
-  variant = if scale == 10
-    "land boundaries"
-  elseif scale == 50
-    "land lines"
-  else
-    "country boundaries"
+function borders(; scale=10, variant=:border, kwargs...)
+  variantstr = if variant == :border
+    if scale == 10
+      "land boundaries"
+    elseif scale == 50
+      "land lines"
+    else
+      "country boundaries"
+    end
+  elseif variant == :mapunit
+    "map unit lines"
+  elseif variant == :maritme
+    "maritime indicators"
+  elseif variant == :maritimechn
+    "maritime indicators China supplement"
+  elseif variant == :pacific
+    "Pacific grouping lines"
   end
-  get(scale, "Admin 0 – Boundary Lines", variant; kwargs...)
+  get(scale, "Admin 0 – Boundary Lines", variantstr; kwargs...)
 end
 
-states(; scale=10, kwargs...) = get(scale, "Admin 1 – States, Provinces", "states and provinces"; kwargs...)
+function states(; scale=10, variant=:states, kwargs...)
+  variantstr = if variant == :states
+    "states and provinces"
+  elseif variant == :ranks
+    if scale == 10
+      "as scale ranks"
+    else
+      "scale ranks"
+    end
+  elseif variant == :nolakes
+    "without large lakes"
+  elseif variant == :borders
+    if scale == 100
+      "boundaries"
+    else
+      "boundary lines"
+    end
+  else
+    varianterror()
+  end
+  get(scale, "Admin 1 – States, Provinces", variantstr; kwargs...)
+end
 
 counties(; scale=10, kwargs...) = get(scale, "Admin 2 – Counties", "counties"; kwargs...)
 
@@ -101,5 +132,7 @@ urbanareas(; scale=10, kwargs...) = get(scale, "Urban Areas", "urban areas"; kwa
 usparks(; scale=10, kwargs...) = get(scale, "Parks and Protected Lands", "U.S. national parks"; kwargs...)
 
 timezones(; scale=10, kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
+
+varianterror() = throw(ArgumentError("invalid variant, please check the docstring"))
 
 end
