@@ -599,6 +599,306 @@ NaturalEarth.timezones()
 """
 timezones(; scale="1:10", kwargs...) = get(scale, "Timezones", "time zones"; kwargs...)
 
+"""
+    NaturalEarth.coastlines(; scale="1:10", kwargs...)
+
+Load all coastlines of the Earth.
+
+## Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.coastlines()
+NaturalEarth.coastlines(scale="1:100")
+```
+"""
+coastlines(; scale="1:10", kwargs...) = get(scale, "Coastline", "coastline"; kwargs...)
+
+"""
+    NaturalEarth.lands(variant="default"; scale="1:10", kwargs...)
+
+Load all lands of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default lands map;
+* `"ranks"`: Lands with scale ranks;
+
+## Examples
+
+```julia
+NaturalEarth.lands()
+NaturalEarth.lands(scale="1:100")
+NaturalEarth.lands("ranks")
+```
+"""
+function lands(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "land"
+  elseif variant == "ranks"
+    "scale rank"
+  else
+    varianterror()
+  end
+  get(scale, "Land", variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.minorislands(variant="default"; scale="1:10", kwargs...)
+
+Load all minor islands of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default minor islands map;
+* `"coastline"`: Minor islands coastline;
+
+## Examples
+
+```julia
+NaturalEarth.minorislands()
+NaturalEarth.minorislands("coastline")
+```
+"""
+function minorislands(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "minor islands"
+  elseif variant == "coastline"
+    "minor islands coastline"
+  else
+    varianterror()
+  end
+  get(scale, "Minor Islands", variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.reefs(; scale="1:10", kwargs...)
+
+Load all reefs of the Earth.
+
+## Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.reefs()
+```
+"""
+reefs(; scale="1:10", kwargs...) = get(scale, "Reefs", "reefs"; kwargs...)
+
+"""
+    NaturalEarth.oceans(variant="default"; scale="1:10", kwargs...)
+
+Load all oceans of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default oceans map;
+* `"ranks"`: Oceans with scale ranks;
+
+## Examples
+
+```julia
+NaturalEarth.oceans()
+NaturalEarth.oceans(scale="1:100")
+NaturalEarth.oceans("ranks")
+```
+"""
+function oceans(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "ocean"
+  elseif variant == "ranks"
+    "scale rank"
+  else
+    varianterror()
+  end
+  get(scale, "Ocean", variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.rivers(variant="default"; scale="1:10", kwargs...)
+
+Load all rivers and lake centerlines of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default rivers map;
+* `"ranks"`: Rivers with scale ranks and tapering;
+* `"australia"`: Rivers with Australia supplement;
+* `"europe"`: Rivers with Europe supplement;
+* `"northamerica"`: Rivers with North America supplement;
+
+## Examples
+
+```julia
+NaturalEarth.rivers()
+NaturalEarth.rivers(scale="1:100")
+NaturalEarth.rivers("ranks")
+```
+"""
+function rivers(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "rivers and lake centerlines"
+  elseif variant == "ranks"
+    "with scale ranks + tapering"
+  elseif variant == "australia"
+    "Australia supplement"
+  elseif variant == "europe"
+    "Europe supplement"
+  elseif variant == "northamerica"
+    "North America supplement"
+  else
+    varianterror()
+  end
+  entity = if scale == "1:10"
+    "Rivers + lake centerlines"
+  else
+    "Rivers, Lake Centerlines"
+  end
+  get(scale, entity, variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.lakes(variant="default"; scale="1:10", kwargs...)
+
+Load all lakes and reservoirs of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default lakes map;
+* `"historic"`: Historic lakes;
+* `"pluvial"`: Pluvial lakes;
+* `"australia"`: Lakes with Australia supplement;
+* `"europe"`: Lakes with Europe supplement;
+* `"northamerica"`: Lakes with North America supplement;
+
+## Examples
+
+```julia
+NaturalEarth.lakes()
+NaturalEarth.lakes(scale="1:100")
+NaturalEarth.lakes("historic")
+```
+"""
+function lakes(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "lakes"
+  elseif variant == "historic"
+    if scale == "1:10"
+      "historic lakes"
+    else
+      "historic"
+    end
+  elseif variant == "pluvial"
+    "pluvial lakes"
+  elseif variant == "australia"
+    "Australia supplement"
+  elseif variant == "europe"
+    "Europe supplement"
+  elseif variant == "northamerica"
+    "North America supplement"
+  else
+    varianterror()
+  end
+  get(scale, "Lakes + Reservoirs", variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.physicallabels(variant="default"; scale="1:10", kwargs...)
+
+Load physical labels for areas and points of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Physical labels for areas;
+* `"points"`: Physical labels for points;
+* `"elevationpoints"`: Physical labels for elevation points;
+* `"marineareas"`: Physical labels for marine areas;
+
+```julia
+NaturalEarth.physicallabels()
+NaturalEarth.physicallabels(scale="1:50")
+NaturalEarth.physicallabels("points")
+NaturalEarth.physicallabels("points", scale="1:100")
+```
+"""
+function physicallabels(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "label areas"
+  elseif variant == "points"
+    "label points"
+  elseif variant == "elevationpoints"
+    "elevation points"
+  elseif variant == "marineareas"
+    "marine areas"
+  else
+    varianterror()
+  end
+  get(scale, "Physical Labels", variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.playas(; scale="1:10", kwargs...)
+
+Load all playas of the Earth.
+
+## Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.playas()
+NaturalEarth.playas(scale="1:50")
+```
+"""
+playas(; scale="1:10", kwargs...) = get(scale, "Playas", "playas"; kwargs...)
+
 # -----------------
 # HELPER FUNCTIONS
 # -----------------
