@@ -17,6 +17,29 @@ Provides functions to download data from the Natural Earth database:
 * [`NaturalEarth.urbanareas`](@ref)
 * [`NaturalEarth.usparks`](@ref)
 * [`NaturalEarth.timezones`](@ref)
+* [`NaturalEarth.coastlines`](@ref)
+* [`NaturalEarth.lands`](@ref)
+* [`NaturalEarth.minorislands`](@ref)
+* [`NaturalEarth.reefs`](@ref)
+* [`NaturalEarth.oceans`](@ref)
+* [`NaturalEarth.rivers`](@ref)
+* [`NaturalEarth.lakes`](@ref)
+* [`NaturalEarth.physicallabels`](@ref)
+* [`NaturalEarth.playas`](@ref)
+* [`NaturalEarth.glaciatedareas`](@ref)
+* [`NaturalEarth.iceshelves`](@ref)
+* [`NaturalEarth.bathymetry`](@ref)
+* [`NaturalEarth.geographiclines`](@ref)
+* [`NaturalEarth.graticules`](@ref)
+* [`NaturalEarth.crossblended`](@ref)
+* [`NaturalEarth.naturalearth1`](@ref)
+* [`NaturalEarth.naturalearth2`](@ref)
+* [`NaturalEarth.oceanbottom`](@ref)
+* [`NaturalEarth.shadedrelief`](@ref)
+* [`NaturalEarth.grayearth`](@ref)
+* [`NaturalEarth.usmanualshadedrelief`](@ref)
+* [`NaturalEarth.manualshadedrelief`](@ref)
+* [`NaturalEarth.prismashadedrelief`](@ref)
 
 Please check their docstrings for more details.
 """
@@ -1116,7 +1139,7 @@ NaturalEarth.crossblended("rwdo", size="large")
 ```
 """
 function crossblended(variant="default"; scale="1:10", size="default", kwargs...)
-  variant = if size == "default"
+  variantstr = if size == "default"
     if scale == "1:10"
       "medium size"
     else
@@ -1150,7 +1173,7 @@ function crossblended(variant="default"; scale="1:10", size="default", kwargs...
     varianterror()
   end
 
-  get(scale, entity, variant; kwargs...)
+  get(scale, entity, variantstr; kwargs...)
 end
 
 """
@@ -1188,7 +1211,7 @@ NaturalEarth.naturalearth1("rwd", size="large")
 ```
 """
 function naturalearth1(variant="default"; scale="1:10", size="default", kwargs...)
-  variant = if size == "default"
+  variantstr = if size == "default"
     if scale == "1:10"
       "medium size"
     else
@@ -1220,7 +1243,7 @@ function naturalearth1(variant="default"; scale="1:10", size="default", kwargs..
     varianterror()
   end
 
-  get(scale, entity, variant; kwargs...)
+  get(scale, entity, variantstr; kwargs...)
 end
 
 """
@@ -1258,7 +1281,7 @@ NaturalEarth.naturalearth2("rwd", size="large")
 ```
 """
 function naturalearth2(variant="default"; scale="1:10", size="default", kwargs...)
-  variant = if size == "default"
+  variantstr = if size == "default"
     if scale == "1:10"
       "medium size"
     else
@@ -1290,7 +1313,7 @@ function naturalearth2(variant="default"; scale="1:10", size="default", kwargs..
     varianterror()
   end
 
-  get(scale, entity, variant; kwargs...)
+  get(scale, entity, variantstr; kwargs...)
 end
 
 """
@@ -1311,13 +1334,13 @@ NaturalEarth.oceanbottom(scale="1:50")
 ```
 """
 function oceanbottom(; scale="1:10", kwargs...)
-  variant = if scale == "1:10"
+  variantstr = if scale == "1:10"
     "medium size"
   else
     "small size"
   end
 
-  get(scale, "Ocean Bottom", variant; kwargs...)
+  get(scale, "Ocean Bottom", variantstr; kwargs...)
 end
 
 """
@@ -1346,7 +1369,7 @@ NaturalEarth.shadedrelief(scale="1:50")
 ```
 """
 function shadedrelief(; scale="1:10", size="default", kwargs...)
-  variant = if size == "default"
+  variantstr = if size == "default"
     if scale == "1:10"
       "medium size"
     else
@@ -1362,7 +1385,7 @@ function shadedrelief(; scale="1:10", size="default", kwargs...)
     sizeerror()
   end
 
-  get(scale, "Shaded Relief Basic", variant; kwargs...)
+  get(scale, "Shaded Relief Basic", variantstr; kwargs...)
 end
 
 """
@@ -1401,7 +1424,7 @@ NaturalEarth.grayearth("rwd", size="large")
 ```
 """
 function grayearth(variant="default"; scale="1:10", size="default", kwargs...)
-  variant = if size == "default"
+  variantstr = if size == "default"
     if scale == "1:10"
       "medium size"
     else
@@ -1431,7 +1454,7 @@ function grayearth(variant="default"; scale="1:10", size="default", kwargs...)
     varianterror()
   end
 
-  get(scale, entity, variant; kwargs...)
+  get(scale, entity, variantstr; kwargs...)
 end
 
 """
