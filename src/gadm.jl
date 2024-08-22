@@ -94,7 +94,7 @@ at a given depth starting from the given region specification.
 
 The [`GADM.codes`](@ref) function can be used to get a table with all country codes.
 
-## Parameters
+## Arguments
 
 * `country`: ISO 3166 Alpha 3 country code;
 * `subregions`: Full official names in hierarchial order (provinces, districts, etc.);
