@@ -42,7 +42,7 @@ for each scale: https://www.naturalearthdata.com/
 
 ## Arguments
 
-* `scale`: Specifies the the map scale, can be `"1:10"`, `"1:50"` or `"1:100"`;
+* `scale`: Specifies the the map scale, can be: `"1:10"`, `"1:50"` or `"1:100"`;
 * `entity`: Specifies the name of the map to load;
 * `variant`: Specifies the type of geographic data to load;
 """
@@ -100,7 +100,7 @@ for each scale: https://www.naturalearthdata.com/
 
 ## Arguments
 
-* `scale`: Specifies the the map scale, can be `"1:10"`, `"1:50"` or `"1:100"`;
+* `scale`: Specifies the the map scale, can be: `"1:10"`, `"1:50"` or `"1:100"`;
 * `entity`: Specifies the name of the map to load;
 * `variant`: Specifies the type of geographic data to load;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
@@ -898,6 +898,180 @@ NaturalEarth.playas(scale="1:50")
 ```
 """
 playas(; scale="1:10", kwargs...) = get(scale, "Playas", "playas"; kwargs...)
+
+"""
+    NaturalEarth.glaciatedareas(; scale="1:10", kwargs...)
+
+Load all glaciated areas of the Earth.
+
+## Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.glaciatedareas()
+NaturalEarth.glaciatedareas(scale="1:100")
+```
+"""
+glaciatedareas(; scale="1:10", kwargs...) = get(scale, "Glaciated Areas", "glaciated areas"; kwargs...)
+
+"""
+    NaturalEarth.iceshelves(variant="default"; scale="1:10", kwargs...)
+
+Load the Antarctic ice shelves.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default Antarctic ice shelves map;
+* `"borders"`: Antarctic ice shelve borders;
+
+## Examples
+
+```julia
+NaturalEarth.iceshelves()
+NaturalEarth.iceshelves(scale="1:50")
+NaturalEarth.iceshelves("borders")
+```
+"""
+function iceshelves(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "Antarctic ice shelves"
+  elseif variant == "borders"
+    "Antarctic ice shelve edge"
+  else
+    varianterror()
+  end
+  get(scale, "Antarctic Ice Shelves", variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.bathymetry(variant="default"; scale="1:10", kwargs...)
+
+Load the bathymetry of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: All depths;
+* Number: Depth in meters, can be: `"0"`, `"200"`, `"1000"`, `"2000"`, `"3000"`,
+  `"4000"`, `"5000"`, `"6000"`, `"7000"`, `"8000"`, `"9000"`, `"10000"`;
+
+## Examples
+
+```julia
+NaturalEarth.bathymetry()
+NaturalEarth.bathymetry("5000")
+```
+"""
+function bathymetry(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    "all"
+  elseif variant == "0"
+    "0m"
+  elseif variant == "200"
+    "200 m"
+  elseif variant == "1000"
+    "1,000 m"
+  elseif variant == "2000"
+    "2,000 m"
+  elseif variant == "3000"
+    "3,000 m"
+  elseif variant == "4000"
+    "4,000 m"
+  elseif variant == "5000"
+    "5,000 m"
+  elseif variant == "6000"
+    "6,000 m"
+  elseif variant == "7000"
+    "7,000 m"
+  elseif variant == "8000"
+    "8,000 m"
+  elseif variant == "9000"
+    "9,000 m"
+  elseif variant == "10000"
+    "10,000 m"
+  else
+    varianterror()
+  end
+  get(scale, "Bathymetry", variantstr; kwargs...)
+end
+
+"""
+    NaturalEarth.geographiclines(; scale="1:10", kwargs...)
+
+Load all geographic lines of the Earth.
+
+## Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.geographiclines()
+NaturalEarth.geographiclines(scale="1:100")
+```
+"""
+geographiclines(; scale="1:10", kwargs...) = get(scale, "Geographic lines", "geographic lines"; kwargs...)
+
+"""
+    NaturalEarth.graticules(variant="default"; scale="1:10", kwargs...)
+
+Load the graticules of the Earth.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: All graticules;
+* Number: Grid interval in degrees, can be: `"1"`, `"5"`, `"10`, `"15"`, `"20"`, `"30"`;
+* `"boundingbox"`: WGS84 bounding box;
+"""
+function graticules(variant="default"; scale="1:10", kwargs...)
+  variantstr = if variant == "default"
+    if scale == "1:10"
+      "all graticules"
+    else
+      "all"
+    end
+  elseif variant == "1"
+    "1 degree"
+  elseif variant == "5"
+    "5"
+  elseif variant == "10"
+    "10"
+  elseif variant == "15"
+    "15"
+  elseif variant == "20"
+    "20"
+  elseif variant == "30"
+    "30"
+  elseif variant == "boundingbox"
+    "bounding box"
+  else
+    varianterror()
+  end
+  get(scale, "Graticules", variantstr; kwargs...)
+end
 
 # -----------------
 # HELPER FUNCTIONS
