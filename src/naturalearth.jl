@@ -132,7 +132,7 @@ function get(scale, entity, variant; kwargs...)
   path = download(scale, entity, variant)
 
   # find Shapefile/GeoTIFF file
-  files = readdir(path; join=true)
+  files = rreaddir(path)
   isgeo(f) = last(splitext(f)) ∈ (".shp", ".tif", ".tiff")
   file = files[findfirst(isgeo, files)]
 
@@ -1515,5 +1515,19 @@ prismashadedrelief(; kwargs...) = get("1:50", "Prisma Shaded Relief", "small siz
 varianterror() = throw(ArgumentError("invalid variant, please check the docstring"))
 
 sizeerror() = throw(ArgumentError("invalid size, please check the docstring"))
+
+# recursive readdir
+function rreaddir(dir)
+  files = String[]
+  _rreaddir!(files, dir)
+  files
+end
+
+function _rreaddir!(files, dir)
+  for path in readdir(dir, join=true)
+    isdir(path) && _rreaddir!(files, path)
+    isfile(path) && push!(files, path)
+  end
+end
 
 end
