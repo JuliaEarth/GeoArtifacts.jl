@@ -115,7 +115,7 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 1
 
-    gtb = NaturalEarth.crossblended()
+    gtb = NaturalEarth.hypsometrictints()
     @test gtb.geometry isa Grid
     @test paramdim(gtb.geometry) == 2
 

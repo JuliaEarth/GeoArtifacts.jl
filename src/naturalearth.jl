@@ -31,7 +31,7 @@ Provides functions to download data from the Natural Earth database:
 * [`NaturalEarth.bathymetry`](@ref)
 * [`NaturalEarth.geographiclines`](@ref)
 * [`NaturalEarth.graticules`](@ref)
-* [`NaturalEarth.crossblended`](@ref)
+* [`NaturalEarth.hypsometrictints`](@ref)
 * [`NaturalEarth.naturalearth1`](@ref)
 * [`NaturalEarth.naturalearth2`](@ref)
 * [`NaturalEarth.oceanbottom`](@ref)
@@ -1104,7 +1104,7 @@ function graticules(variant="default"; scale="1:10", kwargs...)
 end
 
 """
-    NaturalEarth.crossblended(variant="default"; scale="1:10", size="default", kwargs...)
+    NaturalEarth.hypsometrictints(variant="default"; scale="1:10", size="default", kwargs...)
 
 Load the Cross-blended Hypsometric Tints raster data.
 
@@ -1117,11 +1117,11 @@ Load the Cross-blended Hypsometric Tints raster data.
 
 ## Variants
 
-* `"default"`: Default Cross-blended Hypsometric map;
-* `"r"`: Cross-blended Hypsometric with Shaded Relief;
-* `"rw"`: Cross-blended Hypsometric with Shaded Relief and Water;
-* `"rwd"`: Cross-blended Hypsometric with Shaded Relief, Water, and Drainages;
-* `"rwdo"`: Cross-blended Hypsometric with Shaded Relief, Water, Drainages, and Ocean Bottom;
+* `"default"`: Default Cross-blended Hypsometric Tints map;
+* `"relief"`: Cross-blended Hypsometric Tints with Shaded Relief;
+* `"water"`: Cross-blended Hypsometric Tints with Shaded Relief and Water;
+* `"drainages"`: Cross-blended Hypsometric Tints with Shaded Relief, Water, and Drainages;
+* `"oceanbottom"`: Cross-blended Hypsometric Tints with Shaded Relief, Water, Drainages, and Ocean Bottom;
 
 ## Sizes
 
@@ -1133,12 +1133,12 @@ Load the Cross-blended Hypsometric Tints raster data.
 ## Examples
 
 ```julia
-NaturalEarth.crossblended()
-NaturalEarth.crossblended(scale="1:50")
-NaturalEarth.crossblended("rwdo", size="large")
+NaturalEarth.hypsometrictints()
+NaturalEarth.hypsometrictints(scale="1:50")
+NaturalEarth.hypsometrictints("oceanbottom", size="large")
 ```
 """
-function crossblended(variant="default"; scale="1:10", size="default", kwargs...)
+function hypsometrictints(variant="default"; scale="1:10", size="default", kwargs...)
   variantstr = if size == "default"
     if scale == "1:10"
       "medium size"
@@ -1161,13 +1161,13 @@ function crossblended(variant="default"; scale="1:10", size="default", kwargs...
     else
       "Cross Blended Hypso with Shaded Relief"
     end
-  elseif variant == "r"
+  elseif variant == "relief"
     "Cross Blended Hypso with Shaded Relief"
-  elseif variant == "rw"
+  elseif variant == "water"
     "Cross Blended Hypso with Shaded Relief and Water"
-  elseif variant == "rwd"
+  elseif variant == "drainages"
     "Cross Blended Hypso with Shaded Relief, Water, and Drainages"
-  elseif variant == "rwdo"
+  elseif variant == "oceanbottom"
     "Cross Blended Hypso with Relief, Water, Drains, and Ocean Bottom"
   else
     varianterror()
@@ -1191,9 +1191,9 @@ Load the Natural Earth I raster data.
 ## Variants
 
 * `"default"`: Default Natural Earth I map;
-* `"r"`: Natural Earth I with Shaded Relief;
-* `"rw"`: Natural Earth I with Shaded Relief and Water;
-* `"rwd"`: Natural Earth I with Shaded Relief, Water, and Drainages;
+* `"relief"`: Natural Earth I with Shaded Relief;
+* `"water"`: Natural Earth I with Shaded Relief and Water;
+* `"drainages"`: Natural Earth I with Shaded Relief, Water, and Drainages;
 
 ## Sizes
 
@@ -1207,7 +1207,7 @@ Load the Natural Earth I raster data.
 ```julia
 NaturalEarth.naturalearth1()
 NaturalEarth.naturalearth1(scale="1:50")
-NaturalEarth.naturalearth1("rwd", size="large")
+NaturalEarth.naturalearth1("drainages", size="large")
 ```
 """
 function naturalearth1(variant="default"; scale="1:10", size="default", kwargs...)
@@ -1233,11 +1233,11 @@ function naturalearth1(variant="default"; scale="1:10", size="default", kwargs..
     else
       "Natural Earth I with Shaded Relief"
     end
-  elseif variant == "r"
+  elseif variant == "relief"
     "Natural Earth I with Shaded Relief"
-  elseif variant == "rw"
+  elseif variant == "water"
     "Natural Earth I with Shaded Relief and Water"
-  elseif variant == "rwd"
+  elseif variant == "drainages"
     "Natural Earth I with Shaded Relief, Water, and Drainages"
   else
     varianterror()
@@ -1261,9 +1261,9 @@ Load the Natural Earth II raster data.
 ## Variants
 
 * `"default"`: Default Natural Earth II map;
-* `"r"`: Natural Earth II with Shaded Relief;
-* `"rw"`: Natural Earth II with Shaded Relief and Water;
-* `"rwd"`: Natural Earth II with Shaded Relief, Water, and Drainages;
+* `"relief"`: Natural Earth II with Shaded Relief;
+* `"water"`: Natural Earth II with Shaded Relief and Water;
+* `"drainages"`: Natural Earth II with Shaded Relief, Water, and Drainages;
 
 ## Sizes
 
@@ -1277,7 +1277,7 @@ Load the Natural Earth II raster data.
 ```julia
 NaturalEarth.naturalearth2()
 NaturalEarth.naturalearth2(scale="1:50")
-NaturalEarth.naturalearth2("rwd", size="large")
+NaturalEarth.naturalearth2("drainages", size="large")
 ```
 """
 function naturalearth2(variant="default"; scale="1:10", size="default", kwargs...)
@@ -1303,11 +1303,11 @@ function naturalearth2(variant="default"; scale="1:10", size="default", kwargs..
     else
       "Natural Earth II with Shaded Relief"
     end
-  elseif variant == "r"
+  elseif variant == "relief"
     "Natural Earth II with Shaded Relief"
-  elseif variant == "rw"
+  elseif variant == "water"
     "Natural Earth II with Shaded Relief and Water"
-  elseif variant == "rwd"
+  elseif variant == "drainages"
     "Natural Earth II with Shaded Relief, Water, and Drainages"
   else
     varianterror()
@@ -1403,10 +1403,10 @@ Load the Gray Earth raster data.
 ## Variants
 
 * `"default"`: Default Gray Earth map;
-* `"rh"`: Gray Earth with Shaded Relief and Hypsography;
-* `"rhw"`: Gray Earth with Shaded Relief, Hypsography, and Flat Water;
-* `"rho"`: Gray Earth with Shaded Relief, Hypsography, and Ocean Bottom;
-* `"rhod"`: Gray Earth with Shaded Relief, Hypsography, Ocean Bottom, and Drainages;
+* `"relief"`: Gray Earth with Shaded Relief and Hypsography;
+* `"flatwater"`: Gray Earth with Shaded Relief, Hypsography, and Flat Water;
+* `"oceanbottom"`: Gray Earth with Shaded Relief, Hypsography, and Ocean Bottom;
+* `"drainages"`: Gray Earth with Shaded Relief, Hypsography, Ocean Bottom, and Drainages;
 
 ## Sizes
 
@@ -1420,7 +1420,7 @@ Load the Gray Earth raster data.
 ```julia
 NaturalEarth.grayearth()
 NaturalEarth.grayearth(scale="1:50")
-NaturalEarth.grayearth("rwd", size="large")
+NaturalEarth.grayearth("drainages", size="large")
 ```
 """
 function grayearth(variant="default"; scale="1:10", size="default", kwargs...)
@@ -1442,13 +1442,13 @@ function grayearth(variant="default"; scale="1:10", size="default", kwargs...)
 
   entity = if variant == "default"
     "Gray Earth with Shaded Relief and Hypsography"
-  elseif variant == "rh"
+  elseif variant == "relief"
     "Gray Earth with Shaded Relief and Hypsography"
-  elseif variant == "rhw"
+  elseif variant == "flatwater"
     "Gray Earth with Shaded Relief, Hypsography, and Flat Water"
-  elseif variant == "rho"
+  elseif variant == "oceanbottom"
     "Gray Earth with Shaded Relief, Hypsography, and Ocean Bottom"
-  elseif variant == "rhod"
+  elseif variant == "drainages"
     "Gray Earth with Shaded Relief, Hypsography, Ocean Bottom, and Drainages"
   else
     varianterror()
