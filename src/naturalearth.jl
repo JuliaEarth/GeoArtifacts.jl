@@ -135,7 +135,7 @@ Load all countries of the Earth.
 
 * `"default"`: Default countries map;
 * `"nolakes"`: Countries without boundary lakes;
-* `"isopov"`: ISO point-of-view;
+* `"iso"`: ISO point-of-view;
 * `"toplevel"`: Top level countries point-of-view;
 * ISO 3166 Alpha 3 string: Point-of-view of the following countries:
   * `"ARG"`: Argentina
@@ -187,7 +187,7 @@ function countries(variant="default"; scale="1:10", kwargs...)
     "without boundary lakes"
   else
     ispov = true
-    if variant == "isopov"
+    if variant == "iso"
       "countries (ISO POV)"
     elseif variant == "toplevel"
       "countries (top-level-countries POV)"
