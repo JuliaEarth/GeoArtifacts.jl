@@ -1045,6 +1045,13 @@ Load the graticules of the Earth.
 * `"default"`: All graticules;
 * Number: Grid interval in degrees, can be: `"1"`, `"5"`, `"10`, `"15"`, `"20"`, `"30"`;
 * `"boundingbox"`: WGS84 bounding box;
+
+## Examples
+
+```julia
+NaturalEarth.graticules()
+NaturalEarth.graticules("15")
+```
 """
 function graticules(variant="default"; scale="1:10", kwargs...)
   variantstr = if variant == "default"
@@ -1073,10 +1080,417 @@ function graticules(variant="default"; scale="1:10", kwargs...)
   get(scale, "Graticules", variantstr; kwargs...)
 end
 
+"""
+    NaturalEarth.crossblended(variant="default"; scale="1:10", size="default", kwargs...)
+
+Load the Cross-blended Hypsometric Tints raster data.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `size`: Optional keyword argument to determine the map size;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default Cross-blended Hypsometric map;
+* `"r"`: Cross-blended Hypsometric with Shaded Relief;
+* `"rw"`: Cross-blended Hypsometric with Shaded Relief and Water;
+* `"rwd"`: Cross-blended Hypsometric with Shaded Relief, Water, and Drainages;
+* `"rwdo"`: Cross-blended Hypsometric with Shaded Relief, Water, Drainages, and Ocean Bottom;
+
+## Sizes
+
+* `"default"`: Minimum size supported by `scale`;
+* `"large"`: Large size;
+* `"medium"`: Medium size;
+* `"small"`: Small size;
+
+## Examples
+
+```julia
+NaturalEarth.crossblended()
+NaturalEarth.crossblended(scale="1:50")
+NaturalEarth.crossblended("rwdo", size="large")
+```
+"""
+function crossblended(variant="default"; scale="1:10", size="default", kwargs...)
+  variant = if size == "default"
+    if scale == "1:10"
+      "medium size"
+    else
+      "small size"
+    end
+  elseif size == "large"
+    "large size"
+  elseif size == "medium"
+    "medium size"
+  elseif size == "small"
+    "small size"
+  else
+    sizeerror()
+  end
+
+  entity = if variant == "default"
+    if scale == "1:10"
+      "Cross Blended Hypso"
+    else
+      "Cross Blended Hypso with Shaded Relief"
+    end
+  elseif variant == "r"
+    "Cross Blended Hypso with Shaded Relief"
+  elseif variant == "rw"
+    "Cross Blended Hypso with Shaded Relief and Water"
+  elseif variant == "rwd"
+    "Cross Blended Hypso with Shaded Relief, Water, and Drainages"
+  elseif variant == "rwdo"
+    "Cross Blended Hypso with Relief, Water, Drains, and Ocean Bottom"
+  else
+    varianterror()
+  end
+
+  get(scale, entity, variant; kwargs...)
+end
+
+"""
+    NaturalEarth.naturalearth1(variant="default"; scale="1:10", size="default", kwargs...)
+
+Load the Natural Earth I raster data.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `size`: Optional keyword argument to determine the map size;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default Natural Earth I map;
+* `"r"`: Natural Earth I with Shaded Relief;
+* `"rw"`: Natural Earth I with Shaded Relief and Water;
+* `"rwd"`: Natural Earth I with Shaded Relief, Water, and Drainages;
+
+## Sizes
+
+* `"default"`: Minimum size supported by passed `scale`;
+* `"large"`: Large size;
+* `"medium"`: Medium size;
+* `"small"`: Small size;
+
+## Examples
+
+```julia
+NaturalEarth.naturalearth1()
+NaturalEarth.naturalearth1(scale="1:50")
+NaturalEarth.naturalearth1("rwd", size="large")
+```
+"""
+function naturalearth1(variant="default"; scale="1:10", size="default", kwargs...)
+  variant = if size == "default"
+    if scale == "1:10"
+      "medium size"
+    else
+      "small size"
+    end
+  elseif size == "large"
+    "large size"
+  elseif size == "medium"
+    "medium size"
+  elseif size == "small"
+    "small size"
+  else
+    sizeerror()
+  end
+
+  entity = if variant == "default"
+    if scale == "1:10"
+      "Natural Earth I"
+    else
+      "Natural Earth I with Shaded Relief"
+    end
+  elseif variant == "r"
+    "Natural Earth I with Shaded Relief"
+  elseif variant == "rw"
+    "Natural Earth I with Shaded Relief and Water"
+  elseif variant == "rwd"
+    "Natural Earth I with Shaded Relief, Water, and Drainages"
+  else
+    varianterror()
+  end
+
+  get(scale, entity, variant; kwargs...)
+end
+
+"""
+    NaturalEarth.naturalearth2(variant="default"; scale="1:10", size="default", kwargs...)
+
+Load the Natural Earth II raster data.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `size`: Optional keyword argument to determine the map size;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default Natural Earth II map;
+* `"r"`: Natural Earth II with Shaded Relief;
+* `"rw"`: Natural Earth II with Shaded Relief and Water;
+* `"rwd"`: Natural Earth II with Shaded Relief, Water, and Drainages;
+
+## Sizes
+
+* `"default"`: Minimum size supported by passed `scale`;
+* `"large"`: Large size;
+* `"medium"`: Medium size;
+* `"small"`: Small size;
+
+## Examples
+
+```julia
+NaturalEarth.naturalearth2()
+NaturalEarth.naturalearth2(scale="1:50")
+NaturalEarth.naturalearth2("rwd", size="large")
+```
+"""
+function naturalearth2(variant="default"; scale="1:10", size="default", kwargs...)
+  variant = if size == "default"
+    if scale == "1:10"
+      "medium size"
+    else
+      "small size"
+    end
+  elseif size == "large"
+    "large size"
+  elseif size == "medium"
+    "medium size"
+  elseif size == "small"
+    "small size"
+  else
+    sizeerror()
+  end
+
+  entity = if variant == "default"
+    if scale == "1:10"
+      "Natural Earth II"
+    else
+      "Natural Earth II with Shaded Relief"
+    end
+  elseif variant == "r"
+    "Natural Earth II with Shaded Relief"
+  elseif variant == "rw"
+    "Natural Earth II with Shaded Relief and Water"
+  elseif variant == "rwd"
+    "Natural Earth II with Shaded Relief, Water, and Drainages"
+  else
+    varianterror()
+  end
+
+  get(scale, entity, variant; kwargs...)
+end
+
+"""
+    NaturalEarth.oceanbottom(; scale="1:10", kwargs...)
+
+Load the Ocean Bottom raster data.
+
+## Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.oceanbottom()
+NaturalEarth.oceanbottom(scale="1:50")
+```
+"""
+function oceanbottom(; scale="1:10", kwargs...)
+  variant = if scale == "1:10"
+    "medium size"
+  else
+    "small size"
+  end
+
+  get(scale, "Ocean Bottom", variant; kwargs...)
+end
+
+"""
+    NaturalEarth.shadedrelief(; scale="1:10", size="default", kwargs...)
+
+Load the Shaded Relief raster data.
+
+## Arguments
+
+* `scale`: Optional keyword argument to determine the map scale;
+* `size`: Optional keyword argument to determine the map size;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Sizes
+
+* `"default"`: Minimum size supported by passed `scale`;
+* `"large"`: Large size;
+* `"medium"`: Medium size;
+* `"small"`: Small size;
+
+## Examples
+
+```julia
+NaturalEarth.shadedrelief()
+NaturalEarth.shadedrelief(scale="1:50")
+```
+"""
+function shadedrelief(; scale="1:10", size="default", kwargs...)
+  variant = if size == "default"
+    if scale == "1:10"
+      "medium size"
+    else
+      "small size"
+    end
+  elseif size == "large"
+    "large size"
+  elseif size == "medium"
+    "medium size"
+  elseif size == "small"
+    "small size"
+  else
+    sizeerror()
+  end
+
+  get(scale, "Shaded Relief Basic", variant; kwargs...)
+end
+
+"""
+    NaturalEarth.grayearth(variant="default"; scale="1:10", size="default", kwargs...)
+
+Load the Gray Earth raster data.
+
+## Arguments
+
+* `variant`: Specifies the type of geographic data to load;
+* `scale`: Optional keyword argument to determine the map scale;
+* `size`: Optional keyword argument to determine the map size;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Variants
+
+* `"default"`: Default Gray Earth map;
+* `"rh"`: Gray Earth with Shaded Relief and Hypsography;
+* `"rhw"`: Gray Earth with Shaded Relief, Hypsography, and Flat Water;
+* `"rho"`: Gray Earth with Shaded Relief, Hypsography, and Ocean Bottom;
+* `"rhod"`: Gray Earth with Shaded Relief, Hypsography, Ocean Bottom, and Drainages;
+
+## Sizes
+
+* `"default"`: Minimum size supported by passed `scale`;
+* `"large"`: Large size;
+* `"medium"`: Medium size;
+* `"small"`: Small size;
+
+## Examples
+
+```julia
+NaturalEarth.grayearth()
+NaturalEarth.grayearth(scale="1:50")
+NaturalEarth.grayearth("rwd", size="large")
+```
+"""
+function grayearth(variant="default"; scale="1:10", size="default", kwargs...)
+  variant = if size == "default"
+    if scale == "1:10"
+      "medium size"
+    else
+      "small size"
+    end
+  elseif size == "large"
+    "large size"
+  elseif size == "medium"
+    "medium size"
+  elseif size == "small"
+    "small size"
+  else
+    sizeerror()
+  end
+
+  entity = if variant == "default"
+    "Gray Earth with Shaded Relief and Hypsography"
+  elseif variant == "rh"
+    "Gray Earth with Shaded Relief and Hypsography"
+  elseif variant == "rhw"
+    "Gray Earth with Shaded Relief, Hypsography, and Flat Water"
+  elseif variant == "rho"
+    "Gray Earth with Shaded Relief, Hypsography, and Ocean Bottom"
+  elseif variant == "rhod"
+    "Gray Earth with Shaded Relief, Hypsography, Ocean Bottom, and Drainages"
+  else
+    varianterror()
+  end
+
+  get(scale, entity, variant; kwargs...)
+end
+
+"""
+    NaturalEarth.usmanualshadedrelief(; kwargs...)
+
+Load the Manual Shaded Relief of Contiguous US raster data.
+
+## Arguments
+
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.usmanualshadedrelief()
+```
+"""
+usmanualshadedrelief(; kwargs...) = get("1:10", "Manual Shaded Relief of Contiguous US", "medium size"; kwargs...)
+
+"""
+    NaturalEarth.manualshadedrelief(; kwargs...)
+
+Load the Manual Shaded Relief raster data.
+
+## Arguments
+
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.manualshadedrelief()
+```
+"""
+manualshadedrelief(; kwargs...) = get("1:50", "Manual Shaded Relief", "small size"; kwargs...)
+
+"""
+    NaturalEarth.prismashadedrelief(; kwargs...)
+
+Load the Prisma Shaded Relief raster data.
+
+## Arguments
+
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+
+## Examples
+
+```julia
+NaturalEarth.prismashadedrelief()
+```
+"""
+prismashadedrelief(; kwargs...) = get("1:50", "Prisma Shaded Relief", "small size"; kwargs...)
+
 # -----------------
 # HELPER FUNCTIONS
 # -----------------
 
 varianterror() = throw(ArgumentError("invalid variant, please check the docstring"))
+
+sizeerror() = throw(ArgumentError("invalid size, please check the docstring"))
 
 end
