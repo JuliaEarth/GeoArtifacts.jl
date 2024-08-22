@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to download data from the NaturalEarth database:
+Provides functions to download data from the Natural Earth database:
 
 * [`NaturalEarth.countries`](@ref)
 * [`NaturalEarth.borders`](@ref)
@@ -28,6 +28,24 @@ using TableTransforms
 using Tables
 using CSV
 
+"""
+    NaturalEarth.download(scale, entity, variant)
+
+Download geometric data from Natural Earth database.
+
+`entity` and `variant` can be queried with a substring
+of the full name. If more than one result is returned in the query,
+only the first result will be selected.
+
+Check the Natural Earth website to see all available entities and variants
+for each scale: https://www.naturalearthdata.com/
+
+## Arguments
+
+* `scale`: Specifies the the map scale, can be `"1:10"`, `"1:50"` or `"1:100"`;
+* `entity`: Specifies the name of the map to load;
+* `variant`: Specifies the type of geographic data to load;
+"""
 function download(scale, entity, variant)
   if scale ∉ ("1:10", "1:50", "1:100")
     throw(ArgumentError("invalid scale, please use one these: 1:10, 1:50, 1:100"))
@@ -68,6 +86,25 @@ function download(scale, entity, variant)
   end
 end
 
+"""
+    NaturalEarth.get(scale, entity, variant; kwargs...)
+
+Load geometric data from Natural Earth database.
+
+`entity` and `variant` must be queried with a substring
+of the full name. If more than one results are returned in query,
+only the first result are selected.
+
+Check the Natural Earth website to see all available entities and variants
+for each scale: https://www.naturalearthdata.com/
+
+## Arguments
+
+* `scale`: Specifies the the map scale, can be `"1:10"`, `"1:50"` or `"1:100"`;
+* `entity`: Specifies the name of the map to load;
+* `variant`: Specifies the type of geographic data to load;
+* `kwargs`: Keyword arguments passed to `GeoIO.load` function;
+"""
 function get(scale, entity, variant; kwargs...)
   path = download(scale, entity, variant)
 
