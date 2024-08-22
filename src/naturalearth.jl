@@ -88,13 +88,13 @@ end
 
 Load all countries of the Earth.
 
-# Arguments
+## Arguments
 
 * `variant`: Specifies the type of geographic data to load;
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Variants
+## Variants
 
 * `"default"`: Default countries map;
 * `"nolakes"`: Countries without boundary lakes;
@@ -133,7 +133,7 @@ Load all countries of the Earth.
   * `"UKR"`: Ukraine
   * `"VNM"`: Vietnam
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.countries()
@@ -231,13 +231,13 @@ end
 
 Load all country borders of the Earth.
 
-# Arguments
+## Arguments
 
 * `variant`: Specifies the type of geographic data to load;
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Variants
+## Variants
 
 * `"default"`: Default borders map;
 * `"mapunit"`: Borders with map units;
@@ -245,7 +245,7 @@ Load all country borders of the Earth.
 * `"maritimechn"`: Borders of maritime indicators with China supplement;
 * `"maritme"`: Borders of Pacific grouping lines;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.borders()
@@ -282,20 +282,20 @@ end
 
 Load all states of the Earth.
 
-# Arguments
+## Arguments
 
 * `variant`: Specifies the type of geographic data to load;
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Variants
+## Variants
 
 * `"default"`: Default states map;
 * `"ranks"`: States with scale ranks;
 * `"nolakes"`: States without large lakes;
 * `"borders"`: State borders;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.states()
@@ -331,20 +331,20 @@ end
 
 Load all counties of the Earth.
 
-# Arguments
+## Arguments
 
 * `variant`: Specifies the type of geographic data to load;
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Variants
+## Variants
 
 * `"default"`: Default counties map;
 * `"nolakes"`: Counties without large lakes;
 * `"ranks"`: Counties with scale ranks;
 * `"ranksislands"`: Counties with scale ranks and minor islands;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.counties()
@@ -371,18 +371,18 @@ end
 
 Load all populated places of the Earth.
 
-# Arguments
+## Arguments
 
 * `variant`: Specifies the type of geographic data to load;
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Variants
+## Variants
 
 * `"default"`: Default populated places map;
 * `"simple"`: Simplified data (less columns);
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.populatedplaces()
@@ -406,18 +406,18 @@ end
 
 Load all roads of the Earth.
 
-# Arguments
+## Arguments
 
 * `variant`: Specifies the type of geographic data to load;
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Variants
+## Variants
 
 * `"default"`: Default roads map;
 * `"northamerica"`: Roads with North America supplement;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.roads()
@@ -440,18 +440,18 @@ end
 
 Load all rail roads of the Earth.
 
-# Arguments
+## Arguments
 
 * `variant`: Specifies the type of geographic data to load;
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Variants
+## Variants
 
 * `"default"`: Default rail roads map;
 * `"northamerica"`: Rail roads with North America supplement;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.railroads()
@@ -474,12 +474,12 @@ end
 
 Load all airports of the Earth.
 
-# Arguments
+## Arguments
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.airports()
@@ -493,12 +493,12 @@ airports(; scale="1:10", kwargs...) = get(scale, "Airports", "airports"; kwargs.
 
 Load all ports of the Earth.
 
-# Arguments
+## Arguments
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.ports()
@@ -512,12 +512,12 @@ ports(; scale="1:10", kwargs...) = get(scale, "Ports", "ports"; kwargs...)
 
 Load all urban areas of the Earth.
 
-# Arguments
+## Arguments
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.urbanareas()
@@ -531,12 +531,12 @@ urbanareas(; scale="1:10", kwargs...) = get(scale, "Urban Areas", "urban areas";
 
 Load the U.S. national parks.
 
-# Arguments
+## Arguments
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.usparks()
@@ -549,12 +549,12 @@ usparks(; scale="1:10", kwargs...) = get(scale, "Parks and Protected Lands", "U.
 
 Load all time zones of the Earth.
 
-# Arguments
+## Arguments
 
 * `scale`: Optional keyword argument to determine the map scale;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
 
-# Examples
+## Examples
 
 ```julia
 NaturalEarth.timezones()
