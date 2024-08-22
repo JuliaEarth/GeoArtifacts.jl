@@ -20,11 +20,7 @@ Please check the docstring of each submodule for more information.
 help?> GADM
 
   Provides a single function GADM.get to download data from the GADM database. Please check its docstring for more details.
-```
 
-##### Examples
-
-```
 julia> GADM.get("BRA", depth=1)
 27×12 GeoTable over 27 GeometrySet
 ┌─────────────┬─────────────┬─────────────┬────────────────────┬──────────────────────┬─────────────┬──────────────────┬──────────────────┬─────────────┬─────────────┬───────
@@ -126,11 +122,7 @@ help?> NaturalEarth
     •  NaturalEarth.prismashadedrelief
 
   Please check their docstrings for more details.
-```
 
-##### Examples
-
-```
 julia> NaturalEarth.countries()
 258×169 GeoTable over 258 GeometrySet
 ┌─────────────────┬─────────────┬─────────────┬────────────────┬─────────────┬─────────────┬─────────────┬───────────────────┬─────────────┬──────────────────────────────┬───
@@ -152,9 +144,7 @@ julia> NaturalEarth.countries()
 │        ⋮        │      ⋮      │      ⋮      │       ⋮        │      ⋮      │      ⋮      │      ⋮      │         ⋮         │      ⋮      │              ⋮               │  ⋱
 └─────────────────┴─────────────┴─────────────┴────────────────┴─────────────┴─────────────┴─────────────┴───────────────────┴─────────────┴──────────────────────────────┴───
                                                                                                                                               159 columns and 247 rows omitted
-```
 
-```
 julia> NaturalEarth.coastlines()
 4133×4 GeoTable over 4133 GeometrySet
 ┌─────────────┬─────────────┬────────────┬───────────────────────────────┐
@@ -186,11 +176,7 @@ help?> INMET
   Provides functions to load data from the INMET API. Please check their docstrings for more details:
 
     •  INMET.stations
-```
 
-##### Examples
-
-```
 julia> INMET.stations()
 566×13 GeoTable over 566 PointSet{3,Float64}
 ┌─────────────┬─────────────┬─────────────┬─────────────┬─────────────┬────────────────┬─────────────────┬─────────────────────────┬─────────────┬───────────────────────────────┬────────────────
