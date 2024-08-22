@@ -136,10 +136,10 @@ Load all countries of the Earth.
 # Examples
 
 ```julia
-NaturalEarth.counties()
-NaturalEarth.counties(scale="1:100")
-NaturalEarth.counties("BRA")
-NaturalEarth.counties("USA")
+NaturalEarth.countries()
+NaturalEarth.countries(scale="1:100")
+NaturalEarth.countries("BRA")
+NaturalEarth.countries("USA")
 ```
 """
 function countries(variant="default"; scale="1:10", kwargs...)
