@@ -383,7 +383,12 @@ function states(variant="default"; scale="1:10", kwargs...)
   else
     varianterror()
   end
-  get(scale, "Admin 1 – States, Provinces", variantstr; kwargs...)
+  entity = if scale == "1:50"
+    "Admin 1 – States, provinces"
+  else
+    "Admin 1 – States, Provinces"
+  end
+  get(scale, entity, variantstr; kwargs...)
 end
 
 """
