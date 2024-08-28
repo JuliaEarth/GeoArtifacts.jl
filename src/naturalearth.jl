@@ -65,13 +65,13 @@ for each scale: https://www.naturalearthdata.com/
 
 ## Arguments
 
-* `scale`: Specifies the the map scale, can be: `"1:10"`, `"1:50"` or `"1:100"`;
+* `scale`: Specifies the the map scale, can be: `"1:10"`, `"1:50"` or `"1:110"`;
 * `entity`: Specifies the name of the map to load;
 * `variant`: Specifies the type of geographic data to load;
 """
 function download(scale, entity, variant)
-  if scale ∉ ("1:10", "1:50", "1:100")
-    throw(ArgumentError("invalid scale, please use one these: 1:10, 1:50, 1:100"))
+  if scale ∉ ("1:10", "1:50", "1:110")
+    throw(ArgumentError("invalid scale, please use one these: 1:10, 1:50, 1:110"))
   end
 
   table = CSV.File(joinpath(@__DIR__, "..", "artifacts", "NaturalEarth.csv"))
@@ -123,7 +123,7 @@ for each scale: https://www.naturalearthdata.com/
 
 ## Arguments
 
-* `scale`: Specifies the the map scale, can be: `"1:10"`, `"1:50"` or `"1:100"`;
+* `scale`: Specifies the the map scale, can be: `"1:10"`, `"1:50"` or `"1:110"`;
 * `entity`: Specifies the name of the map to load;
 * `variant`: Specifies the type of geographic data to load;
 * `kwargs`: Keyword arguments passed to `GeoIO.load` function;
@@ -197,7 +197,7 @@ Load all countries of the Earth.
 
 ```julia
 NaturalEarth.countries()
-NaturalEarth.countries(scale="1:100")
+NaturalEarth.countries(scale="1:110")
 NaturalEarth.countries("BRA")
 NaturalEarth.countries("USA")
 ```
@@ -309,7 +309,7 @@ Load all country borders of the Earth.
 
 ```julia
 NaturalEarth.borders()
-NaturalEarth.borders(scale="1:100")
+NaturalEarth.borders(scale="1:110")
 NaturalEarth.borders("maritme")
 NaturalEarth.borders("pacific")
 ```
@@ -359,7 +359,7 @@ Load all states of the Earth.
 
 ```julia
 NaturalEarth.states()
-NaturalEarth.states(scale="1:100")
+NaturalEarth.states(scale="1:110")
 NaturalEarth.states("borders")
 ```
 """
@@ -375,7 +375,7 @@ function states(variant="default"; scale="1:10", kwargs...)
   elseif variant == "nolakes"
     "without large lakes"
   elseif variant == "borders"
-    if scale == "1:100"
+    if scale == "1:110"
       "boundaries"
     else
       "boundary lines"
@@ -446,7 +446,7 @@ Load all populated places of the Earth.
 
 ```julia
 NaturalEarth.populatedplaces()
-NaturalEarth.populatedplaces(scale="1:100")
+NaturalEarth.populatedplaces(scale="1:110")
 NaturalEarth.populatedplaces("simple")
 ```
 """
@@ -636,7 +636,7 @@ Load all coastlines of the Earth.
 
 ```julia
 NaturalEarth.coastlines()
-NaturalEarth.coastlines(scale="1:100")
+NaturalEarth.coastlines(scale="1:110")
 ```
 """
 coastlines(; scale="1:10", kwargs...) = get(scale, "Coastline", "coastline"; kwargs...)
@@ -661,7 +661,7 @@ Load all lands of the Earth.
 
 ```julia
 NaturalEarth.lands()
-NaturalEarth.lands(scale="1:100")
+NaturalEarth.lands(scale="1:110")
 NaturalEarth.lands("ranks")
 ```
 """
@@ -748,7 +748,7 @@ Load all oceans of the Earth.
 
 ```julia
 NaturalEarth.oceans()
-NaturalEarth.oceans(scale="1:100")
+NaturalEarth.oceans(scale="1:110")
 NaturalEarth.oceans("ranks")
 ```
 """
@@ -786,7 +786,7 @@ Load all rivers and lake centerlines of the Earth.
 
 ```julia
 NaturalEarth.rivers()
-NaturalEarth.rivers(scale="1:100")
+NaturalEarth.rivers(scale="1:110")
 NaturalEarth.rivers("ranks")
 ```
 """
@@ -836,7 +836,7 @@ Load all lakes and reservoirs of the Earth.
 
 ```julia
 NaturalEarth.lakes()
-NaturalEarth.lakes(scale="1:100")
+NaturalEarth.lakes(scale="1:110")
 NaturalEarth.lakes("historic")
 ```
 """
@@ -885,7 +885,7 @@ Load physical labels for areas and points of the Earth.
 NaturalEarth.physicallabels()
 NaturalEarth.physicallabels(scale="1:50")
 NaturalEarth.physicallabels("points")
-NaturalEarth.physicallabels("points", scale="1:100")
+NaturalEarth.physicallabels("points", scale="1:110")
 ```
 """
 function physicallabels(variant="default"; scale="1:10", kwargs...)
@@ -936,7 +936,7 @@ Load all glaciated areas of the Earth.
 
 ```julia
 NaturalEarth.glaciatedareas()
-NaturalEarth.glaciatedareas(scale="1:100")
+NaturalEarth.glaciatedareas(scale="1:110")
 ```
 """
 glaciatedareas(; scale="1:10", kwargs...) = get(scale, "Glaciated Areas", "glaciated areas"; kwargs...)
@@ -1047,7 +1047,7 @@ Load all geographic lines of the Earth.
 
 ```julia
 NaturalEarth.geographiclines()
-NaturalEarth.geographiclines(scale="1:100")
+NaturalEarth.geographiclines(scale="1:110")
 ```
 """
 geographiclines(; scale="1:10", kwargs...) = get(scale, "Geographic lines", "geographic lines"; kwargs...)
