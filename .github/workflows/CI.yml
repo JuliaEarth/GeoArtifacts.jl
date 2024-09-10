@@ -40,13 +40,21 @@ jobs:
       - uses: codecov/codecov-action@v3
         with:
           files: lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Install GeoBR data
+  test-geobr:
+    name: Test GeoBR submodule
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: "1"
+      - uses: julia-actions/cache@v1
+      - uses: julia-actions/julia-buildpkg@v1
+      - name: Run GeoBR tests
         run: |
-          mkdir -p data
-          curl -L https://github.com/ipeaGIT/geobr/archive/refs/heads/main.zip -o geobr.zip
-          unzip geobr.zip -d data
-          rm geobr.zip
-
-      - name: List GeoBR data
-        run: ls -R data/geobr-main/data
+          julia --project=@. -e '
+            using Pkg
+            Pkg.test("GeoBR")
+          '
