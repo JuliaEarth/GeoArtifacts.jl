@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-    tags: ['*']
+    tags: ["*"]
   pull_request:
   workflow_dispatch:
 concurrency:
@@ -19,8 +19,8 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.9'
-          - '1'
+          - "1.9"
+          - "1"
         os:
           - ubuntu-latest
           - macos-latest
@@ -40,4 +40,13 @@ jobs:
       - uses: codecov/codecov-action@v3
         with:
           files: lcov.info
-          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Install GeoBR data
+        run: |
+          mkdir -p data
+          curl -L https://github.com/ipeaGIT/geobr/archive/refs/heads/main.zip -o geobr.zip
+          unzip geobr.zip -d data
+          rm geobr.zip
+
+      - name: List GeoBR data
+        run: ls -R data/geobr-main/data
