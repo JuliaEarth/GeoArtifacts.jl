@@ -7,6 +7,7 @@ module GeoArtifacts
 include("gadm.jl")
 include("naturalearth.jl")
 include("inmet.jl")
+include("geobr.jl")
 
 function __init__()
   # make sure datasets are always downloaded
@@ -14,6 +15,6 @@ function __init__()
   ENV["DATADEPS_ALWAYS_ACCEPT"] = true
 end
 
-export GADM, NaturalEarth, INMET, GeoStatsImages
+export GADM, NaturalEarth, INMET, GeoBR
 
 end

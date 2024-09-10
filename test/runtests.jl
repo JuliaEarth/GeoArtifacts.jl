@@ -235,4 +235,119 @@ using Test
     @test gtb.geometry isa PointSet
     @test embeddim(gtb.geometry) == 3
   end
+
+  @testset "GeoBR" begin
+    gtb = GeoBR.amazon()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.municipality(33)
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.state("RJ")
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.country()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.biomes()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.disasterriskarea()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.indigenousland()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.metroarea()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.neighborhood()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.urbanarea()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.weightingarea(33)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.mesoregion(33)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.microregion(33)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.intermediateregion(33)
+    @test gtb.geometry isa SubDomain
+    @test paramdim(gtb.geometry.domain) == 2
+    @test gtb.geometry.domain isa GeometrySet
+
+    gtb = GeoBR.immediateregion(33)
+    @test gtb.geometry isa SubDomain
+    @test gtb.geometry.domain isa GeometrySet
+    @test paramdim(gtb.geometry.domain) == 2
+
+    gtb = GeoBR.municipalseat()
+    @test gtb.geometry isa GeometrySet
+    @test gtb.geometry[1] isa Point
+
+    gtb = GeoBR.censustract(33)
+    @test gtb.geometry isa GeometrySet
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.conservationunits()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.semiarid()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.schools()
+    @test gtb.geometry isa GeometrySet
+    @test gtb.geometry[1] isa Point
+
+    gtb = GeoBR.comparableareas()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.urbanconcentrations()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.poparrangements()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+
+    gtb = GeoBR.healthregion()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    @test gtb.geometry[1] isa MultiPolygon
+  end
+
 end
