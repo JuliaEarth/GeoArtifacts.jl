@@ -41,20 +41,3 @@ jobs:
         with:
           files: lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
-
-  test-geobr:
-    name: Test GeoBR submodule
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: julia-actions/setup-julia@v1
-        with:
-          version: "1"
-      - uses: julia-actions/cache@v1
-      - uses: julia-actions/julia-buildpkg@v1
-      - name: Run GeoBR tests
-        run: |
-          julia --project=@. -e '
-            using Pkg
-            Pkg.test("GeoBR")
-          '

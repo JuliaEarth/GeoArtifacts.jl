@@ -41,7 +41,6 @@
        ]
        
        for (i, url) in enumerate(urls)
-           println("Debug: Attempting URL $i: $url")
            try
                response = HTTP.get(url)
                println("Debug: Response status for URL $i: $(response.status)")
