@@ -52,7 +52,7 @@ function metadata()
     catch
         register(DataDep(ID,
             """
-            Metadata for GeoBR package.
+            Metadata for GeoBR project.
             Source: $url
             """,
             url,
