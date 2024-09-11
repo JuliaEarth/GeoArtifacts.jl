@@ -1,12 +1,10 @@
 # ------------------------------------------------------------------
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
+
 """
 Provides functions to download data from the GeoBR database:
 
-`GeoBR.extractmetadata`
-`GeoBR.download`
-`GeoBR.get`
 `GeoBR.state`
 `GeoBR.municipality`
 `GeoBR.region`
@@ -49,9 +47,8 @@ const APIVERSIONS = (v"1.7.0",)
 function metadata()
     url = "http://www.ipea.gov.br/geobr/metadata/metadata_1.7.0_gpkg.csv"
     ID = "GeoBR_metadata"
-    path = ""
-    try
-        path = @datadep_str filepath(ID, url)
+    path = try
+        @datadep_str filepath(ID, url)
     catch
         register(DataDep(ID,
             """
@@ -61,12 +58,30 @@ function metadata()
             url,
             Any
         ))
-        path = @datadep_str filepath(ID, url)
+        @datadep_str filepath(ID, url)
     end
-    return path
+    path
 end
 
-function extractmetadata(geo, year, code, abbrev; returnall=false)
+"""
+    metadatarows(geo, year, code, abbrev; returnall=false)
+
+Retrieve metadata rows for the specified parameters.
+
+# Arguments
+- `geo`: The geographic level (e.g., "state", "municipality").
+- `year`: The year of the data.
+- `code`: The numeric code of the geographic area (optional).
+- `abbrev`: The abbreviation of the geographic area (optional).
+- `returnall`: If true, return all matching rows; if false, return only the first row (default: false).
+
+# Returns
+A single row or all rows of metadata matching the specified criteria.
+
+# Throws
+- `ErrorException` if no matching rows are found.
+"""
+function metadatarows(geo, year, code, abbrev; returnall=false)
     path = metadata()
     table = CSV.File(path)
 
@@ -84,12 +99,22 @@ function extractmetadata(geo, year, code, abbrev; returnall=false)
     return returnall ? Tables.rows(srows) : Tables.rows(srows) |> first
 end
 
-function download(geo, year, code, abbrev)
-    srow = extractmetadata(geo, year, code, abbrev)
+"""
+    download(url, ID)
 
-    url = srow.download_path
-    fname = split(url, "/") |> last |> splitext |> first
-    ID = "GeoBR_$fname"
+Download a file from the given URL and save it using DataDeps.jl.
+
+# Arguments
+- `url`: The URL of the file to download.
+- `ID`: A unique identifier for the DataDep.
+
+# Returns
+The local file path of the downloaded file.
+
+# Throws
+- `ErrorException` if the download fails due to internet or server issues.
+"""
+function download(url, ID)
     try
         # if data is already on disk
         # we just return the path
@@ -113,8 +138,31 @@ function download(geo, year, code, abbrev)
     end
 end
 
+"""
+    get(geo, year, code=nothing, abbrev=nothing; kwargs...)
+
+Retrieve geographic data based on the specified parameters.
+
+# Arguments
+- `geo`: The geographic level (e.g., "state", "municipality").
+- `year`: The year of the data.
+- `code`: The numeric code of the geographic area (optional).
+- `abbrev`: The abbreviation of the geographic area (optional).
+- `kwargs`: Additional keyword arguments to pass to GeoIO.load.
+
+# Returns
+The loaded geographic data.
+
+# Throws
+- May throw exceptions from metadatarows, download, or GeoIO.load functions.
+"""
 function get(geo, year, code=nothing, abbrev=nothing; kwargs...)
-    path = download(geo, year, code, abbrev)
+    srow = metadatarows(geo, year, code, abbrev)
+    url = srow.download_path
+    fname = split(url, "/") |> last |> splitext |> first
+    ID = "GeoBR_$fname"
+
+    path = download(url, ID)
     GeoIO.load(path; kwargs...)
 end
 
@@ -529,7 +577,7 @@ function comparableareas(; startyear=1970, endyear=2010, kwargs...)
         throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
     end
 
-    metadata = extractmetadata("amc", startyear, nothing, nothing; returnall=true)
+    metadata = metadatarows("amc", startyear, nothing, nothing; returnall=true)
     metadata = metadata |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
     if isempty(metadata)
