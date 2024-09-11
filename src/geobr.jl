@@ -1,7 +1,41 @@
 # ------------------------------------------------------------------
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
+"""
+Provides functions to download data from the GeoBR database:
 
+`GeoBR.extractmetadata`
+`GeoBR.download`
+`GeoBR.get`
+`GeoBR.state`
+`GeoBR.municipality`
+`GeoBR.region`
+`GeoBR.country`
+`GeoBR.amazon`
+`GeoBR.biomes`
+`GeoBR.disasterriskarea`
+`GeoBR.healthfacilities`
+`GeoBR.indigenousland`
+`GeoBR.metroarea`
+`GeoBR.neighborhood`
+`GeoBR.urbanarea`
+`GeoBR.weightingarea`
+`GeoBR.mesoregion`
+`GeoBR.microregion`
+`GeoBR.intermediateregion`
+`GeoBR.immediateregion`
+`GeoBR.municipalseat`
+`GeoBR.censustract`
+`GeoBR.statisticalgrid`
+`GeoBR.conservationunits`
+`GeoBR.semiarid`
+`GeoBR.schools`
+`GeoBR.comparableareas`
+`GeoBR.urbanconcentrations`
+`GeoBR.poparrangements`
+`GeoBR.healthregion`
+`GeoBR.filepath`
+"""
 module GeoBR
 
 using GeoIO
@@ -12,12 +46,12 @@ using TableTransforms
 
 const APIVERSIONS = (v"1.7.0",)
 
-function extractmetadata(geo, year, code, abbrev; returnall=false)
+function metadata()
     url = "http://www.ipea.gov.br/geobr/metadata/metadata_1.7.0_gpkg.csv"
     ID = "GeoBR_metadata"
     path = ""
     try
-        path = @datadep_str getdatadep(ID, url)
+        path = @datadep_str filepath(ID, url)
     catch
         register(DataDep(ID,
             """
@@ -27,9 +61,13 @@ function extractmetadata(geo, year, code, abbrev; returnall=false)
             url,
             Any
         ))
-        path = @datadep_str getdatadep(ID, url)
+        path = @datadep_str filepath(ID, url)
     end
+    return path
+end
 
+function extractmetadata(geo, year, code, abbrev; returnall=false)
+    path = metadata()
     table = CSV.File(path)
 
     srows = table |> Filter(row ->
@@ -55,7 +93,7 @@ function download(geo, year, code, abbrev)
     try
         # if data is already on disk
         # we just return the path
-        @datadep_str getdatadep(ID, url)
+        @datadep_str filepath(ID, url)
     catch
         # otherwise we register the data
         # and download using DataDeps.jl
@@ -68,7 +106,7 @@ function download(geo, year, code, abbrev)
                 url,
                 Any
             ))
-            @datadep_str getdatadep(ID, url)
+            @datadep_str filepath(ID, url)
         catch
             throw(ErrorException("download failed due to internet and/or server issues"))
         end
@@ -130,9 +168,7 @@ Arguments:
 Returns:
 - Region data for the specified year.
 """
-function region(; year=2010, kwargs...)
-    get("regions", year, nothing, nothing, kwargs...)
-end
+region(; year=2010, kwargs...) = get("regions", year, nothing, nothing, kwargs...)
 
 """
     country(; year=2010, kwargs...)
@@ -146,9 +182,7 @@ Arguments:
 Returns:
 - Country data for the specified year.
 """
-function country(; year=2010, kwargs...)
-    get("country", year, nothing, nothing, kwargs...)
-end
+country(; year=2010, kwargs...) = get("country", year, nothing, nothing, kwargs...)
 
 """
     amazon(; year=2012, kwargs...)
@@ -162,9 +196,7 @@ Arguments:
 Returns:
 - Amazon data for the specified year.
 """
-function amazon(; year=2012, kwargs...)
-    get("amazonia_legal", year, nothing, nothing, kwargs...)
-end
+amazon(; year=2012, kwargs...) = get("amazonia_legal", year, nothing, nothing, kwargs...)
 
 """
     biomes(; year=2019, kwargs...)
@@ -178,9 +210,7 @@ Arguments:
 Returns:
 - Biomes data for the specified year.
 """
-function biomes(; year=2019, kwargs...)
-    get("biomes", year, nothing, nothing, kwargs...)
-end
+biomes(; year=2019, kwargs...) = get("biomes", year, nothing, nothing, kwargs...)
 
 """
     disasterriskarea(; year=2010, kwargs...)
@@ -194,9 +224,7 @@ Arguments:
 Returns:
 - Disaster risk area data for the specified year.
 """
-function disasterriskarea(; year=2010, kwargs...)
-    get("disaster_risk_area", year, nothing, nothing, kwargs...)
-end
+disasterriskarea(; year=2010, kwargs...) = get("disaster_risk_area", year, nothing, nothing, kwargs...)
 
 """
     healthfacilities(; year=2013, kwargs...)
@@ -210,9 +238,7 @@ Arguments:
 Returns:
 - Health facilities data for the specified year.
 """
-function healthfacilities(; year=2013, kwargs...)
-    get("health_facilities", year, nothing, nothing, kwargs...)
-end
+healthfacilities(; year=2013, kwargs...) = get("health_facilities", year, nothing, nothing, kwargs...)
 
 """
     indigenousland(; date=201907, kwargs...)
@@ -226,9 +252,7 @@ Arguments:
 Returns:
 - Indigenous land data for the specified date.
 """
-function indigenousland(; date=201907, kwargs...)
-    get("indigenous_land", date, nothing, nothing, kwargs...)
-end
+indigenousland(; date=201907, kwargs...) = get("indigenous_land", date, nothing, nothing, kwargs...)
 
 """
     metroarea(; year=2018, kwargs...)
@@ -242,9 +266,7 @@ Arguments:
 Returns:
 - Metropolitan area data for the specified year.
 """
-function metroarea(; year=2018, kwargs...)
-    get("metropolitan_area", year, nothing, nothing, kwargs...)
-end
+metroarea(; year=2018, kwargs...) = get("metropolitan_area", year, nothing, nothing, kwargs...)
 
 """
     neighborhood(; year=2010, kwargs...)
@@ -258,9 +280,7 @@ Arguments:
 Returns:
 - Neighborhood data for the specified year.
 """
-function neighborhood(; year=2010, kwargs...)
-    get("neighborhood", year, nothing, nothing, kwargs...)
-end
+neighborhood(; year=2010, kwargs...) = get("neighborhood", year, nothing, nothing, kwargs...)
 
 """
     urbanarea(; year=2015, kwargs...)
@@ -274,9 +294,7 @@ Arguments:
 Returns:
 - Urban area data for the specified year.
 """
-function urbanarea(; year=2015, kwargs...)
-    get("urban_area", year, nothing, nothing, kwargs...)
-end
+urbanarea(; year=2015, kwargs...) = get("urban_area", year, nothing, nothing, kwargs...)
 
 """
     weightingarea(weighting; year=2010, kwargs...)
@@ -341,7 +359,12 @@ end
 Get intermediate region data for a given year.
 
 Arguments:
-- `intermediate`: Intermediate region code or abbreviation.
+- `intermediate`: 
+              6-digit code of an intermediate region. If the two-digit code or a 
+              two-letter uppercase abbreviation of a state is passed, (e.g. 33 or 
+              "RJ") the function will load all intermediate regions of that state. If 
+              intermediate="all", all intermediate regions of the country are loaded 
+              (defaults to "all")
 - `year`: Year of the data (default: 2019).
 - `kwargs`: Additional keyword arguments.
 
@@ -367,7 +390,12 @@ end
 Get immediate region data for a given year.
 
 Arguments:
-- `immediate`: Immediate region code or abbreviation.
+- `immediate`: 
+            6-digit code of an immediate region. If the two-digit code or a 
+            two-letter uppercase abbreviation of a state is passed, (e.g. 33 or 
+            "RJ") the function will load all immediate regions of that state. If 
+            immediate="all", all immediate regions of the country are loaded 
+(defaults to "all")
 - `year`: Year of the data (default: 2017).
 - `kwargs`: Additional keyword arguments.
 
@@ -399,9 +427,7 @@ Arguments:
 Returns:
 - Municipal seat data for the specified year.
 """
-function municipalseat(; year=2010, kwargs...)
-    get("municipal_seat", year, nothing, nothing, kwargs...)
-end
+municipalseat(; year=2010, kwargs...) = get("municipal_seat", year, nothing, nothing, kwargs...)
 
 """
     censustract(codetract; year=2010, kwargs...)
@@ -453,9 +479,7 @@ Arguments:
 Returns:
 - Conservation units data for the specified date.
 """
-function conservationunits(; date=201909, kwargs...)
-    get("conservation_units", date, nothing, nothing, kwargs...)
-end
+conservationunits(; date=201909, kwargs...) = get("conservation_units", date, nothing, nothing, kwargs...)
 
 """
     semiarid(; year=2017, kwargs...)
@@ -469,9 +493,7 @@ Arguments:
 Returns:
 - Semiarid data for the specified year.
 """
-function semiarid(; year=2017, kwargs...)
-    get("semiarid", year, nothing, nothing, kwargs...)
-end
+semiarid(; year=2017, kwargs...) = get("semiarid", year, nothing, nothing, kwargs...)
 
 """
     schools(; year=2020, kwargs...)
@@ -485,9 +507,7 @@ Arguments:
 Returns:
 - Schools data for the specified year.
 """
-function schools(; year=2020, kwargs...)
-    get("schools", year, nothing, nothing, kwargs...)
-end
+schools(; year=2020, kwargs...) = get("schools", year, nothing, nothing, kwargs...)
 
 """
     comparableareas(; startyear=1970, endyear=2010, kwargs...)
@@ -532,9 +552,7 @@ Arguments:
 Returns:
 - Urban concentrations data for the specified year.
 """
-function urbanconcentrations(; year=2015, kwargs...)
-    get("urban_concentrations", year, nothing, nothing, kwargs...)
-end
+urbanconcentrations(; year=2015, kwargs...) = get("urban_concentrations", year, nothing, nothing, kwargs...)
 
 """
     poparrangements(; year=2015, kwargs...)
@@ -548,9 +566,7 @@ Arguments:
 Returns:
 - Population arrangements data for the specified year.
 """
-function poparrangements(; year=2015, kwargs...)
-    get("pop_arrengements", year, nothing, nothing, kwargs...)
-end
+poparrangements(; year=2015, kwargs...) = get("pop_arrengements", year, nothing, nothing, kwargs...)
 
 """
     healthregion(; year=2013, kwargs...)
@@ -564,11 +580,9 @@ Arguments:
 Returns:
 - Health region data for the specified year.
 """
-function healthregion(; year=2013, kwargs...)
-    get("health_region", year, nothing, nothing, kwargs...)
-end
+healthregion(; year=2013, kwargs...) = get("health_region", year, nothing, nothing, kwargs...)
 
-function getdatadep(ID, url)
+function filepath(ID, url)
     filename = split(url, "/") |> last
     ID * "/" * filename
 end
