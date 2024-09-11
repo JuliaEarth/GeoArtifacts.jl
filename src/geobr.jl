@@ -12,25 +12,42 @@ using TableTransforms
 
 const APIVERSIONS = (v"1.7.0",)
 
-function extract_metadata(geo, year, code, code_abbrev; return_all=false)
-    table = CSV.File(joinpath(@__DIR__, "..", "artifacts", "GeoBR.csv"))
+function extractmetadata(geo, year, code, abbrev; returnall=false)
+    url = "http://www.ipea.gov.br/geobr/metadata/metadata_1.7.0_gpkg.csv"
+    ID = "GeoBR_metadata"
+    path = ""
+    try
+        path = @datadep_str getdatadep(ID, url)
+    catch
+        register(DataDep(ID,
+            """
+            Metadata for GeoBR package.
+            Source: $url
+            """,
+            url,
+            Any
+        ))
+        path = @datadep_str getdatadep(ID, url)
+    end
+
+    table = CSV.File(path)
 
     srows = table |> Filter(row ->
         row.geo == geo &&
             row.year == year &&
             (isnothing(code) || parse(Int, row.code) == code) &&
-            (isnothing(code_abbrev) || row.code_abbrev == code_abbrev)
+            (isnothing(abbrev) || row.code_abbrev == abbrev)
     )
 
     if isempty(srows)
         throw(ErrorException("No matching rows found for the given parameters"))
     end
 
-    return return_all ? Tables.rows(srows) : Tables.rows(srows) |> first
+    return returnall ? Tables.rows(srows) : Tables.rows(srows) |> first
 end
 
-function download(geo, year, code, code_abbrev)
-    srow = extract_metadata(geo, year, code, code_abbrev)
+function download(geo, year, code, abbrev)
+    srow = extractmetadata(geo, year, code, abbrev)
 
     url = srow.download_path
     fname = split(url, "/") |> last |> splitext |> first
@@ -58,94 +75,79 @@ function download(geo, year, code, code_abbrev)
     end
 end
 
-function get(geo, year, code=nothing, code_abbrev=nothing; kwargs...)
-    path = download(geo, year, code, code_abbrev)
+function get(geo, year, code=nothing, abbrev=nothing; kwargs...)
+    path = download(geo, year, code, abbrev)
     GeoIO.load(path; kwargs...)
 end
 
 function state(state; year=2010, kwargs...)
     code = isa(state, Number) ? state : nothing
-    code_abbrev = isa(state, AbstractString) ? state : nothing
-    gdf = get("state", year, code, code_abbrev, kwargs...)
-    return gdf
+    abbrev = isa(state, AbstractString) ? state : nothing
+    get("state", year, code, abbrev, kwargs...)
 end
 
 function municipality(muni; year=2010, kwargs...)
     code = isa(muni, Number) ? muni : nothing
-    code_abbrev = isa(muni, AbstractString) ? muni : nothing
-    gdf = get("municipality", year, code, code_abbrev; kwargs...)
-    return gdf
+    abbrev = isa(muni, AbstractString) ? muni : nothing
+    get("municipality", year, code, abbrev; kwargs...)
 end
 
 function region(; year=2010, kwargs...)
-    gdf = get("regions", year, nothing, nothing, kwargs...)
-    return gdf
+    get("regions", year, nothing, nothing, kwargs...)
 end
 
 function country(; year=2010, kwargs...)
-    gdf = get("country", year, nothing, nothing, kwargs...)
-    return gdf
+    get("country", year, nothing, nothing, kwargs...)
 end
 
 function amazon(; year=2012, kwargs...)
-    gdf = get("amazonia_legal", year, nothing, nothing, kwargs...)
-    return gdf
+    get("amazonia_legal", year, nothing, nothing, kwargs...)
 end
 
 function biomes(; year=2019, kwargs...)
-    gdf = get("biomes", year, nothing, nothing, kwargs...)
-    return gdf
+    get("biomes", year, nothing, nothing, kwargs...)
 end
 
 function disasterriskarea(; year=2010, kwargs...)
-    gdf = get("disaster_risk_area", year, nothing, nothing, kwargs...)
-    return gdf
+    get("disaster_risk_area", year, nothing, nothing, kwargs...)
 end
 
 function healthfacilities(; year=2013, kwargs...)
-    gdf = get("health_facilities", year, nothing, nothing, kwargs...)
-    return gdf
+    get("health_facilities", year, nothing, nothing, kwargs...)
 end
 
 function indigenousland(; date=201907, kwargs...)
-    gdf = get("indigenous_land", date, nothing, nothing, kwargs...)
-    return gdf
+    get("indigenous_land", date, nothing, nothing, kwargs...)
 end
 
 function metroarea(; year=2018, kwargs...)
-    gdf = get("metropolitan_area", year, nothing, nothing, kwargs...)
-    return gdf
+    get("metropolitan_area", year, nothing, nothing, kwargs...)
 end
 
 function neighborhood(; year=2010, kwargs...)
-    gdf = get("neighborhood", year, nothing, nothing, kwargs...)
-    return gdf
+    get("neighborhood", year, nothing, nothing, kwargs...)
 end
 
 function urbanarea(; year=2015, kwargs...)
-    gdf = get("urban_area", year, nothing, nothing, kwargs...)
-    return gdf
+    get("urban_area", year, nothing, nothing, kwargs...)
 end
 
 function weightingarea(weighting; year=2010, kwargs...)
     code = isa(weighting, Number) ? weighting : nothing
-    code_abbrev = isa(weighting, AbstractString) ? weighting : nothing
-    gdf = get("weighting_area", year, code, code_abbrev, kwargs...)
-    return gdf
+    abbrev = isa(weighting, AbstractString) ? weighting : nothing
+    get("weighting_area", year, code, abbrev, kwargs...)
 end
 
 function mesoregion(meso; year=2010, kwargs...)
     code = isa(meso, Number) ? meso : nothing
-    code_abbrev = isa(meso, AbstractString) ? meso : nothing
-    gdf = get("meso_region", year, code, code_abbrev, kwargs...)
-    return gdf
+    abbrev = isa(meso, AbstractString) ? meso : nothing
+    get("meso_region", year, code, abbrev, kwargs...)
 end
 
 function microregion(micro; year=2010, kwargs...)
     code = isa(micro, Number) ? micro : nothing
-    code_abbrev = isa(micro, AbstractString) ? micro : nothing
-    gdf = get("micro_region", year, code, code_abbrev, kwargs...)
-    return gdf
+    abbrev = isa(micro, AbstractString) ? micro : nothing
+    get("micro_region", year, code, abbrev, kwargs...)
 end
 
 function intermediateregion(intermediate; year=2019, kwargs...)
@@ -175,37 +177,31 @@ function immediateregion(immediate; year=2017, kwargs...)
 end
 
 function municipalseat(; year=2010, kwargs...)
-    gdf = get("municipal_seat", year, nothing, nothing, kwargs...)
-    return gdf
+    get("municipal_seat", year, nothing, nothing, kwargs...)
 end
 
 function censustract(codetract; year=2010, kwargs...)
     code = isa(codetract, Number) ? codetract : nothing
-    code_abbrev = isa(codetract, AbstractString) ? codetract : nothing
-    gdf = get("census_tract", year, code, code_abbrev, kwargs...)
-    return gdf
+    abbrev = isa(codetract, AbstractString) ? codetract : nothing
+    get("census_tract", year, code, abbrev, kwargs...)
 end
 
 function statisticalgrid(grid; year=2010, kwargs...)
     code = isa(grid, Number) ? grid : nothing
-    code_abbrev = isa(grid, AbstractString) ? grid : nothing
-    gdf = get("statistical_grid", year, code, code_abbrev, kwargs...)
-    return gdf
+    abbrev = isa(grid, AbstractString) ? grid : nothing
+    get("statistical_grid", year, code, abbrev, kwargs...)
 end
 
 function conservationunits(; date=201909, kwargs...)
-    gdf = get("conservation_units", date, nothing, nothing, kwargs...)
-    return gdf
+    get("conservation_units", date, nothing, nothing, kwargs...)
 end
 
 function semiarid(; year=2017, kwargs...)
-    gdf = get("semiarid", year, nothing, nothing, kwargs...)
-    return gdf
+    get("semiarid", year, nothing, nothing, kwargs...)
 end
 
 function schools(; year=2020, kwargs...)
-    gdf = get("schools", year, nothing, nothing, kwargs...)
-    return gdf
+    get("schools", year, nothing, nothing, kwargs...)
 end
 
 function comparableareas(; startyear=1970, endyear=2010, kwargs...)
@@ -215,7 +211,7 @@ function comparableareas(; startyear=1970, endyear=2010, kwargs...)
         throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
     end
 
-    metadata = extract_metadata("amc", startyear, nothing, nothing; return_all=true)
+    metadata = extractmetadata("amc", startyear, nothing, nothing; returnall=true)
     metadata = metadata |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
     if isempty(metadata)
@@ -223,29 +219,24 @@ function comparableareas(; startyear=1970, endyear=2010, kwargs...)
     end
 
     first_row = first(metadata)
-    gdf = get("amc", first_row.year, nothing, nothing; kwargs...)
-
-    return gdf
+    get("amc", first_row.year, nothing, nothing; kwargs...)
 end
 
 function urbanconcentrations(; year=2015, kwargs...)
-    gdf = get("urban_concentrations", year, nothing, nothing, kwargs...)
-    return gdf
+    get("urban_concentrations", year, nothing, nothing, kwargs...)
 end
 
 function poparrangements(; year=2015, kwargs...)
-    gdf = get("pop_arrengements", year, nothing, nothing, kwargs...)
-    return gdf
+    get("pop_arrengements", year, nothing, nothing, kwargs...)
 end
 
 function healthregion(; year=2013, kwargs...)
-    gdf = get("health_region", year, nothing, nothing, kwargs...)
-    return gdf
+    get("health_region", year, nothing, nothing, kwargs...)
 end
 
 function getdatadep(ID, url)
     filename = split(url, "/") |> last
-    return ID * "/" * filename
+    ID * "/" * filename
 end
 
 end
