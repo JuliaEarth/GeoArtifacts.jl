@@ -293,7 +293,7 @@ Arguments:
 Returns:
 - Health facilities data for the specified year.
 """
-healthfacilities(; year=2013, kwargs...) = get("health_facilities", year, nothing, nothing, kwargs...)
+healthfacilities(; year=2013, kwargs...) = get("health_facilities", year; kwargs...)
 
 """
     indigenousland(; date=201907, kwargs...)
