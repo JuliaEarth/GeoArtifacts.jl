@@ -321,7 +321,7 @@ Arguments:
 Returns:
 - Metropolitan area data for the specified year.
 """
-metroarea(; year=2018, kwargs...) = get("metropolitan_area", year, nothing, nothing, kwargs...)
+metroarea(; year=2018, kwargs...) = get("metropolitan_area", year; kwargs...)
 
 """
     neighborhood(; year=2010, kwargs...)
