@@ -534,7 +534,7 @@ Arguments:
 Returns:
 - Conservation units data for the specified date.
 """
-conservationunits(; date=201909, kwargs...) = get("conservation_units", date, nothing, nothing, kwargs...)
+conservationunits(; date=201909, kwargs...) = get("conservation_units", date; kwargs...)
 
 """
     semiarid(; year=2017, kwargs...)
