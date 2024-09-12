@@ -97,11 +97,11 @@ function metadatarows(geo, year, code, abbrev; all=false)
             (isnothing(abbrev) || row.code_abbrev == abbrev)
     )
 
-    if isempty(srows)
+    if isempty(filtered)
         throw(ErrorException("No matching rows found for the given parameters"))
     end
 
-    all ? Tables.rows(srows) : Tables.rows(srows) |> first
+    all ? Tables.rows(filtered) : Tables.rows(filtered) |> first
 end
 
 """
