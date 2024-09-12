@@ -607,7 +607,7 @@ Arguments:
 Returns:
 - Urban concentrations data for the specified year.
 """
-urbanconcentrations(; year=2015, kwargs...) = get("urban_concentrations", year, nothing, nothing, kwargs...)
+urbanconcentrations(; year=2015, kwargs...) = get("urban_concentrations", year; kwargs...)
 
 """
     poparrangements(; year=2015, kwargs...)
