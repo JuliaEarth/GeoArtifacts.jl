@@ -44,6 +44,14 @@ using TableTransforms
 
 const APIVERSIONS = (v"1.7.0",)
 
+"""
+    metadata()
+
+Retrieve the metadata file path for the GeoBR project.
+
+# Returns
+The file path of the metadata CSV file.
+"""
 function metadata()
     url = "http://www.ipea.gov.br/geobr/metadata/metadata_1.7.0_gpkg.csv"
     ID = "GeoBR_metadata"
