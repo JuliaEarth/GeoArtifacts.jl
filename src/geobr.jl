@@ -164,8 +164,7 @@ The loaded geographic data.
 function get(geo, year, code=nothing, abbrev=nothing; kwargs...)
     row = metadatarows(geo, year, code, abbrev)
     url = row.download_path
-    fname = split(url, "/") |> last |> splitext |> first
-    ID = "GeoBR_$fname"
+    ID = "GeoBR_" * basename(url) |> splittext |> first
 
     path = download(url, ID)
     GeoIO.load(path; kwargs...)
