@@ -96,7 +96,7 @@ function metadatarows(geo, year, code, abbrev; returnall=false)
         throw(ErrorException("No matching rows found for the given parameters"))
     end
 
-    return returnall ? Tables.rows(srows) : Tables.rows(srows) |> first
+    returnall ? Tables.rows(srows) : Tables.rows(srows) |> first
 end
 
 """
