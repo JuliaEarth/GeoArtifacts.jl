@@ -162,8 +162,8 @@ The loaded geographic data.
 - May throw exceptions from metadatarows, download, or GeoIO.load functions.
 """
 function get(geo, year, code=nothing, abbrev=nothing; kwargs...)
-    srow = metadatarows(geo, year, code, abbrev)
-    url = srow.download_path
+    row = metadatarows(geo, year, code, abbrev)
+    url = row.download_path
     fname = split(url, "/") |> last |> splitext |> first
     ID = "GeoBR_$fname"
 
