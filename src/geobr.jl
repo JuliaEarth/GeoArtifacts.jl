@@ -44,36 +44,6 @@ using TableTransforms
 const APIVERSIONS = (v"1.7.0",)
 
 """
-    downloadmeta(version=last(APIVERSIONS))
-
-(Down)load metadata for the specified `version` of the dataset.
-"""
-function downloadmeta(version=last(APIVERSIONS))
-  # download metadata if necessary
-  url = "http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"
-  ID = "GeoBR_$(version)_metadata"
-  try
-    # if data is already on disk
-    # we just return the path
-    @datadep_str ID
-  catch
-    # otherwise we register the data
-    # and download using DataDeps.jl
-    register(DataDep(
-      ID,
-      """
-      Metadata for GeoBR project.
-      Source: $url
-      """,
-      url,
-      Any
-    ))
-    @datadep_str ID
-  end
-  joinpath(ID, basename(url))
-end
-
-"""
     download(url; version=last(APIVERSIONS))
 
 (Down)load data for the specified `url` and `version` of the dataset.
@@ -102,6 +72,13 @@ function download(url; version=last(APIVERSIONS))
 end
 
 """
+    downloadmeta(version=last(APIVERSIONS))
+
+(Down)load metadata for the specified `version` of the dataset.
+"""
+downloadmeta(version=last(APIVERSIONS)) = download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version)
+
+"""
     geturl(csv, entity, year, code)
 
 Retrieve rows of `csv` for the given `entity`, `year` and `code`.
@@ -124,19 +101,16 @@ function get(entity, year; code=nothing, version=last(APIVERSIONS), kwargs...)
 end
 
 """
-    state(state; year=2010, kwargs...)
+    state(; year=2010, code=nothing, kwargs...)
 
-Get state data for a given year.
+Get state data.
 
 Arguments:
-- `state`: State code or abbreviation.
 - `year`: Year of the data (default: 2010).
+- `code`: State code or abbreviation.
 - `kwargs`: Additional keyword arguments.
-
-Returns:
-- State data for the specified year.
 """
-state(state=nothing; year=2010, kwargs...) = get("state", year, state; kwargs...)
+state(; year=2010, code=nothing, kwargs...) = get("state"; year, code, kwargs...)
 
 """
     municipality(muni; year=2010, kwargs...)
