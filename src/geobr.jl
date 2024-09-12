@@ -55,7 +55,7 @@ The file path of the metadata CSV file.
 function metadata()
     url = "http://www.ipea.gov.br/geobr/metadata/metadata_1.7.0_gpkg.csv"
     ID = "GeoBR_metadata"
-    path = try
+    try
         @datadep_str filepath(ID, url)
     catch
         register(DataDep(ID,
