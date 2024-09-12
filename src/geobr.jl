@@ -107,7 +107,7 @@ end
 """
     download(url, ID)
 
-Download a file from the given URL and save it using DataDeps.jl.
+Download a file from the given `url` and save it on a given DataDeps.jl's `ID`.
 
 # Arguments
 - `url`: The URL of the file to download.
