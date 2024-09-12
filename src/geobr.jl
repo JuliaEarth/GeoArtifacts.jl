@@ -279,7 +279,7 @@ Arguments:
 Returns:
 - Disaster risk area data for the specified year.
 """
-disasterriskarea(; year=2010, kwargs...) = get("disaster_risk_area", year, nothing, nothing, kwargs...)
+disasterriskarea(; year=2010, kwargs...) = get("disaster_risk_area", year; kwargs...)
 
 """
     healthfacilities(; year=2013, kwargs...)
