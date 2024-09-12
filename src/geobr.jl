@@ -90,7 +90,7 @@ A single row or all rows of metadata matching the specified criteria.
 function metadatarows(geo, year, code, abbrev; all=false)
     table = CSV.File(metadata())
 
-    srows = table |> Filter(row ->
+    filtered = table |> Filter(row ->
         row.geo == geo &&
             row.year == year &&
             (isnothing(code) || parse(Int, row.code) == code) &&
