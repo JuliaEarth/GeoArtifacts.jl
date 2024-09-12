@@ -161,7 +161,7 @@ The loaded geographic data.
 # Throws
 - May throw exceptions from metadatarows, download, or GeoIO.load functions.
 """
-function get(geo, year, code=nothing, abbrev=nothing; kwargs...)
+function get(geo, year; code=nothing, abbrev=nothing, kwargs...)
     row = metadatarows(geo, year, code, abbrev)
     url = row.download_path
     ID = "GeoBR_" * basename(url) |> splittext |> first
