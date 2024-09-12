@@ -562,7 +562,7 @@ Arguments:
 Returns:
 - Schools data for the specified year.
 """
-schools(; year=2020, kwargs...) = get("schools", year, nothing, nothing, kwargs...)
+schools(; year=2020, kwargs...) = get("schools", year; kwargs...)
 
 """
     comparableareas(; startyear=1970, endyear=2010, kwargs...)
