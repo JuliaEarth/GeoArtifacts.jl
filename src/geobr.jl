@@ -621,7 +621,7 @@ Arguments:
 Returns:
 - Population arrangements data for the specified year.
 """
-poparrangements(; year=2015, kwargs...) = get("pop_arrengements", year, nothing, nothing, kwargs...)
+poparrangements(; year=2015, kwargs...) = get("pop_arrengements", year; kwargs...)
 
 """
     healthregion(; year=2013, kwargs...)
