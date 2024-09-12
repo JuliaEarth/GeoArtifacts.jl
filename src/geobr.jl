@@ -70,7 +70,7 @@ Retrieve metadata rows for the specified parameters.
 
 # Arguments
 - `geo`: The geographic level (e.g., "state", "municipality").
-- `year`: The year of the data.
+- `year`: The year of the data (e.g., 2010).
 - `code`: The numeric code of the geographic area (optional).
 - `abbrev`: The abbreviation of the geographic area (optional).
 - `returnall`: If true, return all matching rows; if false, return only the first row (default: false).
