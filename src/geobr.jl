@@ -349,7 +349,7 @@ Arguments:
 Returns:
 - Urban area data for the specified year.
 """
-urbanarea(; year=2015, kwargs...) = get("urban_area", year, nothing, nothing, kwargs...)
+urbanarea(; year=2015, kwargs...) = get("urban_area", year; kwargs...)
 
 """
     weightingarea(weighting; year=2010, kwargs...)
