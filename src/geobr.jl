@@ -60,7 +60,6 @@ function metadata()
         ))
         @datadep_str filepath(ID, url)
     end
-    path
 end
 
 """
