@@ -548,7 +548,7 @@ Arguments:
 Returns:
 - Semiarid data for the specified year.
 """
-semiarid(; year=2017, kwargs...) = get("semiarid", year, nothing, nothing, kwargs...)
+semiarid(; year=2017, kwargs...) = get("semiarid", year; kwargs...)
 
 """
     schools(; year=2020, kwargs...)
