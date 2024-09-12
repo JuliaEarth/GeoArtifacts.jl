@@ -71,7 +71,7 @@ function metadata()
 end
 
 """
-    metadatarows(geo, year, code, abbrev; returnall=false)
+    metadatarows(geo, year, code, abbrev; all=false)
 
 Retrieve metadata rows for the specified parameters.
 
@@ -80,7 +80,7 @@ Retrieve metadata rows for the specified parameters.
 - `year`: The year of the data (e.g., 2010).
 - `code`: The numeric code of the geographic area (optional).
 - `abbrev`: The abbreviation of the geographic area (optional).
-- `returnall`: If true, return all matching rows; if false, return only the first row (default: false).
+- `all`: If true, return all matching rows; if false, return only the first row (default: false).
 
 # Returns
 A single row or all rows of metadata matching the specified criteria.
@@ -88,7 +88,7 @@ A single row or all rows of metadata matching the specified criteria.
 # Throws
 - `ErrorException` if no matching rows are found.
 """
-function metadatarows(geo, year, code, abbrev; returnall=false)
+function metadatarows(geo, year, code, abbrev; all=false)
     path = metadata()
     table = CSV.File(path)
 
@@ -103,7 +103,7 @@ function metadatarows(geo, year, code, abbrev; returnall=false)
         throw(ErrorException("No matching rows found for the given parameters"))
     end
 
-    returnall ? Tables.rows(srows) : Tables.rows(srows) |> first
+    all ? Tables.rows(srows) : Tables.rows(srows) |> first
 end
 
 """
@@ -584,7 +584,7 @@ function comparableareas(; startyear=1970, endyear=2010, kwargs...)
         throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
     end
 
-    metadata = metadatarows("amc", startyear, nothing, nothing; returnall=true)
+    metadata = metadatarows("amc", startyear, nothing, nothing; all=true)
     metadata = metadata |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
     if isempty(metadata)
