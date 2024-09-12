@@ -51,8 +51,7 @@ Retrieve metadata for the specified parameters.
 # Arguments
 - `geo`: The geographic level (e.g., "state", "municipality").
 - `year`: The year of the data (e.g., 2010).
-- `code`: The numeric code of the geographic area (optional).
-- `abbrev`: The abbreviation of the geographic area (optional).
+- `code`: The code or abbreviation of the geographic area (optional).
 - `version`: The version of the dataset (optional).
 - `all`: If true, return all matching rows; if false, return only the first row (default: false).
 
@@ -161,7 +160,7 @@ Retrieve geographic data based on the specified parameters.
 The loaded geographic data.
 
 # Throws
-- May throw exceptions from metadatarows, download, or GeoIO.load functions.
+- May throw exceptions from metadata, download, or GeoIO.load functions.
 """
 function get(geo, year, code=nothing; kwargs...)
   abbrev = nothing
@@ -565,15 +564,16 @@ function comparableareas(; startyear=1970, endyear=2010, kwargs...)
     throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
   end
 
-  metadata = metadata("amc", startyear, nothing, nothing; all=true)
-  metadata = metadata |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
+  meta = metadata("amc", startyear; all=true)
+  filt = meta |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
-  if isempty(metadata)
+  if isempty(filt)
     throw(ErrorException("No data found for the specified years"))
   end
 
-  first_row = first(metadata)
-  get("amc", first_row.year, kwargs...)
+  year = first(filt).year
+
+  get("amc", year, kwargs...)
 end
 
 """
