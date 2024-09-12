@@ -88,8 +88,7 @@ A single row or all rows of metadata matching the specified criteria.
 - `ErrorException` if no matching rows are found.
 """
 function metadatarows(geo, year, code, abbrev; all=false)
-    path = metadata()
-    table = CSV.File(path)
+    table = CSV.File(metadata())
 
     srows = table |> Filter(row ->
         row.geo == geo &&
