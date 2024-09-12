@@ -265,7 +265,7 @@ Arguments:
 Returns:
 - Biomes data for the specified year.
 """
-biomes(; year=2019, kwargs...) = get("biomes", year, nothing, nothing, kwargs...)
+biomes(; year=2019, kwargs...) = get("biomes", year; kwargs...)
 
 """
     disasterriskarea(; year=2010, kwargs...)
