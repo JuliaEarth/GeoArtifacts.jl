@@ -307,7 +307,7 @@ Arguments:
 Returns:
 - Indigenous land data for the specified date.
 """
-indigenousland(; date=201907, kwargs...) = get("indigenous_land", date, nothing, nothing, kwargs...)
+indigenousland(; date=201907, kwargs...) = get("indigenous_land", date; kwargs...)
 
 """
     metroarea(; year=2018, kwargs...)
