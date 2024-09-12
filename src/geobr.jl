@@ -44,41 +44,16 @@ using TableTransforms
 const APIVERSIONS = (v"1.7.0",)
 
 """
-    metadata()
+    metadata(geo, year, code, abbrev; version=last(APIVERSIONS), all=false)
 
-Retrieve the metadata file path for the GeoBR project.
-
-# Returns
-The file path of the metadata CSV file.
-"""
-function metadata()
-    url = "http://www.ipea.gov.br/geobr/metadata/metadata_1.7.0_gpkg.csv"
-    ID = "GeoBR_metadata"
-    try
-        @datadep_str filepath(ID, url)
-    catch
-        register(DataDep(ID,
-            """
-            Metadata for GeoBR project.
-            Source: $url
-            """,
-            url,
-            Any
-        ))
-        @datadep_str filepath(ID, url)
-    end
-end
-
-"""
-    metadatarows(geo, year, code, abbrev; all=false)
-
-Retrieve metadata rows for the specified parameters.
+Retrieve metadata for the specified parameters.
 
 # Arguments
 - `geo`: The geographic level (e.g., "state", "municipality").
 - `year`: The year of the data (e.g., 2010).
 - `code`: The numeric code of the geographic area (optional).
 - `abbrev`: The abbreviation of the geographic area (optional).
+- `version`: The version of the dataset (optional).
 - `all`: If true, return all matching rows; if false, return only the first row (default: false).
 
 # Returns
@@ -87,8 +62,29 @@ A single row or all rows of metadata matching the specified criteria.
 # Throws
 - `ErrorException` if no matching rows are found.
 """
-function metadatarows(geo, year, code, abbrev; all=false)
-    table = CSV.File(metadata())
+function metadata(geo, year, code, abbrev; version=last(APIVERSIONS), all=false)
+    # download metadata if necessary
+    url = "http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"
+    ID = "GeoBR_$(version)_metadata"
+    dir = try
+        # if data is already on disk
+        # we just return the path
+        @datadep_str ID
+    catch
+        # otherwise we register the data
+        # and download using DataDeps.jl
+        register(DataDep(ID,
+            """
+            Metadata for GeoBR project.
+            Source: $url
+            """,
+            url,
+            Any
+        ))
+        @datadep_str ID
+    end
+
+    table = CSV.File(joinpath(dir, basename(url)))
 
     filtered = table |> Filter(row ->
         row.geo == geo &&
@@ -98,7 +94,7 @@ function metadatarows(geo, year, code, abbrev; all=false)
     )
 
     if isempty(filtered)
-        throw(ErrorException("No matching rows found for the given parameters"))
+        throw(ErrorException("Data not found for the given parameters"))
     end
 
     all ? Tables.rows(filtered) : Tables.rows(filtered) |> first
@@ -172,7 +168,7 @@ function get(geo, year, code=nothing; kwargs...)
         end
     end
 
-    row = metadatarows(geo, year, code, abbrev)
+    row = metadata(geo, year, code, abbrev)
     url = row.download_path
     ID = "GeoBR_" * basename(url) |> splitext |> first
 
@@ -563,7 +559,7 @@ function comparableareas(; startyear=1970, endyear=2010, kwargs...)
         throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
     end
 
-    metadata = metadatarows("amc", startyear, nothing, nothing; all=true)
+    metadata = metadata("amc", startyear, nothing, nothing; all=true)
     metadata = metadata |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
     if isempty(metadata)
