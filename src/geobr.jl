@@ -63,41 +63,47 @@ A single row or all rows of metadata matching the specified criteria.
 - `ErrorException` if no matching rows are found.
 """
 function metadata(geo, year, code, abbrev; version=last(APIVERSIONS), all=false)
-    # download metadata if necessary
-    url = "http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"
-    ID = "GeoBR_$(version)_metadata"
-    dir = try
-        # if data is already on disk
-        # we just return the path
-        @datadep_str ID
-    catch
-        # otherwise we register the data
-        # and download using DataDeps.jl
-        register(DataDep(ID,
-            """
-            Metadata for GeoBR project.
-            Source: $url
-            """,
-            url,
-            Any
-        ))
-        @datadep_str ID
-    end
+  # download metadata if necessary
+  url = "http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"
+  ID = "GeoBR_$(version)_metadata"
+  dir = try
+    # if data is already on disk
+    # we just return the path
+    @datadep_str ID
+  catch
+    # otherwise we register the data
+    # and download using DataDeps.jl
+    register(DataDep(
+      ID,
+      """
+      Metadata for GeoBR project.
+      Source: $url
+      """,
+      url,
+      Any
+    ))
+    @datadep_str ID
+  end
 
-    table = CSV.File(joinpath(dir, basename(url)))
+  # load metadata into a table
+  fname = joinpath(dir, basename(url))
+  table = CSV.File(fname)
 
-    filtered = table |> Filter(row ->
+  # filter rows based on parameters
+  filtered =
+    table |> Filter(
+      row ->
         row.geo == geo &&
-            row.year == year &&
-            (isnothing(code) || parse(Int, row.code) == code) &&
-            (isnothing(abbrev) || row.code_abbrev == abbrev)
+          row.year == year &&
+          (isnothing(code) || parse(Int, row.code) == code) &&
+          (isnothing(abbrev) || row.code_abbrev == abbrev)
     )
 
-    if isempty(filtered)
-        throw(ErrorException("Data not found for the given parameters"))
-    end
+  if isempty(filtered)
+    throw(ErrorException("Data not found for the given parameters"))
+  end
 
-    all ? Tables.rows(filtered) : Tables.rows(filtered) |> first
+  all ? Tables.rows(filtered) : Tables.rows(filtered) |> first
 end
 
 """
@@ -116,40 +122,40 @@ The local file path of the downloaded file.
 - `ErrorException` if the download fails due to internet or server issues.
 """
 function download(url, ID)
+  try
+    # if data is already on disk
+    # we just return the path
+    @datadep_str filepath(ID, url)
+  catch
+    # otherwise we register the data
+    # and download using DataDeps.jl
     try
-        # if data is already on disk
-        # we just return the path
-        @datadep_str filepath(ID, url)
+      register(DataDep(
+        ID,
+        """
+        Metadata for GeoBR package.
+        Source: $url
+        """,
+        url,
+        Any
+      ))
+      @datadep_str filepath(ID, url)
     catch
-        # otherwise we register the data
-        # and download using DataDeps.jl
-        try
-            register(DataDep(ID,
-                """
-                Metadata for GeoBR package.
-                Source: $url
-                """,
-                url,
-                Any
-            ))
-            @datadep_str filepath(ID, url)
-        catch
-            throw(ErrorException("download failed due to internet and/or server issues"))
-        end
+      throw(ErrorException("download failed due to internet and/or server issues"))
     end
+  end
 end
 
 """
-    get(geo, year, code=nothing, abbrev=nothing; kwargs...)
+    get(geo, year; code=nothing, kwargs...)
 
 Retrieve geographic data based on the specified parameters.
 
 # Arguments
 - `geo`: The geographic level (e.g., "state", "municipality").
-- `year`: The year of the data.
-- `code`: The numeric code of the geographic area (optional).
-- `abbrev`: The abbreviation of the geographic area (optional).
-- `kwargs`: Additional keyword arguments to pass to GeoIO.load.
+- `year`: The year of the data (e.g., 2010).
+- `code`: The code or abbreviation of the geographic area (optional).
+- `kwargs`: Additional keyword arguments to pass to `GeoIO.load`.
 
 # Returns
 The loaded geographic data.
@@ -158,22 +164,22 @@ The loaded geographic data.
 - May throw exceptions from metadatarows, download, or GeoIO.load functions.
 """
 function get(geo, year, code=nothing; kwargs...)
-    abbrev = nothing
-    if !isnothing(code)
-        if isa(code, Number)
-            code = Int(code)
-        elseif isa(code, AbstractString)
-            abbrev = code
-            code = nothing
-        end
+  abbrev = nothing
+  if !isnothing(code)
+    if isa(code, Number)
+      code = Int(code)
+    elseif isa(code, AbstractString)
+      abbrev = code
+      code = nothing
     end
+  end
 
-    row = metadata(geo, year, code, abbrev)
-    url = row.download_path
-    ID = "GeoBR_" * basename(url) |> splitext |> first
+  row = metadata(geo, year, code, abbrev)
+  url = row.download_path
+  ID = "GeoBR_" * basename(url) |> splitext |> first
 
-    path = download(url, ID)
-    GeoIO.load(path; kwargs...)
+  path = download(url, ID)
+  GeoIO.load(path; kwargs...)
 end
 
 """
@@ -410,16 +416,16 @@ Returns:
 - Intermediate region data for the specified year.
 """
 function intermediateregion(intermediate; year=2019, kwargs...)
-    gdf = get("intermediate_regions", year, kwargs...)
-    if intermediate == "all"
-        return gdf
-    elseif isa(intermediate, Number) && length(string(intermediate)) == 2
-        return gdf[gdf.code_state.==intermediate, :]
-    elseif isa(intermediate, AbstractString) && length(intermediate) == 2
-        return gdf[gdf.abbrev_state.==intermediate, :]
-    else
-        return gdf[gdf.code_intermediate.==intermediate, :]
-    end
+  gdf = get("intermediate_regions", year, kwargs...)
+  if intermediate == "all"
+    return gdf
+  elseif isa(intermediate, Number) && length(string(intermediate)) == 2
+    return gdf[gdf.code_state .== intermediate, :]
+  elseif isa(intermediate, AbstractString) && length(intermediate) == 2
+    return gdf[gdf.abbrev_state .== intermediate, :]
+  else
+    return gdf[gdf.code_intermediate .== intermediate, :]
+  end
 end
 
 """
@@ -441,16 +447,16 @@ Returns:
 - Immediate region data for the specified year.
 """
 function immediateregion(immediate; year=2017, kwargs...)
-    gdf = get("immediate_regions", year, kwargs...)
-    if immediate == "all"
-        return gdf
-    elseif isa(immediate, Number) && length(string(immediate)) == 2
-        return gdf[gdf.code_state.==string(immediate), :]
-    elseif isa(immediate, AbstractString) && length(immediate) == 2
-        return gdf[gdf.abbrev_state.==immediate, :]
-    else
-        return gdf[gdf.code_immediate.==immediate, :]
-    end
+  gdf = get("immediate_regions", year, kwargs...)
+  if immediate == "all"
+    return gdf
+  elseif isa(immediate, Number) && length(string(immediate)) == 2
+    return gdf[gdf.code_state .== string(immediate), :]
+  elseif isa(immediate, AbstractString) && length(immediate) == 2
+    return gdf[gdf.abbrev_state .== immediate, :]
+  else
+    return gdf[gdf.code_immediate .== immediate, :]
+  end
 end
 
 """
@@ -553,21 +559,21 @@ Returns:
 - Comparable areas data for the specified range of years.
 """
 function comparableareas(; startyear=1970, endyear=2010, kwargs...)
-    years = (1872, 1900, 1911, 1920, 1933, 1940, 1950, 1960, 1970, 1980, 1991, 2000, 2010)
+  years = (1872, 1900, 1911, 1920, 1933, 1940, 1950, 1960, 1970, 1980, 1991, 2000, 2010)
 
-    if startyear ∉ years || endyear ∉ years
-        throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
-    end
+  if startyear ∉ years || endyear ∉ years
+    throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
+  end
 
-    metadata = metadata("amc", startyear, nothing, nothing; all=true)
-    metadata = metadata |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
+  metadata = metadata("amc", startyear, nothing, nothing; all=true)
+  metadata = metadata |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
-    if isempty(metadata)
-        throw(ErrorException("No data found for the specified years"))
-    end
+  if isempty(metadata)
+    throw(ErrorException("No data found for the specified years"))
+  end
 
-    first_row = first(metadata)
-    get("amc", first_row.year, kwargs...)
+  first_row = first(metadata)
+  get("amc", first_row.year, kwargs...)
 end
 
 """
