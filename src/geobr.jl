@@ -635,7 +635,7 @@ Arguments:
 Returns:
 - Health region data for the specified year.
 """
-healthregion(; year=2013, kwargs...) = get("health_region", year, nothing, nothing, kwargs...)
+healthregion(; year=2013, kwargs...) = get("health_region", year; kwargs...)
 
 function filepath(ID, url)
     filename = split(url, "/") |> last
