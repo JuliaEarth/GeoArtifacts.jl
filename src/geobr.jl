@@ -424,7 +424,7 @@ Returns:
 - Intermediate region data for the specified year.
 """
 function intermediateregion(intermediate; year=2019, kwargs...)
-    gdf = get("intermediate_regions", year, nothing, nothing, kwargs...)
+    gdf = get("intermediate_regions", year, kwargs...)
     if intermediate == "all"
         return gdf
     elseif isa(intermediate, Number) && length(string(intermediate)) == 2
@@ -455,7 +455,7 @@ Returns:
 - Immediate region data for the specified year.
 """
 function immediateregion(immediate; year=2017, kwargs...)
-    gdf = get("immediate_regions", year, nothing, nothing, kwargs...)
+    gdf = get("immediate_regions", year, kwargs...)
     if immediate == "all"
         return gdf
     elseif isa(immediate, Number) && length(string(immediate)) == 2
@@ -589,7 +589,7 @@ function comparableareas(; startyear=1970, endyear=2010, kwargs...)
     end
 
     first_row = first(metadata)
-    get("amc", first_row.year, nothing, nothing; kwargs...)
+    get("amc", first_row.year, kwargs...)
 end
 
 """
