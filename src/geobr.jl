@@ -32,7 +32,6 @@ Provides functions to download data from the GeoBR database:
 `GeoBR.urbanconcentrations`
 `GeoBR.poparrangements`
 `GeoBR.healthregion`
-`GeoBR.filepath`
 """
 module GeoBR
 
@@ -637,9 +636,6 @@ Returns:
 """
 healthregion(; year=2013, kwargs...) = get("health_region", year; kwargs...)
 
-function filepath(ID, url)
-    filename = split(url, "/") |> last
-    ID * "/" * filename
-end
+filepath(ID, url) = joinpath(ID, basename(url))
 
 end
