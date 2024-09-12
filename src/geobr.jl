@@ -577,7 +577,7 @@ Returns:
 function comparableareas(; startyear=1970, endyear=2010, kwargs...)
     years = (1872, 1900, 1911, 1920, 1933, 1940, 1950, 1960, 1970, 1980, 1991, 2000, 2010)
 
-    if startyear ∉ years_available || endyear ∉ years_available
+    if startyear ∉ years || endyear ∉ years
         throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
     end
 
