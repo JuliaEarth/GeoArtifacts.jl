@@ -335,7 +335,7 @@ Arguments:
 Returns:
 - Neighborhood data for the specified year.
 """
-neighborhood(; year=2010, kwargs...) = get("neighborhood", year, nothing, nothing, kwargs...)
+neighborhood(; year=2010, kwargs...) = get("neighborhood", year; kwargs...)
 
 """
     urbanarea(; year=2015, kwargs...)
