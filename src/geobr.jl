@@ -223,7 +223,7 @@ Arguments:
 Returns:
 - Region data for the specified year.
 """
-region(; year=2010, kwargs...) = get("regions", year, nothing, nothing, kwargs...)
+region(; year=2010, kwargs...) = get("regions", year; kwargs...)
 
 """
     country(; year=2010, kwargs...)
