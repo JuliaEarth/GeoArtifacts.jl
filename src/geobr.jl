@@ -73,6 +73,11 @@ function downloadmeta(version=last(APIVERSIONS))
   joinpath(ID, basename(url))
 end
 
+"""
+    download(url; version=last(APIVERSIONS))
+
+(Down)load data for the specified `url` and `version` of the dataset.
+"""
 function download(url; version=last(APIVERSIONS))
   ID = "GeoBR_$(version)_$(basename(url))"
   try
@@ -97,6 +102,15 @@ function download(url; version=last(APIVERSIONS))
 end
 
 """
+    geturl(csv, entity, year, code)
+
+Retrieve rows of `csv` for the given `entity`, `year` and `code`.
+"""
+function geturl(csv, entity, year, code)
+  # TODO
+end
+
+"""
     get(entity, year; code=nothing, version=last(APIVERSIONS), kwargs...)
 
 Load geographic data for given `entity` and `year`. Optionally specify
@@ -104,21 +118,9 @@ Load geographic data for given `entity` and `year`. Optionally specify
 to `GeoIO.load`.
 """
 function get(entity, year; code=nothing, version=last(APIVERSIONS), kwargs...)
-  abbrev = nothing
-  if !isnothing(code)
-    if isa(code, Number)
-      code = Int(code)
-    elseif isa(code, AbstractString)
-      abbrev = code
-      code = nothing
-    end
-  end
-
-  meta = CSV.File(downloadmeta(version))
-  row = Tables.rows(meta) |> first
-  url = row.download_path
-  path = download(url)
-  GeoIO.load(path; kwargs...)
+  csv = CSV.File(downloadmeta(version))
+  url = geturl(csv, entity, year, code)
+  GeoIO.load(download(url; version); kwargs...)
 end
 
 """
