@@ -482,7 +482,7 @@ Arguments:
 Returns:
 - Municipal seat data for the specified year.
 """
-municipalseat(; year=2010, kwargs...) = get("municipal_seat", year, nothing, nothing, kwargs...)
+municipalseat(; year=2010, kwargs...) = get("municipal_seat", year; kwargs...)
 
 """
     censustract(codetract; year=2010, kwargs...)
