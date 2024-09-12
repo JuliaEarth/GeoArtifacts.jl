@@ -44,28 +44,15 @@ using TableTransforms
 const APIVERSIONS = (v"1.7.0",)
 
 """
-    metadata(geo, year, code, abbrev; version=last(APIVERSIONS), all=false)
+    downloadmeta(version=last(APIVERSIONS))
 
-Retrieve metadata for the specified parameters.
-
-# Arguments
-- `geo`: The geographic level (e.g., "state", "municipality").
-- `year`: The year of the data (e.g., 2010).
-- `code`: The code or abbreviation of the geographic area (optional).
-- `version`: The version of the dataset (optional).
-- `all`: If true, return all matching rows; if false, return only the first row (default: false).
-
-# Returns
-A single row or all rows of metadata matching the specified criteria.
-
-# Throws
-- `ErrorException` if no matching rows are found.
+(Down)load metadata for the specified `version` of the dataset.
 """
-function metadata(geo, year, code, abbrev; version=last(APIVERSIONS), all=false)
+function downloadmeta(version=last(APIVERSIONS))
   # download metadata if necessary
   url = "http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"
   ID = "GeoBR_$(version)_metadata"
-  dir = try
+  try
     # if data is already on disk
     # we just return the path
     @datadep_str ID
@@ -83,86 +70,40 @@ function metadata(geo, year, code, abbrev; version=last(APIVERSIONS), all=false)
     ))
     @datadep_str ID
   end
-
-  # load metadata into a table
-  fname = joinpath(dir, basename(url))
-  table = CSV.File(fname)
-
-  # filter rows based on parameters
-  filtered =
-    table |> Filter(
-      row ->
-        row.geo == geo &&
-          row.year == year &&
-          (isnothing(code) || parse(Int, row.code) == code) &&
-          (isnothing(abbrev) || row.code_abbrev == abbrev)
-    )
-
-  if isempty(filtered)
-    throw(ErrorException("Data not found for the given parameters"))
-  end
-
-  all ? Tables.rows(filtered) : Tables.rows(filtered) |> first
+  joinpath(ID, basename(url))
 end
 
-"""
-    download(url, ID)
-
-Download a file from the given `url` and save it on a given DataDeps.jl's `ID`.
-
-# Arguments
-- `url`: The URL of the file to download.
-- `ID`: A unique identifier for the DataDep.
-
-# Returns
-The local file path of the downloaded file.
-
-# Throws
-- `ErrorException` if the download fails due to internet or server issues.
-"""
-function download(url, ID)
+function download(url; version=last(APIVERSIONS))
+  ID = "GeoBR_$(version)_$(basename(url))"
   try
     # if data is already on disk
     # we just return the path
-    @datadep_str filepath(ID, url)
+    @datadep_str ID
   catch
     # otherwise we register the data
     # and download using DataDeps.jl
-    try
-      register(DataDep(
-        ID,
-        """
-        Metadata for GeoBR package.
-        Source: $url
-        """,
-        url,
-        Any
-      ))
-      @datadep_str filepath(ID, url)
-    catch
-      throw(ErrorException("download failed due to internet and/or server issues"))
-    end
+    register(DataDep(
+      ID,
+      """
+      Data for GeoBR project.
+      Source: $url
+      """,
+      url,
+      Any
+    ))
+    @datadep_str ID
   end
+  joinpath(ID, basename(url))
 end
 
 """
-    get(geo, year; code=nothing, kwargs...)
+    get(entity, year; code=nothing, version=last(APIVERSIONS), kwargs...)
 
-Retrieve geographic data based on the specified parameters.
-
-# Arguments
-- `geo`: The geographic level (e.g., "state", "municipality").
-- `year`: The year of the data (e.g., 2010).
-- `code`: The code or abbreviation of the geographic area (optional).
-- `kwargs`: Additional keyword arguments to pass to `GeoIO.load`.
-
-# Returns
-The loaded geographic data.
-
-# Throws
-- May throw exceptions from metadata, download, or GeoIO.load functions.
+Load geographic data for given `entity` and `year`. Optionally specify
+`code` or abbreviation and dataset `version`. The `kwargs` are forwarded
+to `GeoIO.load`.
 """
-function get(geo, year, code=nothing; kwargs...)
+function get(entity, year; code=nothing version=last(APIVERSIONS), kwargs...)
   abbrev = nothing
   if !isnothing(code)
     if isa(code, Number)
@@ -173,11 +114,10 @@ function get(geo, year, code=nothing; kwargs...)
     end
   end
 
-  row = metadata(geo, year, code, abbrev)
+  meta = CSV.File(downloadmeta(version))
+  row = Tables.rows(meta) |> first
   url = row.download_path
-  ID = "GeoBR_" * basename(url) |> splitext |> first
-
-  path = download(url, ID)
+  path = download(url)
   GeoIO.load(path; kwargs...)
 end
 
@@ -617,7 +557,5 @@ Returns:
 - Health region data for the specified year.
 """
 healthregion(; year=2013, kwargs...) = get("health_region", year; kwargs...)
-
-filepath(ID, url) = joinpath(ID, basename(url))
 
 end
