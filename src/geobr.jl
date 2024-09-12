@@ -174,7 +174,7 @@ function get(geo, year, code=nothing; kwargs...)
 
     row = metadatarows(geo, year, code, abbrev)
     url = row.download_path
-    ID = "GeoBR_" * basename(url) |> splittext |> first
+    ID = "GeoBR_" * basename(url) |> splitext |> first
 
     path = download(url, ID)
     GeoIO.load(path; kwargs...)
@@ -393,7 +393,7 @@ Arguments:
 Returns:
 - Microregion data for the specified year.
 """
-mesoregion(meso=nothing; year=2010, kwargs...) = get("meso_region", year, meso; kwargs...)
+microregion(meso=nothing; year=2010, kwargs...) = get("micro_region", year, meso; kwargs...)
 
 """
     intermediateregion(intermediate; year=2019, kwargs...)
