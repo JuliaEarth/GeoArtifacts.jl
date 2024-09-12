@@ -103,7 +103,7 @@ Load geographic data for given `entity` and `year`. Optionally specify
 `code` or abbreviation and dataset `version`. The `kwargs` are forwarded
 to `GeoIO.load`.
 """
-function get(entity, year; code=nothing version=last(APIVERSIONS), kwargs...)
+function get(entity, year; code=nothing, version=last(APIVERSIONS), kwargs...)
   abbrev = nothing
   if !isnothing(code)
     if isa(code, Number)
