@@ -161,7 +161,17 @@ The loaded geographic data.
 # Throws
 - May throw exceptions from metadatarows, download, or GeoIO.load functions.
 """
-function get(geo, year; code=nothing, abbrev=nothing, kwargs...)
+function get(geo, year, code=nothing; kwargs...)
+    abbrev = nothing
+    if !isnothing(code)
+        if isa(code, Number)
+            code = Int(code)
+        elseif isa(code, AbstractString)
+            abbrev = code
+            code = nothing
+        end
+    end
+
     row = metadatarows(geo, year, code, abbrev)
     url = row.download_path
     ID = "GeoBR_" * basename(url) |> splittext |> first
@@ -183,11 +193,7 @@ Arguments:
 Returns:
 - State data for the specified year.
 """
-function state(state; year=2010, kwargs...)
-    code = isa(state, Number) ? state : nothing
-    abbrev = isa(state, AbstractString) ? state : nothing
-    get("state", year, code, abbrev, kwargs...)
-end
+state(state=nothing; year=2010, kwargs...) = get("state", year, state; kwargs...)
 
 """
     municipality(muni; year=2010, kwargs...)
@@ -202,11 +208,7 @@ Arguments:
 Returns:
 - Municipality data for the specified year.
 """
-function municipality(muni; year=2010, kwargs...)
-    code = isa(muni, Number) ? muni : nothing
-    abbrev = isa(muni, AbstractString) ? muni : nothing
-    get("municipality", year, code, abbrev; kwargs...)
-end
+municipality(muni=nothing; year=2010, kwargs...) = get("municipality", year, muni; kwargs...)
 
 """
     region(; year=2010, kwargs...)
@@ -361,11 +363,7 @@ Arguments:
 Returns:
 - Weighting area data for the specified year.
 """
-function weightingarea(weighting; year=2010, kwargs...)
-    code = isa(weighting, Number) ? weighting : nothing
-    abbrev = isa(weighting, AbstractString) ? weighting : nothing
-    get("weighting_area", year, code, abbrev, kwargs...)
-end
+weightingarea(weighting=nothing; year=2010, kwargs...) = get("weighting_area", year, weighting; kwargs...)
 
 """
     mesoregion(meso; year=2010, kwargs...)
@@ -380,11 +378,7 @@ Arguments:
 Returns:
 - Mesoregion data for the specified year.
 """
-function mesoregion(meso; year=2010, kwargs...)
-    code = isa(meso, Number) ? meso : nothing
-    abbrev = isa(meso, AbstractString) ? meso : nothing
-    get("meso_region", year, code, abbrev, kwargs...)
-end
+mesoregion(meso=nothing; year=2010, kwargs...) = get("meso_region", year, meso; kwargs...)
 
 """
     microregion(micro; year=2010, kwargs...)
@@ -399,11 +393,7 @@ Arguments:
 Returns:
 - Microregion data for the specified year.
 """
-function microregion(micro; year=2010, kwargs...)
-    code = isa(micro, Number) ? micro : nothing
-    abbrev = isa(micro, AbstractString) ? micro : nothing
-    get("micro_region", year, code, abbrev, kwargs...)
-end
+mesoregion(meso=nothing; year=2010, kwargs...) = get("meso_region", year, meso; kwargs...)
 
 """
     intermediateregion(intermediate; year=2019, kwargs...)
@@ -494,11 +484,7 @@ Arguments:
 Returns:
 - Census tract data for the specified year.
 """
-function censustract(codetract; year=2010, kwargs...)
-    code = isa(codetract, Number) ? codetract : nothing
-    abbrev = isa(codetract, AbstractString) ? codetract : nothing
-    get("census_tract", year, code, abbrev, kwargs...)
-end
+censustract(codetract=nothing; year=2010, kwargs...) = get("census_tract", year, codetract; kwargs...)
 
 """
     statisticalgrid(grid; year=2010, kwargs...)
@@ -513,11 +499,7 @@ Arguments:
 Returns:
 - Statistical grid data for the specified year.
 """
-function statisticalgrid(grid; year=2010, kwargs...)
-    code = isa(grid, Number) ? grid : nothing
-    abbrev = isa(grid, AbstractString) ? grid : nothing
-    get("statistical_grid", year, code, abbrev, kwargs...)
-end
+statisticalgrid(grid=nothing; year=2010, kwargs...) = get("statistical_grid", year, grid; kwargs...)
 
 """
     conservationunits(; date=201909, kwargs...)
