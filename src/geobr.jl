@@ -251,7 +251,7 @@ Arguments:
 Returns:
 - Amazon data for the specified year.
 """
-amazon(; year=2012, kwargs...) = get("amazonia_legal", year, nothing, nothing, kwargs...)
+amazon(; year=2012, kwargs...) = get("amazonia_legal", year; kwargs...)
 
 """
     biomes(; year=2019, kwargs...)
