@@ -237,7 +237,7 @@ Arguments:
 Returns:
 - Country data for the specified year.
 """
-country(; year=2010, kwargs...) = get("country", year, nothing, nothing, kwargs...)
+country(; year=2010, kwargs...) = get("country", year; kwargs...)
 
 """
     amazon(; year=2012, kwargs...)
