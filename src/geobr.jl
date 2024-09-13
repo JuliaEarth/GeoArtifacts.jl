@@ -44,13 +44,20 @@ using TableTransforms
 const APIVERSIONS = (v"1.7.0",)
 
 """
-    download(url; version=last(APIVERSIONS))
+    download(url; version=v"1.7.0")
 
 (Down)load data for the specified `url` and `version` of the dataset.
 """
-function download(url; version=last(APIVERSIONS))
-  ID = "GeoBR_$(version)_$(basename(url))"
-  try
+function download(url; version=v"1.7.0")
+  if version ∉ APIVERSIONS
+    throw(ArgumentError("invalid API version, please check the docstring"))
+  end
+
+  filename = basename(url)
+
+  ID = "GeoBR_$(version)_$filename"
+
+  dir = try
     # if data is already on disk
     # we just return the path
     @datadep_str ID
@@ -60,7 +67,7 @@ function download(url; version=last(APIVERSIONS))
     register(DataDep(
       ID,
       """
-      Data for GeoBR project.
+      Geographic data provided by the GeoBR project.
       Source: $url
       """,
       url,
@@ -68,49 +75,52 @@ function download(url; version=last(APIVERSIONS))
     ))
     @datadep_str ID
   end
-  joinpath(ID, basename(url))
+
+  joinpath(dir, filename)
 end
 
 """
-    downloadmeta(version=last(APIVERSIONS))
+    downloadmeta(; version=v"1.7.0")
 
 (Down)load metadata for the specified `version` of the dataset.
 """
-downloadmeta(version=last(APIVERSIONS)) = download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version)
+downloadmeta(; version=v"1.7.0") = download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version)
 
 """
-    geturl(csv, entity, year, code)
+    geturl(csv, geo, year, code)
 
-Retrieve rows of `csv` for the given `entity`, `year` and `code`.
+Retrieve url in `csv` table for given `geo`, `year` and `code` parameters.
 """
-function geturl(csv, entity, year, code)
-  # TODO
+function geturl(csv, geo, year, code)
+  rows = csv |> Filter(row -> row.geo == geo && row.year == year)
+  row = rows |> Tables.rows |> first
+  row.download_path
 end
 
 """
-    get(entity, year; code=nothing, version=last(APIVERSIONS), kwargs...)
+    get(entity, year, code; version=v"1.7.0", kwargs...)
 
-Load geographic data for given `entity` and `year`. Optionally specify
-`code` or abbreviation and dataset `version`. The `kwargs` are forwarded
-to `GeoIO.load`.
+Load geographic data for given `geo`, `year` and `code`.
+Optionally specify dataset `version` and `kwargs` to
+`GeoIO.load`.
 """
-function get(entity, year; code=nothing, version=last(APIVERSIONS), kwargs...)
-  csv = CSV.File(downloadmeta(version))
-  url = geturl(csv, entity, year, code)
+function get(geo, year, code=nothing; version=v"1.7.0", kwargs...)
+  csv = CSV.File(downloadmeta(; version))
+  url = geturl(csv, geo, year, code)
   GeoIO.load(download(url; version); kwargs...)
 end
 
 """
-    state(; year=2010, code=nothing, kwargs...)
+    state(code; year=2010, kwargs...)
 
 Get state data.
 
 Arguments:
-- `year`: Year of the data (default: 2010).
 - `code`: State code or abbreviation.
+- `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 """
-state(; year=2010, code=nothing, kwargs...) = get("state"; year, code, kwargs...)
+state(code; year=2010, kwargs...) = get("state", year, code; kwargs...)
 
 """
     municipality(muni; year=2010, kwargs...)
@@ -118,14 +128,14 @@ state(; year=2010, code=nothing, kwargs...) = get("state"; year, code, kwargs...
 Get municipality data for a given year.
 
 Arguments:
-- `muni`: Municipality code or abbreviation.
+- `code`: Municipality code or abbreviation.
 - `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Municipality data for the specified year.
 """
-municipality(muni=nothing; year=2010, kwargs...) = get("municipality", year, muni; kwargs...)
+municipality(code; year=2010, kwargs...) = get("municipality", year, code; kwargs...)
 
 """
     region(; year=2010, kwargs...)
@@ -268,34 +278,34 @@ Returns:
 urbanarea(; year=2015, kwargs...) = get("urban_area", year; kwargs...)
 
 """
-    weightingarea(weighting; year=2010, kwargs...)
+    weightingarea(code; year=2010, kwargs...)
 
 Get weighting area data for a given year.
 
 Arguments:
-- `weighting`: Weighting area code or abbreviation.
+- `code`: Weighting area code or abbreviation.
 - `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Weighting area data for the specified year.
 """
-weightingarea(weighting=nothing; year=2010, kwargs...) = get("weighting_area", year, weighting; kwargs...)
+weightingarea(code; year=2010, kwargs...) = get("weighting_area", year, code; kwargs...)
 
 """
-    mesoregion(meso; year=2010, kwargs...)
+    mesoregion(code; year=2010, kwargs...)
 
 Get mesoregion data for a given year.
 
 Arguments:
-- `meso`: Mesoregion code or abbreviation.
+- `code`: Mesoregion code or abbreviation.
 - `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Mesoregion data for the specified year.
 """
-mesoregion(meso=nothing; year=2010, kwargs...) = get("meso_region", year, meso; kwargs...)
+mesoregion(code; year=2010, kwargs...) = get("meso_region", year, code; kwargs...)
 
 """
     microregion(micro; year=2010, kwargs...)
@@ -303,76 +313,50 @@ mesoregion(meso=nothing; year=2010, kwargs...) = get("meso_region", year, meso; 
 Get microregion data for a given year.
 
 Arguments:
-- `micro`: Microregion code or abbreviation.
+- `code`: Microregion code or abbreviation.
 - `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Microregion data for the specified year.
 """
-microregion(meso=nothing; year=2010, kwargs...) = get("micro_region", year, meso; kwargs...)
+microregion(code; year=2010, kwargs...) = get("micro_region", year, code; kwargs...)
 
 """
-    intermediateregion(intermediate; year=2019, kwargs...)
+    intermediateregion(code; year=2019, kwargs...)
 
 Get intermediate region data for a given year.
 
 Arguments:
-- `intermediate`: 
-              6-digit code of an intermediate region. If the two-digit code or a 
-              two-letter uppercase abbreviation of a state is passed, (e.g. 33 or 
-              "RJ") the function will load all intermediate regions of that state. If 
-              intermediate="all", all intermediate regions of the country are loaded 
-              (defaults to "all")
+- `code`: 6-digit code of an intermediate region. If the two-digit code or a 
+          two-letter uppercase abbreviation of a state is passed, (e.g. 33 or 
+          "RJ") the function will load all intermediate regions of that state.
+          Otherwise, all intermediate regions of the country are loaded.
 - `year`: Year of the data (default: 2019).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Intermediate region data for the specified year.
 """
-function intermediateregion(intermediate; year=2019, kwargs...)
-  gdf = get("intermediate_regions", year, kwargs...)
-  if intermediate == "all"
-    return gdf
-  elseif isa(intermediate, Number) && length(string(intermediate)) == 2
-    return gdf[gdf.code_state .== intermediate, :]
-  elseif isa(intermediate, AbstractString) && length(intermediate) == 2
-    return gdf[gdf.abbrev_state .== intermediate, :]
-  else
-    return gdf[gdf.code_intermediate .== intermediate, :]
-  end
-end
+intermediateregion(code; year=2019, kwargs...) = get("intermediate_regions", year, code; kwargs...)
 
 """
-    immediateregion(immediate; year=2017, kwargs...)
+    immediateregion(code; year=2017, kwargs...)
 
 Get immediate region data for a given year.
 
 Arguments:
-- `immediate`: 
-            6-digit code of an immediate region. If the two-digit code or a 
-            two-letter uppercase abbreviation of a state is passed, (e.g. 33 or 
-            "RJ") the function will load all immediate regions of that state. If 
-            immediate="all", all immediate regions of the country are loaded 
-(defaults to "all")
+- `code`: 6-digit code of an immediate region. If the two-digit code or a 
+          two-letter uppercase abbreviation of a state is passed, (e.g. 33 or 
+          "RJ") the function will load all immediate regions of that state.
+          Otherwise, all immediate regions of the country are loaded.
 - `year`: Year of the data (default: 2017).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Immediate region data for the specified year.
 """
-function immediateregion(immediate; year=2017, kwargs...)
-  gdf = get("immediate_regions", year, kwargs...)
-  if immediate == "all"
-    return gdf
-  elseif isa(immediate, Number) && length(string(immediate)) == 2
-    return gdf[gdf.code_state .== string(immediate), :]
-  elseif isa(immediate, AbstractString) && length(immediate) == 2
-    return gdf[gdf.abbrev_state .== immediate, :]
-  else
-    return gdf[gdf.code_immediate .== immediate, :]
-  end
-end
+immediateregion(code; year=2017, kwargs...) = get("immediate_regions", year, code; kwargs...)
 
 """
     municipalseat(; year=2010, kwargs...)
@@ -389,34 +373,34 @@ Returns:
 municipalseat(; year=2010, kwargs...) = get("municipal_seat", year; kwargs...)
 
 """
-    censustract(codetract; year=2010, kwargs...)
+    censustract(code; year=2010, kwargs...)
 
 Get census tract data for a given year.
 
 Arguments:
-- `codetract`: Census tract code or abbreviation.
+- `code`: Census tract code or abbreviation.
 - `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Census tract data for the specified year.
 """
-censustract(codetract=nothing; year=2010, kwargs...) = get("census_tract", year, codetract; kwargs...)
+censustract(code; year=2010, kwargs...) = get("census_tract", year, code; kwargs...)
 
 """
-    statisticalgrid(grid; year=2010, kwargs...)
+    statisticalgrid(code; year=2010, kwargs...)
 
 Get statistical grid data for a given year.
 
 Arguments:
-- `grid`: Statistical grid code or abbreviation.
+- `code`: Statistical grid code or abbreviation.
 - `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 
 Returns:
 - Statistical grid data for the specified year.
 """
-statisticalgrid(grid=nothing; year=2010, kwargs...) = get("statistical_grid", year, grid; kwargs...)
+statisticalgrid(code; year=2010, kwargs...) = get("statistical_grid", year, code; kwargs...)
 
 """
     conservationunits(; date=201909, kwargs...)
@@ -473,23 +457,23 @@ Arguments:
 Returns:
 - Comparable areas data for the specified range of years.
 """
-function comparableareas(; startyear=1970, endyear=2010, kwargs...)
+function comparableareas(; startyear=1970, endyear=2010, version=v"1.7.0", kwargs...)
   years = (1872, 1900, 1911, 1920, 1933, 1940, 1950, 1960, 1970, 1980, 1991, 2000, 2010)
 
   if startyear ∉ years || endyear ∉ years
     throw(ArgumentError("Invalid `startyear` or `endyear`. It must be one of the following: $years_available"))
   end
 
-  meta = metadata("amc", startyear; all=true)
-  filt = meta |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
+  csv = CSV.File(downloadmeta(; version))
+  rows = csv |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
-  if isempty(filt)
-    throw(ErrorException("No data found for the specified years"))
+  if isempty(rows)
+    throw(ErrorException("No comparable areas found for the specified years"))
   end
 
-  year = first(filt).year
+  year = first(rows).year
 
-  get("amc", year, kwargs...)
+  get("amc", year; kwargs...)
 end
 
 """
