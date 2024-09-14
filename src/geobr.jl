@@ -55,7 +55,7 @@ function download(url; version=v"1.7.0")
 
   filename = basename(url)
 
-  ID = "GeoBR_$(version)_$filename"
+  ID = "GeoBR_$(version)_$(filename)"
 
   dir = try
     # if data is already on disk
@@ -92,8 +92,10 @@ downloadmeta(; version=v"1.7.0") = download("http://www.ipea.gov.br/geobr/metada
 Retrieve url in `csv` table for given `geo`, `year` and `code` parameters.
 """
 function geturl(csv, geo, year, code)
-  rows = csv |> Filter(row -> row.geo == geo && row.year == year)
-  row = rows |> Tables.rows |> first
+  # TODO: add logic with code parameter, which
+  # can be either an integer or a string
+  table = csv |> Filter(row -> row.geo == geo && row.year == year)
+  row = table |> Tables.rows |> first
   row.download_path
 end
 
@@ -111,7 +113,7 @@ function get(geo, year, code=nothing; version=v"1.7.0", kwargs...)
 end
 
 """
-    state(code; year=2010, kwargs...)
+    state(code="all"; year=2010, kwargs...)
 
 Get state data.
 
@@ -120,7 +122,7 @@ Arguments:
 - `year`: Year of the data (default: 2010).
 - `kwargs`: Additional keyword arguments.
 """
-state(code; year=2010, kwargs...) = get("state", year, code; kwargs...)
+state(code="all"; year=2010, kwargs...) = get("state", year, code; kwargs...)
 
 """
     municipality(muni; year=2010, kwargs...)
