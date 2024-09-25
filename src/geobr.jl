@@ -330,8 +330,7 @@ Get intermediate region data for a given year.
 """
 function intermediateregion(code; year=nothing, kwargs...)
   gtb = get("intermediate_regions", year; kwargs...)
-  codestr = string(code)
-  gtb |> Filter(row -> row.abbrev_state == codestr || row.code_state == codestr || row.code_intermediate == codestr)
+  gtb |> Filter(row -> row.abbrev_state == code || row.code_state == code || row.code_intermediate == code)
 end
 
 """
@@ -350,8 +349,7 @@ Get immediate region data for a given year.
 """
 function immediateregion(code; year=nothing, kwargs...)
   gtb = get("immediate_regions", year; kwargs...)
-  codestr = string(code)
-  gtb |> Filter(row -> row.abbrev_state == codestr || row.code_state == codestr || row.code_immediate == codestr)
+  gtb |> Filter(row -> row.abbrev_state == code || row.code_state == code || row.code_immediate == code)
 end
 
 """
