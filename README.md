@@ -168,6 +168,118 @@ julia> NaturalEarth.coastlines()
                                                          4122 rows omitted
 ```
 
+#### GeoBR
+
+```
+help?> GeoBR
+
+  Provides functions to download data from the GeoBR database:
+
+    •  GeoBR.state
+
+    •  GeoBR.municipality
+
+    •  GeoBR.region
+
+    •  GeoBR.country
+
+    •  GeoBR.amazon
+
+    •  GeoBR.biomes
+
+    •  GeoBR.disasterriskarea
+
+    •  GeoBR.healthfacilities
+
+    •  GeoBR.indigenousland
+
+    •  GeoBR.metroarea
+
+    •  GeoBR.neighborhood
+
+    •  GeoBR.urbanarea
+
+    •  GeoBR.weightingarea
+
+    •  GeoBR.mesoregion
+
+    •  GeoBR.microregion
+
+    •  GeoBR.intermediateregion
+
+    •  GeoBR.immediateregion
+
+    •  GeoBR.municipalseat
+
+    •  GeoBR.censustract
+
+    •  GeoBR.statisticalgrid
+
+    •  GeoBR.conservationunits
+
+    •  GeoBR.semiarid
+
+    •  GeoBR.schools
+
+    •  GeoBR.comparableareas
+
+    •  GeoBR.urbanconcentrations
+
+    •  GeoBR.poparrangements
+
+    •  GeoBR.healthregion
+
+  Please check their docstrings for more details.
+
+julia> GeoBR.state()
+29×2 GeoTable over 29 GeometrySet
+┌───────────────────────────────────────────────┬──────────────────────────────┐
+│                  name_state                   │           geometry           │
+│                  Categorical                  │         MultiPolygon         │
+│                   [NoUnits]                   │ 🖈 GeodeticLatLon{SIRGAS2000} │
+├───────────────────────────────────────────────┼──────────────────────────────┤
+│                     Acre                      │      Multi(1×PolyArea)       │
+│                    Alagoas                    │      Multi(1×PolyArea)       │
+│                     Amapá                     │      Multi(1×PolyArea)       │
+│                   Amazonas                    │      Multi(1×PolyArea)       │
+│                     Bahia                     │      Multi(10×PolyArea)      │
+│                     Ceará                     │      Multi(1×PolyArea)       │
+│ Distrito estadual de Fernando de Noronha (PE) │      Multi(1×PolyArea)       │
+│               Distrito Federal                │      Multi(1×PolyArea)       │
+│                Espírito Santo                 │      Multi(8×PolyArea)       │
+│                     Goiás                     │      Multi(1×PolyArea)       │
+│                 Litígio PI/CE                 │      Multi(3×PolyArea)       │
+│                   Maranhão                    │      Multi(51×PolyArea)      │
+│                  Mato Grosso                  │      Multi(1×PolyArea)       │
+│              Mato Grosso do Sul               │      Multi(1×PolyArea)       │
+│                 Minas Gerais                  │      Multi(1×PolyArea)       │
+│                     Pará                      │      Multi(17×PolyArea)      │
+│                    Paraíba                    │      Multi(2×PolyArea)       │
+│                    Paraná                     │      Multi(1×PolyArea)       │
+│                  Pernambuco                   │      Multi(1×PolyArea)       │
+│                     Piauí                     │      Multi(1×PolyArea)       │
+│                Rio de Janeiro                 │      Multi(82×PolyArea)      │
+│              Rio Grande do Norte              │      Multi(1×PolyArea)       │
+│               Rio Grande do Sul               │      Multi(1×PolyArea)       │
+│                   Rondônia                    │      Multi(1×PolyArea)       │
+│                    Roraima                    │      Multi(1×PolyArea)       │
+│                Santa Catarina                 │      Multi(2×PolyArea)       │
+│                   São Paulo                   │      Multi(37×PolyArea)      │
+│                    Sergipe                    │      Multi(1×PolyArea)       │
+│                   Tocantins                   │      Multi(1×PolyArea)       │
+└───────────────────────────────────────────────┴──────────────────────────────┘
+
+julia> GeoBR.state("RJ")
+1×6 GeoTable over 1 GeometrySet
+┌────────────┬──────────────┬────────────────┬─────────────┬─────────────┬──────────────────────────────┐
+│ code_state │ abbrev_state │   name_state   │ code_region │ name_region │           geometry           │
+│ Continuous │ Categorical  │  Categorical   │ Continuous  │ Categorical │         MultiPolygon         │
+│ [NoUnits]  │  [NoUnits]   │   [NoUnits]    │  [NoUnits]  │  [NoUnits]  │ 🖈 GeodeticLatLon{SIRGAS2000} │
+├────────────┼──────────────┼────────────────┼─────────────┼─────────────┼──────────────────────────────┤
+│    33.0    │      RJ      │ Rio De Janeiro │     3.0     │   Sudeste   │     Multi(577×PolyArea)      │
+└────────────┴──────────────┴────────────────┴─────────────┴─────────────┴──────────────────────────────┘
+```
+
 #### INMET
 
 ```

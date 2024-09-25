@@ -48,7 +48,7 @@ const APIVERSIONS = (v"1.7.0",)
 """
     GeoBR.download(url; version=v"1.7.0")
 
-(Down)load data for the specified `url` and `version` of the GeoBR API.
+(Down)load data for the specified `url` and `version` of the GeoBR database.
 
 The available API versions are: 1.7.0.
 """
@@ -90,7 +90,7 @@ end
 """
     GeoBR.metadata(; version=v"1.7.0")
 
-Metadata for the specified `version` of the GeoBR dataset.
+Metadata for the specified `version` of the GeoBR database.
 """
 metadata(; version=v"1.7.0") =
   CSV.File(download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version))
@@ -99,8 +99,7 @@ metadata(; version=v"1.7.0") =
     GeoBR.get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
 
 Load geographic data for given `entity`, `year` and `code`.
-Optionally specify dataset `version` and `kwargs` passed to
-`GeoIO.load`.
+Optionally specify database `version` and `kwargs` passed to `GeoIO.load` function.
 """
 function get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
   table = metadata(; version)
@@ -136,9 +135,9 @@ Get state data.
 
 ## Arguments
 
-* `code`: State code or abbreviation;
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `code`: State code or abbreviation, e.g. 33 or "RJ" (default to all states);
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 state(code="state"; year=nothing, kwargs...) = get("state", year, code; kwargs...)
 
@@ -149,9 +148,9 @@ Get municipality data for a given year.
 
 ## Arguments
 
-* `code`: Municipality code or abbreviation;
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `code`: State code or abbreviation, e.g. 33 or "RJ" (default to all states);
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 municipality(code="municipality"; year=nothing, kwargs...) = get("municipality", year, code; kwargs...)
 
@@ -162,8 +161,8 @@ Get region data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 region(; year=nothing, kwargs...) = get("regions", year; kwargs...)
 
@@ -174,8 +173,8 @@ Get country data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 country(; year=nothing, kwargs...) = get("country", year; kwargs...)
 
@@ -186,8 +185,8 @@ Get Amazon data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 amazon(; year=nothing, kwargs...) = get("amazonia_legal", year; kwargs...)
 
@@ -198,8 +197,8 @@ Get biomes data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 biomes(; year=nothing, kwargs...) = get("biomes", year; kwargs...)
 
@@ -210,8 +209,8 @@ Get disaster risk area data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 disasterriskarea(; year=nothing, kwargs...) = get("disaster_risk_area", year; kwargs...)
 
@@ -222,8 +221,8 @@ Get health facilities data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 healthfacilities(; year=nothing, kwargs...) = get("health_facilities", year; kwargs...)
 
@@ -235,7 +234,7 @@ Get indigenous land data for a given date.
 ## Arguments
 
 * `date`: Date of the data in format YYYYMM (default to latest available date);
-* `kwargs`: Additional keyword arguments;
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 indigenousland(; date=nothing, kwargs...) = get("indigenous_land", date; kwargs...)
 
@@ -246,8 +245,8 @@ Get metropolitan area data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 metroarea(; year=nothing, kwargs...) = get("metropolitan_area", year; kwargs...)
 
@@ -258,8 +257,8 @@ Get neighborhood data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 neighborhood(; year=nothing, kwargs...) = get("neighborhood", year; kwargs...)
 
@@ -270,8 +269,8 @@ Get urban area data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 urbanarea(; year=nothing, kwargs...) = get("urban_area", year; kwargs...)
 
@@ -282,9 +281,9 @@ Get weighting area data for a given year.
 
 ## Arguments
 
-* `code`: Weighting area code or abbreviation;
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `code`: State code or abbreviation, e.g. 33 or "RJ";
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 weightingarea(code; year=nothing, kwargs...) = get("weighting_area", year, code; kwargs...)
 
@@ -295,9 +294,9 @@ Get mesoregion data for a given year.
 
 ## Arguments
 
-* `code`: Mesoregion code or abbreviation;
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `code`: State code or abbreviation, e.g. 33 or "RJ";
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 mesoregion(code; year=nothing, kwargs...) = get("meso_region", year, code; kwargs...)
 
@@ -308,9 +307,9 @@ Get microregion data for a given year.
 
 ## Arguments
 
-* `code`: Microregion code or abbreviation;
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `code`: State code or abbreviation, e.g. 33 or "RJ";
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 microregion(code; year=nothing, kwargs...) = get("micro_region", year, code; kwargs...)
 
@@ -321,12 +320,12 @@ Get intermediate region data for a given year.
 
 ## Arguments
 
-* `code`: 6-digit code of an intermediate region. If the two-digit code or a 
+* `code`: 4-digit code of an intermediate region. If the two-digit code or a 
   two-letter uppercase abbreviation of a state is passed, (e.g. 33 or "RJ") 
   the function will load all intermediate regions of that state.
   Otherwise, all intermediate regions of the country are loaded.
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 function intermediateregion(code; year=nothing, kwargs...)
   gtb = get("intermediate_regions", year; kwargs...)
@@ -344,8 +343,8 @@ Get immediate region data for a given year.
   two-letter uppercase abbreviation of a state is passed, (e.g. 33 or "RJ") 
   the function will load all immediate regions of that state.
   Otherwise, all immediate regions of the country are loaded.
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 function immediateregion(code; year=nothing, kwargs...)
   gtb = get("immediate_regions", year; kwargs...)
@@ -359,8 +358,8 @@ Get municipal seat data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 municipalseat(; year=nothing, kwargs...) = get("municipal_seat", year; kwargs...)
 
@@ -371,24 +370,24 @@ Get census tract data for a given year.
 
 ## Arguments
 
-* `code`: Census tract code or abbreviation;
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `code`: State code or abbreviation, e.g. 33 or "RJ";
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 censustract(code; year=nothing, kwargs...) = get("census_tract", year, code; kwargs...)
 
 """
-    GeoBR.statisticalgrid(code="statistical_grid"; year=nothing, kwargs...)
+    GeoBR.statisticalgrid(code; year=nothing, kwargs...)
 
 Get statistical grid data for a given year.
 
 ## Arguments
 
-* `code`: Statistical grid code or abbreviation;
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `code`: State code or abbreviation, e.g. 33 or "RJ";
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
-statisticalgrid(code="statistical_grid"; year=nothing, kwargs...) = get("statistical_grid", year, code; kwargs...)
+statisticalgrid(code; year=nothing, kwargs...) = get("statistical_grid", year, code; kwargs...)
 
 """
     GeoBR.conservationunits(; date=nothing, kwargs...)
@@ -398,7 +397,7 @@ Get conservation units data for a given date.
 ## Arguments
 
 * `date`: Date of the data in format YYYYMM (default to latest available date);
-* `kwargs`: Additional keyword arguments;
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 conservationunits(; date=nothing, kwargs...) = get("conservation_units", date; kwargs...)
 
@@ -409,8 +408,8 @@ Get semiarid data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 semiarid(; year=nothing, kwargs...) = get("semiarid", year; kwargs...)
 
@@ -421,8 +420,8 @@ Get schools data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 schools(; year=nothing, kwargs...) = get("schools", year; kwargs...)
 
@@ -433,9 +432,9 @@ Get comparable areas data for a given range of years.
 
 ## Arguments
 
-* `startyear`: Start year of the data (default to 1970);
-* `endyear`: End year of the data (default to 2010);
-* `kwargs`: Additional keyword arguments;
+* `startyear`: Start year of the data in format YYYY (default to 1970);
+* `endyear`: End year of the data in format YYYY (default to 2010);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 function comparableareas(; startyear=1970, endyear=2010, version=v"1.7.0", kwargs...)
   years = (1872, 1900, 1911, 1920, 1933, 1940, 1950, 1960, 1970, 1980, 1991, 2000, 2010)
@@ -465,8 +464,8 @@ Get urban concentrations data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 urbanconcentrations(; year=nothing, kwargs...) = get("urban_concentrations", year; kwargs...)
 
@@ -477,8 +476,8 @@ Get population arrangements data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 poparrangements(; year=nothing, kwargs...) = get("pop_arrengements", year; kwargs...)
 
@@ -489,8 +488,8 @@ Get health region data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default to latest available year);
-* `kwargs`: Additional keyword arguments;
+* `year`: Year of the data in format YYYY (default to latest available year);
+* `kwargs`: Keyword arguments passed to [`GeoBR.get`](@ref) function;
 """
 healthregion(; year=nothing, kwargs...) = get("health_region", year; kwargs...)
 
