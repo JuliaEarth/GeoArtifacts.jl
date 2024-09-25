@@ -3,8 +3,11 @@
 # -----------------------------------------------------------------
 
 """
-Provides a single function `GADM.get` to download data from the GADM database.
-Please check its docstring for more details.
+Provides functions to (down)load data from the GADM database.
+Please check the docstring of each function for more details:
+
+* [`GADM.get`](@ref)
+* [`GADM.codes`](@ref)
 """
 module GADM
 
@@ -19,13 +22,6 @@ const CODES = [c.alpha3 for c in all_countries()]
 const CODETABLE = [(country=c.name, code=c.alpha3) for c in all_countries()]
 
 const APIVERSIONS = (v"4.1", v"4.0", v"3.6", v"2.8")
-
-"""
-    GADM.codes()
-
-Table with all ISO 3166 Alpha 3 country codes.
-"""
-codes() = CODETABLE
 
 """
     GADM.download(code; version=v"4.1")
@@ -139,5 +135,12 @@ function get(country, subregions...; depth=0, version=v"4.1", kwargs...)
 
   gtb |> transform
 end
+
+"""
+    GADM.codes()
+
+Table with all ISO 3166 Alpha 3 country codes.
+"""
+codes() = CODETABLE
 
 end

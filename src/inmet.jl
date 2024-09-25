@@ -3,8 +3,8 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to load data from the INMET API.
-Please check their docstrings for more details:
+Provides functions to (down)load data from the INMET API.
+Please check the docstring of each function for more details:
 
 * [`INMET.stations`](@ref)
 * [`INMET.on`](@ref)

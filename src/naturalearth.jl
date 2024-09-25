@@ -3,7 +3,8 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to download data from the Natural Earth database:
+Provides functions to (down)load data from the Natural Earth database.
+Please check the docstring of each function for more details:
 
 * [`NaturalEarth.countries`](@ref)
 * [`NaturalEarth.borders`](@ref)
