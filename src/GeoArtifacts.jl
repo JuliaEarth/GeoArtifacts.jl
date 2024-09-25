@@ -14,6 +14,6 @@ function __init__()
   ENV["DATADEPS_ALWAYS_ACCEPT"] = true
 end
 
-export GADM, NaturalEarth, INMET, GeoStatsImages
+export GADM, NaturalEarth, INMET
 
 end
