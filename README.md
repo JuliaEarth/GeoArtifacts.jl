@@ -18,8 +18,13 @@ Please check the docstring of each submodule for more information.
 
 ```
 help?> GADM
+  Provides functions to (down)load data from the GADM database.
 
-  Provides a single function GADM.get to download data from the GADM database. Please check its docstring for more details.
+  Please check the docstring of each function for more details:
+
+    •  GADM.get
+
+    •  GADM.codes
 
 julia> GADM.get("BRA", depth=1)
 27×12 GeoTable over 27 GeometrySet
@@ -49,7 +54,9 @@ julia> GADM.get("BRA", depth=1)
 ```
 help?> NaturalEarth
 
-  Provides functions to download data from the Natural Earth database:
+  Provides functions to (down)load data from the Natural Earth database.
+
+  Please check the docstring of each function for more details:
 
     •  NaturalEarth.countries
 
@@ -121,8 +128,6 @@ help?> NaturalEarth
 
     •  NaturalEarth.prismashadedrelief
 
-  Please check their docstrings for more details.
-
 julia> NaturalEarth.countries()
 258×169 GeoTable over 258 GeometrySet
 ┌─────────────────┬─────────────┬─────────────┬────────────────┬─────────────┬─────────────┬─────────────┬───────────────────┬─────────────┬──────────────────────────────┬───
@@ -173,9 +178,13 @@ julia> NaturalEarth.coastlines()
 ```
 help?> INMET
 
-  Provides functions to load data from the INMET API. Please check their docstrings for more details:
+  Provides functions to (down)load data from the INMET API.
+
+  Please check the docstring of each function for more details:
 
     •  INMET.stations
+
+    •  INMET.on
 
 julia> INMET.stations()
 566×13 GeoTable over 566 PointSet{3,Float64}
@@ -198,4 +207,23 @@ julia> INMET.stations()
 │      ⋮      │      ⋮      │      ⋮      │      ⋮      │      ⋮      │       ⋮        │        ⋮        │            ⋮            │      ⋮      │               ⋮               │           ⋮   ⋱
 └─────────────┴─────────────┴─────────────┴─────────────┴─────────────┴────────────────┴─────────────────┴─────────────────────────┴─────────────┴───────────────────────────────┴────────────────
                                                                                                                                                                     3 columns and 555 rows omitted
+
+julia> INMET.on(Date(2024,1,1))
+603×23 GeoTable over 603 PointSet
+┌─────────────┬─────────────┬─────────────┬────────────────────────────────┬─────────────┬────────────┬────────────┬────────────┬────────────┬────────────┬────────────┬───────
+│ CD_ESTACAO  │     UF      │ HR_MEDICAO  │            DC_NOME             │ DT_MEDICAO  │  TEM_INS   │  TEM_MIN   │  TEM_MAX   │  UMD_INS   │  UMD_MIN   │  UMD_MAX   │  PRE ⋯
+│ Categorical │ Categorical │ Categorical │          Categorical           │ Categorical │ Continuous │ Continuous │ Continuous │ Continuous │ Continuous │ Continuous │ Cont ⋯
+│  [NoUnits]  │  [NoUnits]  │  [NoUnits]  │           [NoUnits]            │  [NoUnits]  │    [°C]    │    [°C]    │    [°C]    │    [%]     │    [%]     │    [%]     │   [m ⋯
+├─────────────┼─────────────┼─────────────┼────────────────────────────────┼─────────────┼────────────┼────────────┼────────────┼────────────┼────────────┼────────────┼───────
+│    A001     │     DF      │    0000     │            BRASILIA            │ 2024-01-01  │  22.0 °C   │  21.8 °C   │  22.6 °C   │   79.0 %   │   77.0 %   │   81.0 %   │ 885. ⋯
+│    A002     │     GO      │    0000     │            GOIÂNIA             │ 2024-01-01  │  23.6 °C   │  23.6 °C   │  24.4 °C   │   78.0 %   │   77.0 %   │   79.0 %   │ 930. ⋯
+│    A003     │     GO      │    0000     │           MORRINHOS            │ 2024-01-01  │  23.9 °C   │  23.9 °C   │  25.7 °C   │   78.0 %   │   71.0 %   │   78.0 %   │ 927. ⋯
+│    A004     │     GO      │    0000     │          NIQUELANDIA           │ 2024-01-01  │  missing   │  missing   │  missing   │  missing   │  missing   │  missing   │  mis ⋯
+│    A005     │     GO      │    0000     │           PORANGATU            │ 2024-01-01  │  26.4 °C   │  26.4 °C   │  27.3 °C   │   84.0 %   │   74.0 %   │   84.0 %   │ 970. ⋯
+│    A006     │     GO      │    0000     │             CRIXÁS             │ 2024-01-01  │  missing   │  missing   │  missing   │  missing   │  missing   │  missing   │  mis ⋯
+│    A007     │     GO      │    0000     │             FAINA              │ 2024-01-01  │  missing   │  missing   │  missing   │  missing   │  missing   │  missing   │  mis ⋯
+│    A008     │     DF      │    0000     │ FACULDADE DA TERRA DE BRASÍLIA │ 2024-01-01  │  missing   │  missing   │  missing   │  missing   │  missing   │  missing   │  mis ⋯
+│      ⋮      │      ⋮      │      ⋮      │               ⋮                │      ⋮      │     ⋮      │     ⋮      │     ⋮      │     ⋮      │     ⋮      │     ⋮      │      ⋱
+└─────────────┴─────────────┴─────────────┴────────────────────────────────┴─────────────┴────────────┴────────────┴────────────┴────────────┴────────────┴────────────┴───────
+                                                                                                                                                12 columns and 595 rows omitted
 ```

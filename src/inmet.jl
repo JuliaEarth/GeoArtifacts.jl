@@ -4,6 +4,7 @@
 
 """
 Provides functions to (down)load data from the INMET API.
+
 Please check the docstring of each function for more details:
 
 * [`INMET.stations`](@ref)
