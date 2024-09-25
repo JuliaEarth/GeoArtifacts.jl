@@ -107,10 +107,10 @@ function get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
 
   function select(row)
     result = row.geo == entity
-    if result && !isnothing(year)
+    if !isnothing(year)
       result &= row.year == year
     end
-    if result && !isnothing(code)
+    if !isnothing(code)
       result &= row.code == codestr || row.code_abbrev == codestr
     end
     result
