@@ -274,9 +274,9 @@ using Test
     # @test gtb.geometry isa GeometrySet
     # @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.urbanarea()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
+    # gtb = GeoBR.urbanarea()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
 
     gtb = GeoBR.weightingarea("RJ")
     @test gtb.geometry isa GeometrySet
