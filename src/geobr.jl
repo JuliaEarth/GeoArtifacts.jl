@@ -48,7 +48,9 @@ const APIVERSIONS = (v"1.7.0",)
 """
     GeoBR.download(url; version=v"1.7.0")
 
-(Down)load data for the specified `url` and `version` of the dataset.
+(Down)load data for the specified `url` and `version` of the GeoBR API.
+
+The available API versions are: 1.7.0.
 """
 function download(url; version=v"1.7.0")
   if version ∉ APIVERSIONS
@@ -86,320 +88,333 @@ function download(url; version=v"1.7.0")
 end
 
 """
-    GeoBR.downloadmeta(; version=v"1.7.0")
+    GeoBR.metadata(; version=v"1.7.0")
 
-(Down)load metadata for the specified `version` of the dataset.
+Metadata for the specified `version` of the GeoBR dataset.
 """
-downloadmeta(; version=v"1.7.0") =
-  download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version)
+function metadata(; version=v"1.7.0")
+  path = download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version)
+  CSV.File(path)
+end
 
 """
-    GeoBR.get(entity, year, code; version=v"1.7.0", kwargs...)
+    GeoBR.get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
 
 Load geographic data for given `entity`, `year` and `code`.
 Optionally specify dataset `version` and `kwargs` passed to
 `GeoIO.load`.
 """
-function get(entity, year, code=nothing; version=v"1.7.0", kwargs...)
-  table = CSV.File(downloadmeta(; version))
-  # TODO: add logic with code parameter, which
-  # can be either an integer or a string
-  srows = table |> Filter(row -> row.geo == entity && row.year == year)
-  srow = Tables.rows(srows) |> first
+function get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
+  table = metadata(; version)
+
+  checkyear = if isnothing(year)
+    _ -> true
+  else
+    row -> row.year == year
+  end
+
+  checkcode = if isnothing(code)
+    _ -> true
+  else
+    codestr = string(code)
+    row -> row.code == codestr || row.code_abbrev == codestr
+  end
+
+  filter = Filter(row -> row.geo == entity && checkyear(row) && checkcode(row))
+  srows = table |> filter |> Tables.rows
+
+  srow = if isnothing(year)
+    argmax(row -> row.year, srows)
+  else
+    srows |> first
+  end
+
   url = srow.download_path
   GeoIO.load(download(url; version); kwargs...)
 end
 
 """
-    GeoBR.state(code="all"; year=2010, kwargs...)
+    GeoBR.state(code="state"; year=nothing, kwargs...)
 
 Get state data.
 
 ## Arguments
 
-* `code`: State code or abbreviation.
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `code`: State code or abbreviation;
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-state(code="all"; year=2010, kwargs...) = get("state", year, code; kwargs...)
+state(code="state"; year=nothing, kwargs...) = get("state", year, code; kwargs...)
 
 """
-    GeoBR.municipality(code; year=2010, kwargs...)
+    GeoBR.municipality(code="municipality"; year=nothing, kwargs...)
 
 Get municipality data for a given year.
 
 ## Arguments
 
-* `code`: Municipality code or abbreviation.
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `code`: Municipality code or abbreviation;
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-municipality(code; year=2010, kwargs...) = get("municipality", year, code; kwargs...)
+municipality(code="municipality"; year=nothing, kwargs...) = get("municipality", year, code; kwargs...)
 
 """
-    GeoBR.region(; year=2010, kwargs...)
+    GeoBR.region(; year=nothing, kwargs...)
 
 Get region data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-region(; year=2010, kwargs...) = get("regions", year; kwargs...)
+region(; year=nothing, kwargs...) = get("regions", year; kwargs...)
 
 """
-    GeoBR.country(; year=2010, kwargs...)
+    GeoBR.country(; year=nothing, kwargs...)
 
 Get country data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-country(; year=2010, kwargs...) = get("country", year; kwargs...)
+country(; year=nothing, kwargs...) = get("country", year; kwargs...)
 
 """
-    GeoBR.amazon(; year=2012, kwargs...)
+    GeoBR.amazon(; year=nothing, kwargs...)
 
 Get Amazon data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2012).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-amazon(; year=2012, kwargs...) = get("amazonia_legal", year; kwargs...)
+amazon(; year=nothing, kwargs...) = get("amazonia_legal", year; kwargs...)
 
 """
-    GeoBR.biomes(; year=2019, kwargs...)
+    GeoBR.biomes(; year=nothing, kwargs...)
 
 Get biomes data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2019).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-biomes(; year=2019, kwargs...) = get("biomes", year; kwargs...)
+biomes(; year=nothing, kwargs...) = get("biomes", year; kwargs...)
 
 """
-    GeoBR.disasterriskarea(; year=2010, kwargs...)
+    GeoBR.disasterriskarea(; year=nothing, kwargs...)
 
 Get disaster risk area data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-disasterriskarea(; year=2010, kwargs...) = get("disaster_risk_area", year; kwargs...)
+disasterriskarea(; year=nothing, kwargs...) = get("disaster_risk_area", year; kwargs...)
 
 """
-    GeoBR.healthfacilities(; year=2013, kwargs...)
+    GeoBR.healthfacilities(; year=nothing, kwargs...)
 
 Get health facilities data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2013).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-healthfacilities(; year=2013, kwargs...) = get("health_facilities", year; kwargs...)
+healthfacilities(; year=nothing, kwargs...) = get("health_facilities", year; kwargs...)
 
 """
-    GeoBR.indigenousland(; date=201907, kwargs...)
+    GeoBR.indigenousland(; date=nothing, kwargs...)
 
 Get indigenous land data for a given date.
 
 ## Arguments
 
-* `date`: Date of the data (default: 201907).
-* `kwargs`: Additional keyword arguments.
+* `date`: Date of the data in format YYYYMM (default to latest available date);
+* `kwargs`: Additional keyword arguments;
 """
-indigenousland(; date=201907, kwargs...) = get("indigenous_land", date; kwargs...)
+indigenousland(; date=nothing, kwargs...) = get("indigenous_land", date; kwargs...)
 
 """
-    GeoBR.metroarea(; year=2018, kwargs...)
+    GeoBR.metroarea(; year=nothing, kwargs...)
 
 Get metropolitan area data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2018).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-metroarea(; year=2018, kwargs...) = get("metropolitan_area", year; kwargs...)
+metroarea(; year=nothing, kwargs...) = get("metropolitan_area", year; kwargs...)
 
 """
-    GeoBR.neighborhood(; year=2010, kwargs...)
+    GeoBR.neighborhood(; year=nothing, kwargs...)
 
 Get neighborhood data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-neighborhood(; year=2010, kwargs...) = get("neighborhood", year; kwargs...)
+neighborhood(; year=nothing, kwargs...) = get("neighborhood", year; kwargs...)
 
 """
-    GeoBR.urbanarea(; year=2015, kwargs...)
+    GeoBR.urbanarea(; year=nothing, kwargs...)
 
 Get urban area data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2015).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-urbanarea(; year=2015, kwargs...) = get("urban_area", year; kwargs...)
+urbanarea(; year=nothing, kwargs...) = get("urban_area", year; kwargs...)
 
 """
-    GeoBR.weightingarea(code; year=2010, kwargs...)
+    GeoBR.weightingarea(code; year=nothing, kwargs...)
 
 Get weighting area data for a given year.
 
 ## Arguments
 
-* `code`: Weighting area code or abbreviation.
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `code`: Weighting area code or abbreviation;
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-weightingarea(code; year=2010, kwargs...) = get("weighting_area", year, code; kwargs...)
+weightingarea(code; year=nothing, kwargs...) = get("weighting_area", year, code; kwargs...)
 
 """
-    GeoBR.mesoregion(code; year=2010, kwargs...)
+    GeoBR.mesoregion(code; year=nothing, kwargs...)
 
 Get mesoregion data for a given year.
 
 ## Arguments
 
-* `code`: Mesoregion code or abbreviation.
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `code`: Mesoregion code or abbreviation;
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-mesoregion(code; year=2010, kwargs...) = get("meso_region", year, code; kwargs...)
+mesoregion(code; year=nothing, kwargs...) = get("meso_region", year, code; kwargs...)
 
 """
-    GeoBR.microregion(code; year=2010, kwargs...)
+    GeoBR.microregion(code; year=nothing, kwargs...)
 
 Get microregion data for a given year.
 
 ## Arguments
 
-* `code`: Microregion code or abbreviation.
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `code`: Microregion code or abbreviation;
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-microregion(code; year=2010, kwargs...) = get("micro_region", year, code; kwargs...)
+microregion(code; year=nothing, kwargs...) = get("micro_region", year, code; kwargs...)
 
 """
-    GeoBR.intermediateregion(code; year=2019, kwargs...)
+    GeoBR.intermediateregion(code; year=nothing, kwargs...)
 
 Get intermediate region data for a given year.
 
 ## Arguments
 
-* `code`: 6-digit code of an intermediate region. If the two-digit code or a 
-  two-letter uppercase abbreviation of a state is passed, (e.g. 33 or "RJ") 
-  the function will load all intermediate regions of that state.
-  Otherwise, all intermediate regions of the country are loaded.
-* `year`: Year of the data (default: 2019).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-intermediateregion(code; year=2019, kwargs...) = get("intermediate_regions", year, code; kwargs...)
+intermediateregion(; year=nothing, kwargs...) = get("intermediate_regions", year; kwargs...)
 
 """
-    GeoBR.immediateregion(code; year=2017, kwargs...)
+    GeoBR.immediateregion(code; year=nothing, kwargs...)
 
 Get immediate region data for a given year.
 
 ## Arguments
 
-* `code`: 6-digit code of an immediate region. If the two-digit code or a 
-  two-letter uppercase abbreviation of a state is passed, (e.g. 33 or "RJ") 
-  the function will load all immediate regions of that state.
-  Otherwise, all immediate regions of the country are loaded.
-* `year`: Year of the data (default: 2017).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-immediateregion(code; year=2017, kwargs...) = get("immediate_regions", year, code; kwargs...)
+immediateregion(; year=nothing, kwargs...) = get("immediate_regions", year; kwargs...)
 
 """
-    GeoBR.municipalseat(; year=2010, kwargs...)
+    GeoBR.municipalseat(; year=nothing, kwargs...)
 
 Get municipal seat data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-municipalseat(; year=2010, kwargs...) = get("municipal_seat", year; kwargs...)
+municipalseat(; year=nothing, kwargs...) = get("municipal_seat", year; kwargs...)
 
 """
-    GeoBR.censustract(code; year=2010, kwargs...)
+    GeoBR.censustract(code; year=nothing, kwargs...)
 
 Get census tract data for a given year.
 
 ## Arguments
 
-* `code`: Census tract code or abbreviation.
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `code`: Census tract code or abbreviation;
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-censustract(code; year=2010, kwargs...) = get("census_tract", year, code; kwargs...)
+censustract(code; year=nothing, kwargs...) = get("census_tract", year, code; kwargs...)
 
 """
-    GeoBR.statisticalgrid(code; year=2010, kwargs...)
+    GeoBR.statisticalgrid(code="statistical_grid"; year=nothing, kwargs...)
 
 Get statistical grid data for a given year.
 
 ## Arguments
 
-* `code`: Statistical grid code or abbreviation.
-* `year`: Year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `code`: Statistical grid code or abbreviation;
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-statisticalgrid(code; year=2010, kwargs...) = get("statistical_grid", year, code; kwargs...)
+statisticalgrid(code="statistical_grid"; year=nothing, kwargs...) = get("statistical_grid", year, code; kwargs...)
 
 """
-    GeoBR.conservationunits(; date=201909, kwargs...)
+    GeoBR.conservationunits(; date=nothing, kwargs...)
 
 Get conservation units data for a given date.
 
 ## Arguments
 
-* `date`: Date of the data (default: 201909).
-* `kwargs`: Additional keyword arguments.
+* `date`: Date of the data in format YYYYMM (default to latest available date);
+* `kwargs`: Additional keyword arguments;
 """
-conservationunits(; date=201909, kwargs...) = get("conservation_units", date; kwargs...)
+conservationunits(; date=nothing, kwargs...) = get("conservation_units", date; kwargs...)
 
 """
-    GeoBR.semiarid(; year=2017, kwargs...)
+    GeoBR.semiarid(; year=nothing, kwargs...)
 
 Get semiarid data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2017).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-semiarid(; year=2017, kwargs...) = get("semiarid", year; kwargs...)
+semiarid(; year=nothing, kwargs...) = get("semiarid", year; kwargs...)
 
 """
-    GeoBR.schools(; year=2020, kwargs...)
+    GeoBR.schools(; year=nothing, kwargs...)
 
 Get schools data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2020).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-schools(; year=2020, kwargs...) = get("schools", year; kwargs...)
+schools(; year=nothing, kwargs...) = get("schools", year; kwargs...)
 
 """
     GeoBR.comparableareas(; startyear=1970, endyear=2010, kwargs...)
@@ -408,9 +423,9 @@ Get comparable areas data for a given range of years.
 
 ## Arguments
 
-* `startyear`: Start year of the data (default: 1970).
-* `endyear`: End year of the data (default: 2010).
-* `kwargs`: Additional keyword arguments.
+* `startyear`: Start year of the data (default to 1970);
+* `endyear`: End year of the data (default to 2010);
+* `kwargs`: Additional keyword arguments;
 """
 function comparableareas(; startyear=1970, endyear=2010, version=v"1.7.0", kwargs...)
   years = (1872, 1900, 1911, 1920, 1933, 1940, 1950, 1960, 1970, 1980, 1991, 2000, 2010)
@@ -419,52 +434,54 @@ function comparableareas(; startyear=1970, endyear=2010, version=v"1.7.0", kwarg
     throw(ArgumentError("invalid `startyear` or `endyear`, please use one these: $years_available"))
   end
 
-  table = CSV.File(downloadmeta(; version))
+  table = metadata(; version)
   srows = table |> Filter(row -> contains(row.download_path, "$(startyear)_$(endyear)")) |> Tables.rows
 
   if isempty(srows)
     throw(ErrorException("no comparable areas found for the specified years"))
   end
 
-  year = first(srows).year
+  srow = first(srows)
+  year = srow.year
+  code = srow.code
 
-  get("amc", year; version, kwargs...)
+  get("amc", year, code; version, kwargs...)
 end
 
 """
-    GeoBR.urbanconcentrations(; year=2015, kwargs...)
+    GeoBR.urbanconcentrations(; year=nothing, kwargs...)
 
 Get urban concentrations data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2015).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-urbanconcentrations(; year=2015, kwargs...) = get("urban_concentrations", year; kwargs...)
+urbanconcentrations(; year=nothing, kwargs...) = get("urban_concentrations", year; kwargs...)
 
 """
-    GeoBR.poparrangements(; year=2015, kwargs...)
+    GeoBR.poparrangements(; year=nothing, kwargs...)
 
 Get population arrangements data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2015).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-poparrangements(; year=2015, kwargs...) = get("pop_arrengements", year; kwargs...)
+poparrangements(; year=nothing, kwargs...) = get("pop_arrengements", year; kwargs...)
 
 """
-    GeoBR.healthregion(; year=2013, kwargs...)
+    GeoBR.healthregion(; year=nothing, kwargs...)
 
 Get health region data for a given year.
 
 ## Arguments
 
-* `year`: Year of the data (default: 2013).
-* `kwargs`: Additional keyword arguments.
+* `year`: Year of the data (default to latest available year);
+* `kwargs`: Additional keyword arguments;
 """
-healthregion(; year=2013, kwargs...) = get("health_region", year; kwargs...)
+healthregion(; year=nothing, kwargs...) = get("health_region", year; kwargs...)
 
 end
