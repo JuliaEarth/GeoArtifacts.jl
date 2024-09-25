@@ -92,10 +92,8 @@ end
 
 Metadata for the specified `version` of the GeoBR dataset.
 """
-function metadata(; version=v"1.7.0")
-  path = download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version)
-  CSV.File(path)
-end
+metadata(; version=v"1.7.0") =
+  CSV.File(download("http://www.ipea.gov.br/geobr/metadata/metadata_$(version)_gpkg.csv"; version))
 
 """
     GeoBR.get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
@@ -107,21 +105,18 @@ Optionally specify dataset `version` and `kwargs` passed to
 function get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
   table = metadata(; version)
 
-  checkyear = if isnothing(year)
-    _ -> true
-  else
-    row -> row.year == year
+  function select(row)
+    result = row.geo == entity
+    if result && !isnothing(year)
+      result &= row.year == year
+    end
+    if result && !isnothing(code)
+      result &= row.code == codestr || row.code_abbrev == codestr
+    end
+    result
   end
 
-  checkcode = if isnothing(code)
-    _ -> true
-  else
-    codestr = string(code)
-    row -> row.code == codestr || row.code_abbrev == codestr
-  end
-
-  filter = Filter(row -> row.geo == entity && checkyear(row) && checkcode(row))
-  srows = table |> filter |> Tables.rows
+  srows = table |> Filter(select) |> Tables.rows
 
   srow = if isnothing(year)
     argmax(row -> row.year, srows)
