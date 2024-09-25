@@ -111,6 +111,7 @@ function get(entity, year=nothing, code=nothing; version=v"1.7.0", kwargs...)
       result &= row.year == year
     end
     if !isnothing(code)
+      codestr = string(code)
       result &= row.code == codestr || row.code_abbrev == codestr
     end
     result
