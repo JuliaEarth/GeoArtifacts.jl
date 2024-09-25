@@ -321,10 +321,18 @@ Get intermediate region data for a given year.
 
 ## Arguments
 
+* `code`: 6-digit code of an intermediate region. If the two-digit code or a 
+  two-letter uppercase abbreviation of a state is passed, (e.g. 33 or "RJ") 
+  the function will load all intermediate regions of that state.
+  Otherwise, all intermediate regions of the country are loaded.
 * `year`: Year of the data (default to latest available year);
 * `kwargs`: Additional keyword arguments;
 """
-intermediateregion(; year=nothing, kwargs...) = get("intermediate_regions", year; kwargs...)
+function intermediateregion(code; year=nothing, kwargs...)
+  gtb = get("intermediate_regions", year; kwargs...)
+  codestr = string(code)
+  gtb |> Filter(row -> row.abbrev_state == codestr || row.code_state == codestr || row.code_intermediate == codestr)
+end
 
 """
     GeoBR.immediateregion(code; year=nothing, kwargs...)
@@ -333,10 +341,18 @@ Get immediate region data for a given year.
 
 ## Arguments
 
+* `code`: 6-digit code of an immediate region. If the two-digit code or a 
+  two-letter uppercase abbreviation of a state is passed, (e.g. 33 or "RJ") 
+  the function will load all immediate regions of that state.
+  Otherwise, all immediate regions of the country are loaded.
 * `year`: Year of the data (default to latest available year);
 * `kwargs`: Additional keyword arguments;
 """
-immediateregion(; year=nothing, kwargs...) = get("immediate_regions", year; kwargs...)
+function immediateregion(code; year=nothing, kwargs...)
+  gtb = get("immediate_regions", year; kwargs...)
+  codestr = string(code)
+  gtb |> Filter(row -> row.abbrev_state == codestr || row.code_state == codestr || row.code_immediate == codestr)
+end
 
 """
     GeoBR.municipalseat(; year=nothing, kwargs...)
