@@ -6,6 +6,7 @@ module GeoArtifacts
 
 include("gadm.jl")
 include("naturalearth.jl")
+include("geobr.jl")
 include("inmet.jl")
 
 function __init__()
@@ -14,6 +15,6 @@ function __init__()
   ENV["DATADEPS_ALWAYS_ACCEPT"] = true
 end
 
-export GADM, NaturalEarth, INMET
+export GADM, NaturalEarth, GeoBR, INMET
 
 end

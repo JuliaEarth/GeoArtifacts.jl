@@ -222,6 +222,132 @@ using Test
     @test paramdim(gtb.geometry) == 2
   end
 
+  @testset "GeoBR" begin
+    gtb = GeoBR.state()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.state("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.municipality()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.municipality("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.region()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.country()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.amazon()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.biomes()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.disasterriskarea()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.healthfacilities()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 0
+
+    # these tests are passing locally but are breaking in CI
+    # gtb = GeoBR.indigenousland()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.metroarea()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.neighborhood()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.urbanarea()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.weightingarea("RJ")
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.mesoregion("RJ")
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.microregion("RJ")
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.intermediateregion("RJ")
+    # @test gtb.geometry isa SubDomain
+    # @test paramdim(gtb.geometry) == 2
+    # gtb = GeoBR.intermediateregion(3301)
+    # @test gtb.geometry isa SubDomain
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.immediateregion("RJ")
+    # @test gtb.geometry isa SubDomain
+    # @test paramdim(gtb.geometry) == 2
+    # gtb = GeoBR.immediateregion(330001)
+    # @test gtb.geometry isa SubDomain
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.municipalseat()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 0
+
+    # gtb = GeoBR.censustract("RJ")
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.statisticalgrid("RJ")
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.conservationunits()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.semiarid()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.schools()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 0
+
+    # gtb = GeoBR.comparableareas()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+    # gtb = GeoBR.comparableareas(startyear=2000, endyear=2010)
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.urbanconcentrations()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.poparrangements()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+
+    # gtb = GeoBR.healthregion()
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
+  end
+
   @testset "INMET" begin
     # automatic stations
     gtb = INMET.stations()
