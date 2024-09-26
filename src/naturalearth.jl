@@ -3,7 +3,9 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to download data from the Natural Earth database:
+Provides functions to (down)load data from the Natural Earth database.
+
+Please check the docstring of each function for more details:
 
 * [`NaturalEarth.countries`](@ref)
 * [`NaturalEarth.borders`](@ref)
@@ -40,8 +42,6 @@ Provides functions to download data from the Natural Earth database:
 * [`NaturalEarth.usmanualshadedrelief`](@ref)
 * [`NaturalEarth.manualshadedrelief`](@ref)
 * [`NaturalEarth.prismashadedrelief`](@ref)
-
-Please check their docstrings for more details.
 """
 module NaturalEarth
 

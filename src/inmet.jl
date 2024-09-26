@@ -3,16 +3,19 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to load data from the INMET API.
-Please check their docstrings for more details:
+Provides functions to (down)load data from the INMET API.
 
-- `INMET.stations`
+Please check the docstring of each function for more details:
+
+* [`INMET.stations`](@ref)
+* [`INMET.on`](@ref)
 """
 module INMET
 
 using Meshes
 using Unitful
 using GeoTables
+using CoordRefSystems
 
 import INMET as INMETData
 
@@ -23,16 +26,20 @@ Return INMET stations of given kind. There are two kinds of stations: `:automati
 """
 function stations(kind=:automatic)
   df = INMETData.stations(kind)
-  names = propertynames(df)
-  cnames = [:VL_LONGITUDE, :VL_LATITUDE, :VL_ALTITUDE]
-  fnames = setdiff(names, cnames)
-  feats = df[:, fnames]
-  coords = ustrip.(df[:, cnames])
-  points = map(eachrow(coords)) do row
-    x, y, z = row
-    Point(x, y, z)
-  end
-  georef(feats, PointSet(points))
+  georef(df, (:VL_LATITUDE, :VL_LONGITUDE, :VL_ALTITUDE), crs=LatLonAlt)
+end
+
+"""
+    on(time)
+
+Return data for all automatic stations on a given `time`.
+The time can be a `Date` or a `DateTime` object. In the
+latter case, minutes and seconds are ignored while the
+hour information is retained (data in hourly frequency).
+"""
+function on(time)
+  df = INMETData.on(time)
+  georef(df, (:VL_LATITUDE, :VL_LONGITUDE), crs=LatLon)
 end
 
 end
