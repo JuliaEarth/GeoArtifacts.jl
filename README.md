@@ -178,7 +178,9 @@ julia> NaturalEarth.coastlines()
 ```
 help?> GeoBR
 
-  Provides functions to download data from the GeoBR database:
+  Provides functions to (down)load data from the GeoBR database.
+
+  Please check the docstring of each function for more details:
 
     •  GeoBR.state
 
@@ -233,8 +235,6 @@ help?> GeoBR
     •  GeoBR.poparrangements
 
     •  GeoBR.healthregion
-
-  Please check their docstrings for more details.
 
 julia> GeoBR.state()
 29×2 GeoTable over 29 GeometrySet

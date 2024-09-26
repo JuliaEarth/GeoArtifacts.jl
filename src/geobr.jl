@@ -3,7 +3,9 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to download data from the GeoBR database:
+Provides functions to (down)load data from the GeoBR database.
+
+Please check the docstring of each function for more details:
 
 * [`GeoBR.state`](@ref)
 * [`GeoBR.municipality`](@ref)
@@ -32,8 +34,6 @@ Provides functions to download data from the GeoBR database:
 * [`GeoBR.urbanconcentrations`](@ref)
 * [`GeoBR.poparrangements`](@ref)
 * [`GeoBR.healthregion`](@ref)
-
-Please check their docstrings for more details.
 """
 module GeoBR
 
