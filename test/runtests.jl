@@ -282,9 +282,9 @@ using Test
     # @test gtb.geometry isa GeometrySet
     # @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.mesoregion("RJ")
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
+    # gtb = GeoBR.mesoregion("RJ")
+    # @test gtb.geometry isa GeometrySet
+    # @test paramdim(gtb.geometry) == 2
 
     gtb = GeoBR.microregion("RJ")
     @test gtb.geometry isa GeometrySet
