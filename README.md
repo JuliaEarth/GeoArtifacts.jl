@@ -3,16 +3,16 @@
 [![Build Status](https://github.com/JuliaEarth/GeoArtifacts.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaEarth/GeoArtifacts.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/JuliaEarth/GeoArtifacts.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaEarth/GeoArtifacts.jl)
 
-GeoArtifacts.jl provides geospatial artifacts (e.g., datasets) from different sources for
+GeoArtifacts.jl provides geospatial artifacts (e.g., datasets) from different sources
+in a universal representation described in the book
 [*Geospatial Data Science with Julia*](https://juliaearth.github.io/geospatial-data-science-with-julia).
 
 ## Usage
 
 The package is organized in different submodules, which encapsulate the artifacts.
 Downloads are performed in the host machine upon demand, during the first call to
-functions of a submodule.
-
-Please check the docstring of each submodule for more information.
+functions of a submodule. Please check the docstring of each submodule for more
+information.
 
 ### Artifacts
 
