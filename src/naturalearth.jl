@@ -3,7 +3,9 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to (down)load data from the Natural Earth database.
+Provides functions to (down)load data from the Natural Earth database:
+
+https://www.naturalearthdata.com
 
 Please check the docstring of each function for more details:
 

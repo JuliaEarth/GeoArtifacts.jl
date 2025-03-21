@@ -16,7 +16,7 @@ information.
 
 ### Artifacts
 
-#### GADM
+#### [GADM](https://gadm.org)
 
 ```
 help?> GADM
@@ -51,7 +51,7 @@ julia> GADM.get("BRA", depth=1)
                                                                                                                                                  2 columns and 16 rows omitted
 ```
 
-#### NaturalEarth
+#### [NaturalEarth](https://www.naturalearthdata.com)
 
 ```
 help?> NaturalEarth
@@ -175,7 +175,7 @@ julia> NaturalEarth.coastlines()
                                                          4122 rows omitted
 ```
 
-#### GeoBR
+#### [GeoBR](https://ipeagit.github.io/geobr)
 
 ```
 help?> GeoBR
@@ -287,7 +287,7 @@ julia> GeoBR.state("RJ")
 └────────────┴──────────────┴────────────────┴─────────────┴─────────────┴──────────────────────────────┘
 ```
 
-#### INMET
+#### [INMET](https://mapas.inmet.gov.br)
 
 ```
 help?> INMET

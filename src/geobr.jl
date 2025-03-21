@@ -3,7 +3,9 @@
 # -----------------------------------------------------------------
 
 """
-Provides functions to (down)load data from the GeoBR database.
+Provides functions to (down)load data from the GeoBR database:
+
+https://ipeagit.github.io/geobr
 
 Please check the docstring of each function for more details:
 
