@@ -121,9 +121,9 @@ function get(country, subregions...; depth=0, version=v"4.1", kwargs...)
   isgpkg(f) = last(splitext(f)) == ".gpkg"
   gpkg = files[findfirst(isgpkg, files)]
 
-  # select layer by level
-  level = length(subregions) + depth + 1
-  gtb = GeoIO.load(gpkg; layer=level, kwargs...)
+  # select layer
+  layer = length(subregions) + depth + 1
+  gtb = GeoIO.load(gpkg; layer, kwargs...)
 
   transform = if !isempty(subregions)
     # fetch query params
