@@ -122,7 +122,7 @@ function get(country, subregions...; depth=0, version=v"4.1", kwargs...)
   gpkg = files[findfirst(isgpkg, files)]
 
   # select layer by level
-  level = length(subregions) + depth
+  level = length(subregions) + depth + 1
   gtb = GeoIO.load(gpkg; layer=level, kwargs...)
 
   transform = if !isempty(subregions)
