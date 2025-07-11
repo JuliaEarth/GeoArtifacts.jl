@@ -1,7 +1,7 @@
 name = "GeoArtifacts"
 uuid = "2a3f1dca-97a5-4513-bfd8-b69f0106a87e"
 authors = ["Elias Carvalho <eliascarvdev@gmail.com> and contributors"]
-version = "1.2.7"
+version = "1.2.8"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
@@ -24,7 +24,7 @@ DataDeps = "0.7"
 GeoIO = "1.16"
 GeoTables = "1.21"
 INMET = "1.0"
-Meshes = "0.47 - 0.53"
+Meshes = "0.54"
 TableTransforms = "1.33"
 Tables = "1.12"
 Unitful = "1.17"
