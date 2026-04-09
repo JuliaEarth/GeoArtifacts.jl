@@ -1,7 +1,6 @@
 # GeoArtifacts.jl
 
-[![Build Status](https://github.com/JuliaEarth/GeoArtifacts.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaEarth/GeoArtifacts.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/JuliaEarth/GeoArtifacts.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaEarth/GeoArtifacts.jl)
+[![][build-img]][build-url] [![][codecov-img]][codecov-url]
 
 GeoArtifacts.jl provides geospatial artifacts (e.g., datasets) from different sources
 in a universal representation described in the book
@@ -286,3 +285,13 @@ julia> GeoBR.state("RJ")
 │    33.0    │      RJ      │ Rio De Janeiro │     3.0     │   Sudeste   │     Multi(577×PolyArea)      │
 └────────────┴──────────────┴────────────────┴─────────────┴─────────────┴──────────────────────────────┘
 ```
+
+## Asking for help
+
+If you have any questions, please [contact our community](https://juliaearth.github.io/GeoStats.jl/stable/about/community.html).
+
+[build-img]: https://img.shields.io/github/actions/workflow/status/JuliaEarth/GeoArtifacts.jl/CI.yml?branch=main&style=flat-square
+[build-url]: https://github.com/JuliaEarth/GeoArtifacts.jl/actions
+
+[codecov-img]: https://img.shields.io/codecov/c/github/JuliaEarth/GeoArtifacts.jl?style=flat-square
+[codecov-url]: https://codecov.io/gh/JuliaEarth/GeoArtifacts.jl
