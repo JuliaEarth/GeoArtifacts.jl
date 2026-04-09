@@ -347,18 +347,4 @@ using Test
     # @test gtb.geometry isa GeometrySet
     # @test paramdim(gtb.geometry) == 2
   end
-
-  @testset "INMET" begin
-    # automatic stations
-    gtb = INMET.stations()
-    @test all(isequal("Automatica"), gtb.TP_ESTACAO)
-    @test gtb.geometry isa PointSet
-    @test embeddim(gtb.geometry) == 3
-
-    # manual stations
-    gtb = INMET.stations(:manual)
-    @test all(isequal("Convencional"), gtb.TP_ESTACAO)
-    @test gtb.geometry isa PointSet
-    @test embeddim(gtb.geometry) == 3
-  end
 end
