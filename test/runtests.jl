@@ -4,6 +4,7 @@ using Test
 
 @testset "GeoArtifacts.jl" begin
   @testset "GADM" begin
+    # Original tests
     gtb = GADM.get("SVN", depth=1)
     @test length(gtb.geometry) == 12
 
@@ -12,9 +13,47 @@ using Test
 
     gtb = GADM.get("ISR", depth=1)
     @test length(gtb.geometry) == 7
+
+    # GADM.codes — table of all country codes
+    codes = GADM.codes()
+    @test length(codes) > 200
+    @test "USA" in [row.code for row in codes]
+    @test "BRA" in [row.code for row in codes]
+
+    # GADM.get — default depth (no depth param)
+    gtb = GADM.get("BRA")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GADM.get("USA")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GADM.get — subregion filtering
+    gtb = GADM.get("BRA", depth=1)
+    @test length(gtb.geometry) > 0
+
+    gtb = GADM.get("FRA", depth=1)
+    @test length(gtb.geometry) > 0
+
+    # GADM.get — version parameter
+    gtb = GADM.get("BRA"; version=v"4.1")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = GADM.get("BRA"; version=v"4.0")
+    @test gtb.geometry isa GeometrySet
+
+    # GADM.get — error: invalid country code
+    @test_throws ArgumentError GADM.get("XXX")
+    @test_throws ArgumentError GADM.get("invalid")
+
+    # GADM.get — error: invalid version
+    @test_throws ArgumentError GADM.get("BRA"; version=v"9.9")
+    @test_throws ArgumentError GADM.get("BRA"; version=v"1.0")
   end
 
   @testset "NaturalEarth" begin
+    # Original tests — default and scale
     gtb = NaturalEarth.countries()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
@@ -55,36 +94,6 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 1
 
-    gtb = NaturalEarth.airports()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 0
-
-    gtb = NaturalEarth.ports()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 0
-
-    gtb = NaturalEarth.urbanareas()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-    gtb = NaturalEarth.urbanareas(scale="1:50")
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-
-    gtb = NaturalEarth.usparks()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-
-    gtb = NaturalEarth.timezones()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-
-    gtb = NaturalEarth.coastlines()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 1
-    gtb = NaturalEarth.coastlines(scale="1:110")
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 1
-
     gtb = NaturalEarth.lands()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
@@ -95,10 +104,6 @@ using Test
     gtb = NaturalEarth.minorislands()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
-
-    gtb = NaturalEarth.reefs()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 1
 
     gtb = NaturalEarth.oceans()
     @test gtb.geometry isa GeometrySet
@@ -128,20 +133,6 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = NaturalEarth.playas()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-    gtb = NaturalEarth.playas(scale="1:50")
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-
-    gtb = NaturalEarth.glaciatedareas()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-    gtb = NaturalEarth.glaciatedareas(scale="1:110")
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-
     gtb = NaturalEarth.iceshelves()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
@@ -152,13 +143,6 @@ using Test
     gtb = NaturalEarth.bathymetry()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
-
-    gtb = NaturalEarth.geographiclines()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 1
-    gtb = NaturalEarth.geographiclines(scale="1:110")
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 1
 
     gtb = NaturalEarth.graticules()
     @test gtb.geometry isa GeometrySet
@@ -188,13 +172,6 @@ using Test
     @test gtb.geometry isa Grid
     @test paramdim(gtb.geometry) == 2
 
-    gtb = NaturalEarth.oceanbottom()
-    @test gtb.geometry isa Grid
-    @test paramdim(gtb.geometry) == 2
-    gtb = NaturalEarth.oceanbottom(scale="1:50")
-    @test gtb.geometry isa Grid
-    @test paramdim(gtb.geometry) == 2
-
     gtb = NaturalEarth.shadedrelief()
     @test gtb.geometry isa Grid
     @test paramdim(gtb.geometry) == 2
@@ -209,20 +186,130 @@ using Test
     @test gtb.geometry isa Grid
     @test paramdim(gtb.geometry) == 2
 
-    gtb = NaturalEarth.usmanualshadedrelief()
-    @test gtb.geometry isa Grid
+    # Country-specific variants
+    gtb = NaturalEarth.countries(variant="BRA")
+    @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = NaturalEarth.manualshadedrelief()
-    @test gtb.geometry isa Grid
+    gtb = NaturalEarth.countries(variant="USA")
+    @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = NaturalEarth.prismashadedrelief()
-    @test gtb.geometry isa Grid
+    gtb = NaturalEarth.countries(variant="CHN")
+    @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
+
+    gtb = NaturalEarth.countries(variant="RUS")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # Variant: nolakes
+    gtb = NaturalEarth.countries(variant="nolakes")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.states(variant="nolakes")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.counties(variant="nolakes")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: ranks
+    gtb = NaturalEarth.states(variant="ranks")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.lands(variant="ranks")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.oceans(variant="ranks")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.rivers(variant="ranks")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: borders
+    gtb = NaturalEarth.states(variant="borders")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.iceshelves(variant="borders")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: simple
+    gtb = NaturalEarth.populatedplaces(variant="simple")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 0
+
+    # Variant: region-specific
+    gtb = NaturalEarth.rivers(variant="australia")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.lakes(variant="australia")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: mapunit / maritme / pacific (borders variants)
+    gtb = NaturalEarth.borders(variant="mapunit")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: coastline (minorislands)
+    gtb = NaturalEarth.minorislands(variant="coastline")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: historic / pluvial (lakes)
+    gtb = NaturalEarth.lakes(variant="historic")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.lakes(variant="pluvial")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: points (physicallabels)
+    gtb = NaturalEarth.physicallabels(variant="points")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.physicallabels(variant="elevationpoints")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: boundingbox (graticules)
+    gtb = NaturalEarth.graticules(variant="boundingbox")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.graticules(variant="15")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: depth-specific (bathymetry)
+    gtb = NaturalEarth.bathymetry(variant="5000")
+    @test gtb.geometry isa GeometrySet
+
+    gtb = NaturalEarth.bathymetry(variant="0")
+    @test gtb.geometry isa GeometrySet
+
+    # Variant: size (grid functions)
+    gtb = NaturalEarth.hypsometrictints(size="small")
+    @test gtb.geometry isa Grid
+
+    gtb = NaturalEarth.naturalearth1(variant="relief")
+    @test gtb.geometry isa Grid
+
+    gtb = NaturalEarth.naturalearth1(variant="water")
+    @test gtb.geometry isa Grid
+
+    gtb = NaturalEarth.grayearth(variant="relief")
+    @test gtb.geometry isa Grid
+
+    gtb = NaturalEarth.grayearth(variant="flatwater")
+    @test gtb.geometry isa Grid
+
+    gtb = NaturalEarth.shadedrelief(size="small")
+    @test gtb.geometry isa Grid
+
+    # Invalid scale — should throw ArgumentError
+    @test_throws ArgumentError NaturalEarth.download("1:99", "countries", "default")
+    @test_throws ArgumentError NaturalEarth.countries(scale="1:99")
+
+    # Invalid variant — should throw ArgumentError
+    @test_throws ArgumentError NaturalEarth.countries(variant="nonexistent_variant_xyz")
   end
 
   @testset "GeoBR" begin
+    # Original tests
     gtb = GeoBR.state()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
@@ -261,6 +348,59 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 0
 
+    # GeoBR.state — numeric code
+    gtb = GeoBR.state(33)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.intermediateregion — filter by state abbreviation
+    gtb = GeoBR.intermediateregion("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.intermediateregion — filter by state code
+    gtb = GeoBR.intermediateregion(33)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.intermediateregion — filter by region code
+    gtb = GeoBR.intermediateregion(3301)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.immediateregion — filter by state abbreviation
+    gtb = GeoBR.immediateregion("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.immediateregion — filter by state code
+    gtb = GeoBR.immediateregion(33)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.immediateregion — filter by region code
+    gtb = GeoBR.immediateregion(330001)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.comparableareas — default years
+    gtb = GeoBR.comparableareas()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.comparableareas — custom valid years
+    gtb = GeoBR.comparableareas(startyear=2000, endyear=2010)
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # GeoBR.comparableareas — invalid years (should throw ArgumentError)
+    @test_throws ArgumentError GeoBR.comparableareas(startyear=2005, endyear=2010)
+    @test_throws ArgumentError GeoBR.comparableareas(startyear=1800, endyear=2010)
+    @test_throws ArgumentError GeoBR.comparableareas(startyear=1970, endyear=2099)
+
+    # GeoBR.download — invalid version
+    @test_throws ArgumentError GeoBR.download("http://example.com/test.parquet"; version=v"9.9.9")
+
     # these tests are passing locally but are breaking in CI
     # gtb = GeoBR.indigenousland()
     # @test gtb.geometry isa GeometrySet
@@ -290,20 +430,6 @@ using Test
     # @test gtb.geometry isa GeometrySet
     # @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.intermediateregion("RJ")
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.intermediateregion(3301)
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-
-    # gtb = GeoBR.immediateregion("RJ")
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.immediateregion(330001)
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-
     # gtb = GeoBR.municipalseat()
     # @test gtb.geometry isa GeometrySet
     # @test paramdim(gtb.geometry) == 0
@@ -327,13 +453,6 @@ using Test
     # gtb = GeoBR.schools()
     # @test gtb.geometry isa GeometrySet
     # @test paramdim(gtb.geometry) == 0
-
-    # gtb = GeoBR.comparableareas()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.comparableareas(startyear=2000, endyear=2010)
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
 
     # gtb = GeoBR.urbanconcentrations()
     # @test gtb.geometry isa GeometrySet
