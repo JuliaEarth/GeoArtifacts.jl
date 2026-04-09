@@ -12,6 +12,26 @@ using Test
 
     gtb = GADM.get("ISR", depth=1)
     @test length(gtb.geometry) == 7
+
+    # test codes function
+    codes = GADM.codes()
+    @test length(codes) > 0
+    @test haskey(codes[1], :country)
+    @test haskey(codes[1], :code)
+
+    # test error handling for invalid country code
+    @test_throws ArgumentError GADM.get("INVALID")
+
+    # test error handling for invalid API version
+    @test_throws ArgumentError GADM.get("BRA", version=v"1.0")
+
+    # test depth=0 (default)
+    gtb = GADM.get("QAT")
+    @test length(gtb.geometry) == 1
+
+    # test with subregion filter
+    gtb = GADM.get("SVN", "Savinjska"; depth=1)
+    @test length(gtb.geometry) > 0
   end
 
   @testset "NaturalEarth" begin
@@ -220,6 +240,9 @@ using Test
     gtb = NaturalEarth.prismashadedrelief()
     @test gtb.geometry isa Grid
     @test paramdim(gtb.geometry) == 2
+
+    # test error handling for invalid scale
+    @test_throws ArgumentError NaturalEarth.download("1:999", "countries", "countries")
   end
 
   @testset "GeoBR" begin
@@ -261,90 +284,64 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 0
 
-    # these tests are passing locally but are breaking in CI
-    # gtb = GeoBR.indigenousland()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.indigenousland()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.metroarea()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.metroarea()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.neighborhood()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.neighborhood()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.urbanarea()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.urbanarea()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.weightingarea("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.weightingarea()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.mesoregion("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.censustract()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.microregion("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.statisticalgrid()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.intermediateregion("RJ")
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.intermediateregion(3301)
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.conservationunits()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.immediateregion("RJ")
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.immediateregion(330001)
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.semiarid()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.municipalseat()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 0
+    gtb = GeoBR.schools()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 0
 
-    # gtb = GeoBR.censustract("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.comparableareas()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.statisticalgrid("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.urbanconcentrations()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.conservationunits()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.poparrangements()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
 
-    # gtb = GeoBR.semiarid()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    gtb = GeoBR.airports()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 0
 
-    # gtb = GeoBR.schools()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 0
-
-    # gtb = GeoBR.comparableareas()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.comparableareas(startyear=2000, endyear=2010)
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
-
-    # gtb = GeoBR.urbanconcentrations()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
-
-    # gtb = GeoBR.poparrangements()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
-
-    # gtb = GeoBR.healthregion()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    # test GADM.codes
+    codes = GADM.codes()
+    @test length(codes) > 0
   end
 end
