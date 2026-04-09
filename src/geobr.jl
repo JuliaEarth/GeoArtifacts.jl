@@ -442,7 +442,7 @@ function comparableareas(; startyear=1970, endyear=2010, version=v"1.7.0", kwarg
   years = (1872, 1900, 1911, 1920, 1933, 1940, 1950, 1960, 1970, 1980, 1991, 2000, 2010)
 
   if startyear ∉ years || endyear ∉ years
-    throw(ArgumentError("invalid `startyear` or `endyear`, please use one these: $years_available"))
+    throw(ArgumentError("invalid `startyear` or `endyear`, please use one these: $years"))
   end
 
   table = metadata(; version)
