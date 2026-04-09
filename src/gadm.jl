@@ -123,7 +123,7 @@ function get(country, subregions...; depth=0, version=v"4.1", kwargs...)
 
   # select layer
   layer = length(subregions) + depth + 1
-  gtb = GeoIO.load(gpkg; layer, kwargs...)
+  gtb = GeoIO.load(gpkg; layer, warn=false, kwargs...)
 
   transform = if !isempty(subregions)
     # fetch query params
