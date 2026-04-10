@@ -300,15 +300,35 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.weightingarea()
+    gtb = GeoBR.weightingarea("RJ")
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.censustract()
+    gtb = GeoBR.mesoregion("RJ")
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.statisticalgrid()
+    gtb = GeoBR.microregion("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.intermediateregion("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.immediateregion("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.municipalseat()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 0
+
+    gtb = GeoBR.censustract("RJ")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = GeoBR.statisticalgrid("RJ")
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
@@ -324,7 +344,7 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 0
 
-    gtb = GeoBR.comparableareas()
+    gtb = GeoBR.comparableareas(2000, 2010)
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
@@ -336,12 +356,8 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.airports()
+    gtb = GeoBR.healthregion()
     @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 0
-
-    # test GADM.codes
-    codes = GADM.codes()
-    @test length(codes) > 0
+    @test paramdim(gtb.geometry) == 2
   end
 end
