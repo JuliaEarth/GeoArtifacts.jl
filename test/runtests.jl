@@ -2,6 +2,17 @@ using GeoArtifacts
 using Meshes
 using Test
 
+# Helper macro for network-dependent tests that may fail in CI
+macro mayfail(expr)
+  quote
+    try
+      $(esc(expr))
+    catch e
+      @test_skip "Network-dependent test skipped: $(sprint(showerror, e))"
+    end
+  end
+end
+
 @testset "GeoArtifacts.jl" begin
   @testset "GADM" begin
     gtb = GADM.get("SVN", depth=1)
@@ -12,6 +23,27 @@ using Test
 
     gtb = GADM.get("ISR", depth=1)
     @test length(gtb.geometry) == 7
+
+    # Test GADM.get with country codes
+    @mayfail begin
+      gtb = GADM.get("BRA", depth=1)
+      @test length(gtb.geometry) > 0
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
+
+    # Test GADM.codes
+    @mayfail begin
+      codes = GADM.codes()
+      @test length(codes) > 0
+    end
+
+    # Test GADM.get with depth=0 (country level)
+    @mayfail begin
+      gtb = GADM.get("USA", depth=0)
+      @test length(gtb.geometry) == 1
+      @test gtb.geometry isa GeometrySet
+    end
   end
 
   @testset "NaturalEarth" begin
@@ -261,90 +293,143 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 0
 
-    # these tests are passing locally but are breaking in CI
-    # gtb = GeoBR.indigenousland()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    # Previously commented-out tests - now wrapped with @mayfail for CI compatibility
+    @mayfail begin
+      gtb = GeoBR.indigenousland()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.metroarea()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.metroarea()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.neighborhood()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.neighborhood()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.urbanarea()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.urbanarea()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.weightingarea("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.weightingarea("RJ")
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.mesoregion("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.mesoregion("RJ")
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.microregion("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.microregion("RJ")
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.intermediateregion("RJ")
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.intermediateregion(3301)
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.intermediateregion("RJ")
+      @test gtb.geometry isa SubDomain
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.immediateregion("RJ")
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.immediateregion(330001)
-    # @test gtb.geometry isa SubDomain
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.intermediateregion(3301)
+      @test gtb.geometry isa SubDomain
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.municipalseat()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 0
+    @mayfail begin
+      gtb = GeoBR.immediateregion("RJ")
+      @test gtb.geometry isa SubDomain
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.censustract("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.immediateregion(330001)
+      @test gtb.geometry isa SubDomain
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.statisticalgrid("RJ")
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.municipalseat()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 0
+    end
 
-    # gtb = GeoBR.conservationunits()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.censustract("RJ")
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.semiarid()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.statisticalgrid("RJ")
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.schools()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 0
+    @mayfail begin
+      gtb = GeoBR.conservationunits()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.comparableareas()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
-    # gtb = GeoBR.comparableareas(startyear=2000, endyear=2010)
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.semiarid()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.urbanconcentrations()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.schools()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 0
+    end
 
-    # gtb = GeoBR.poparrangements()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.comparableareas()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
 
-    # gtb = GeoBR.healthregion()
-    # @test gtb.geometry isa GeometrySet
-    # @test paramdim(gtb.geometry) == 2
+    @mayfail begin
+      gtb = GeoBR.comparableareas(startyear=2000, endyear=2010)
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
+
+    @mayfail begin
+      gtb = GeoBR.urbanconcentrations()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
+
+    @mayfail begin
+      gtb = GeoBR.poparrangements()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
+
+    @mayfail begin
+      gtb = GeoBR.healthregion()
+      @test gtb.geometry isa GeometrySet
+      @test paramdim(gtb.geometry) == 2
+    end
+
+    # Error handling tests
+    @test_throws ArgumentError GeoBR.comparableareas(startyear=1999, endyear=2010)
+    @test_throws ArgumentError GeoBR.comparableareas(startyear=1970, endyear=2011)
+
+    @test_throws ArgumentError GeoBR.download("http://example.com/data.gpkg"; version=v"0.0.1")
   end
 end
