@@ -304,18 +304,30 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
+    gtb = GeoBR.mesoregion()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
     gtb = GeoBR.mesoregion("RJ")
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
+    gtb = GeoBR.microregion()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
     gtb = GeoBR.microregion("RJ")
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
+    gtb = GeoBR.intermediateregion()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
     gtb = GeoBR.intermediateregion("RJ")
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
+    gtb = GeoBR.immediateregion()
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
     gtb = GeoBR.immediateregion("RJ")
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
@@ -344,7 +356,7 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 0
 
-    gtb = GeoBR.comparableareas(2000, 2010)
+    gtb = GeoBR.comparableareas(1970, 2010)
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
@@ -359,5 +371,8 @@ using Test
     gtb = GeoBR.healthregion()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
+
+    # test error handling for invalid API version
+    @test_throws ArgumentError GeoBR.download("http://example.com/file.gpkg", version=v"0.0.1")
   end
 end
