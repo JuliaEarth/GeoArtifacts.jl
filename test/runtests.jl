@@ -243,6 +243,53 @@ using Test
 
     # test error handling for invalid scale
     @test_throws ArgumentError NaturalEarth.download("1:999", "countries", "countries")
+
+    # test countries variants
+    gtb = NaturalEarth.countries("nolakes")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = NaturalEarth.countries("BRA")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = NaturalEarth.countries("USA")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    gtb = NaturalEarth.countries("IND")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # test states variants
+    gtb = NaturalEarth.states("nolakes")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # test borders variants
+    gtb = NaturalEarth.borders("maritime")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 1
+
+    # test populatedplaces variants
+    gtb = NaturalEarth.populatedplaces("simple")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 0
+
+    # test rivers variants
+    gtb = NaturalEarth.rivers("lake centerlines")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 1
+
+    # test lakes variants
+    gtb = NaturalEarth.lakes("historic")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 2
+
+    # test graticules variants
+    gtb = NaturalEarth.graticules("30")
+    @test gtb.geometry isa GeometrySet
+    @test paramdim(gtb.geometry) == 1
   end
 
   @testset "GeoBR" begin
@@ -260,15 +307,7 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.region()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-
-    gtb = GeoBR.country()
-    @test gtb.geometry isa GeometrySet
-    @test paramdim(gtb.geometry) == 2
-
-    gtb = GeoBR.amazon()
+    gtb = GeoBR.amazonia()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
@@ -300,7 +339,7 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    gtb = GeoBR.weightingarea("RJ")
+    gtb = GeoBR.weightingarea()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
@@ -356,7 +395,7 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 0
 
-    gtb = GeoBR.comparableareas(1970, 2010)
+    gtb = GeoBR.comparativeareas()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
@@ -372,7 +411,8 @@ using Test
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
 
-    # test error handling for invalid API version
-    @test_throws ArgumentError GeoBR.download("http://example.com/file.gpkg", version=v"0.0.1")
+    # test error handling for invalid state code
+    @test_throws ArgumentError GeoBR.state("INVALID")
+    @test_throws ArgumentError GeoBR.municipality("INVALID")
   end
 end
