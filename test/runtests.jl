@@ -12,6 +12,19 @@ using Test
 
     gtb = GADM.get("ISR", depth=1)
     @test length(gtb.geometry) == 7
+
+    # GADM.codes returns a table of all country codes without network access
+    codes = GADM.codes()
+    @test length(codes) > 0
+    @test hasproperty(first(codes), :country)
+    @test hasproperty(first(codes), :code)
+
+    # Invalid country code throws ArgumentError before any network request
+    @test_throws ArgumentError GADM.get("XXX")
+    @test_throws ArgumentError GADM.download("XXX")
+
+    # Invalid API version throws ArgumentError before any network request
+    @test_throws ArgumentError GADM.download("USA"; version=v"9.9")
   end
 
   @testset "NaturalEarth" begin
@@ -220,6 +233,33 @@ using Test
     gtb = NaturalEarth.prismashadedrelief()
     @test gtb.geometry isa Grid
     @test paramdim(gtb.geometry) == 2
+
+    # Invalid scale throws ArgumentError before any network request
+    @test_throws ArgumentError NaturalEarth.download("1:999", "countries", "default")
+
+    # Invalid variant throws ArgumentError before any network request
+    @test_throws ArgumentError NaturalEarth.countries(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.borders(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.states(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.counties(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.populatedplaces(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.roads(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.railroads(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.lands(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.oceans(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.rivers(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.lakes(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.hypsometrictints(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.naturalearth1(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.naturalearth2(variant="invalid_variant")
+    @test_throws ArgumentError NaturalEarth.grayearth(variant="invalid_variant")
+
+    # Invalid size throws ArgumentError before any network request
+    @test_throws ArgumentError NaturalEarth.hypsometrictints(size="invalid_size")
+    @test_throws ArgumentError NaturalEarth.naturalearth1(size="invalid_size")
+    @test_throws ArgumentError NaturalEarth.naturalearth2(size="invalid_size")
+    @test_throws ArgumentError NaturalEarth.shadedrelief(size="invalid_size")
+    @test_throws ArgumentError NaturalEarth.grayearth(size="invalid_size")
   end
 
   @testset "GeoBR" begin
