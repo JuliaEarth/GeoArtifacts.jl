@@ -4,6 +4,10 @@ using Test
 
 @testset "GeoArtifacts.jl" begin
   @testset "GADM" begin
+    @test !isempty(GADM.codes())
+    @test_throws ArgumentError GADM.download("XXX")
+    @test_throws ArgumentError GADM.download("SVN"; version=v"9.9")
+
     gtb = GADM.get("SVN", depth=1)
     @test length(gtb.geometry) == 12
 
@@ -15,6 +19,33 @@ using Test
   end
 
   @testset "NaturalEarth" begin
+    @test_throws ArgumentError NaturalEarth.download("1:999", "Cultural", "countries")
+    @test_throws ArgumentError NaturalEarth.countries("invalid")
+    @test_throws ArgumentError NaturalEarth.borders("invalid")
+    @test_throws ArgumentError NaturalEarth.states("invalid")
+    @test_throws ArgumentError NaturalEarth.counties("invalid")
+    @test_throws ArgumentError NaturalEarth.populatedplaces("invalid")
+    @test_throws ArgumentError NaturalEarth.roads("invalid")
+    @test_throws ArgumentError NaturalEarth.railroads("invalid")
+    @test_throws ArgumentError NaturalEarth.lands("invalid")
+    @test_throws ArgumentError NaturalEarth.minorislands("invalid")
+    @test_throws ArgumentError NaturalEarth.oceans("invalid")
+    @test_throws ArgumentError NaturalEarth.rivers("invalid")
+    @test_throws ArgumentError NaturalEarth.lakes("invalid")
+    @test_throws ArgumentError NaturalEarth.physicallabels("invalid")
+    @test_throws ArgumentError NaturalEarth.iceshelves("invalid")
+    @test_throws ArgumentError NaturalEarth.bathymetry("invalid")
+    @test_throws ArgumentError NaturalEarth.graticules("invalid")
+    @test_throws ArgumentError NaturalEarth.hypsometrictints("invalid")
+    @test_throws ArgumentError NaturalEarth.hypsometrictints(size="invalid")
+    @test_throws ArgumentError NaturalEarth.naturalearth1("invalid")
+    @test_throws ArgumentError NaturalEarth.naturalearth1(size="invalid")
+    @test_throws ArgumentError NaturalEarth.naturalearth2("invalid")
+    @test_throws ArgumentError NaturalEarth.naturalearth2(size="invalid")
+    @test_throws ArgumentError NaturalEarth.shadedrelief(size="invalid")
+    @test_throws ArgumentError NaturalEarth.grayearth("invalid")
+    @test_throws ArgumentError NaturalEarth.grayearth(size="invalid")
+
     gtb = NaturalEarth.countries()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
@@ -223,6 +254,9 @@ using Test
   end
 
   @testset "GeoBR" begin
+    @test_throws ArgumentError GeoBR.download("metadata_1.7.0_gpkg.csv"; version=v"9.9")
+    @test_throws ArgumentError GeoBR.comparableareas(startyear=1971)
+
     gtb = GeoBR.state()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
