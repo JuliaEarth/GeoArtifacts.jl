@@ -12,9 +12,17 @@ using Test
 
     gtb = GADM.get("ISR", depth=1)
     @test length(gtb.geometry) == 7
+
+    @test_throws ArgumentError GADM.download("XYZ")
+    @test_throws ArgumentError GADM.download("SVN"; version=v"9.9")
   end
 
   @testset "NaturalEarth" begin
+    @test_throws ArgumentError NaturalEarth.download("1:1", "Admin 0 - Countries", "countries")
+    @test_throws ArgumentError NaturalEarth.countries("missing")
+    @test_throws ArgumentError NaturalEarth.borders("missing")
+    @test_throws ArgumentError NaturalEarth.states("missing")
+
     gtb = NaturalEarth.countries()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
@@ -223,6 +231,8 @@ using Test
   end
 
   @testset "GeoBR" begin
+    @test_throws ArgumentError GeoBR.download("metadata_1.7.0_gpkg.csv"; version=v"9.9.9")
+
     gtb = GeoBR.state()
     @test gtb.geometry isa GeometrySet
     @test paramdim(gtb.geometry) == 2
